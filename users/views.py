@@ -52,7 +52,7 @@ def register(request):
 
 def activate(request, uidb64, token):
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
+        uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None

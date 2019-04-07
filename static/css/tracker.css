@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Heebo', sans-serif;
+    box-sizing: border-box;
+}
+
+nav {
+    position: fixed;
+    height: 100%;
+    width: 250px;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-image: linear-gradient(to bottom, #F37335, #FDC830);
+    color: white;
+}
+
+#logo {
+    margin: 40px 0;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+#logo i {
+    margin-right: 5px;
+}
+
+nav a {
+    display: table;
+    width: 100%;
+    padding-left: 30px;
+    text-decoration: none;
+    color: white;
+    font-weight: 300;
+}
+
+nav a span, nav a p {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+nav a span {
+    height: 40px;
+    width: 50px;
+    text-align: center;
+}
+
+.selected, nav a:hover {
+    color: #F58233;
+    background-color: white;
+}
+
+main {
+    margin-left: 250px;
+}
+
+#home-container {
+    color: rgba(0,0,0,0.4);
+    text-align: center;
+}
+
+#home-container h1 {
+    font-weight: 100;
+    font-size: 40px;
+    margin-top: 70px;
+}
+
+#home-container h2 {
+    font-weight: 100;
+    font-size: 30px;
+    margin-top: 40px;
+}
+
+#home-container h3 {
+    margin: 30px 0;
+    color: #F58233;
+    font-size: 25px;
+}
+
+.ldBar-label {
+    color: rgba(0,0,0,0.4);
+    font-weight: 100;
+    font-size: 25px;
+}
+
+.progress-circle {
+    display: inline-block;
+}
+
+#container {
+    text-align: center;
+}

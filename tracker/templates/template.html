@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo:100,300,400,500,700">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/loading-bar.css' %}">
+    {% load static %}
+    <script src="{% static '/js/loading-bar.js' %}"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/tracker.css' %}">
+
+    {% if title %}
+        <title>Longevity - {{ title }}</title>
+    {% else %}
+        <title>Longevity</title>
+    {% endif %}
+
+</head>
+<body>
+    <nav>
+        <h1 id="logo"><i class="fas fa-heartbeat"></i>Longevity</h1>
+        <ul>
+            {% if selected == 'home' %}
+            <li><a class="selected"><span><i class="fas fa-home"></i></span><p>Home</p></a></li>
+            {% else %}
+            <li><a href="{% url 'tracker-home' %}"><span><i class="fas fa-home"></i></span><p>Home</p></a></li>
+            {% endif %}
+            {% if selected == 'daily_log' %}
+            <li><a class="selected"><span><i class="fas fa-calendar-check"></i></span><p>Daily Log</p></a></li>
+            {% else %}
+            <li><a href="{% url 'tracker-daily-log' %}"><span><i class="fas fa-calendar-check"></i></span><p>Daily Log</p></a></li>
+            {% endif %}
+            {% if selected == 'goals' %}
+            <li><a class="selected"><span><i class="fas fa-chart-line"></i></span><p>Goals</p></a></li>
+            {% else %}
+            <li><a href="{% url 'tracker-goals' %}"><span><i class="fas fa-chart-line"></i></span><p>Goals</p></a></li>
+            {% endif %}
+            {% if selected == 'groups' %}
+            <li><a class="selected"><span><i class="fas fa-users"></i></span><p>Groups</p></a></li>
+            {% else %}
+            <li><a href="{% url 'tracker-groups' %}"><span><i class="fas fa-users"></i></span><p>Groups</p></a></li>
+            {% endif %}
+            {% if selected == 'settings' %}
+            <li><a class="selected"><span><i class="fas fa-cog"></i></span><p>Settings</p></a></li>
+            {% else %}
+            <li><a href="{% url 'tracker-settings' %}"><span><i class="fas fa-cog"></i></span><p>Settings</p></a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

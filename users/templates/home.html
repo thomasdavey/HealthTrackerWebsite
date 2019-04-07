@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="background">
+        <div id="landing">
+            <div id="contents">
+                <h1 id="logo"><i class="fas fa-heartbeat"></i>Longevity</h1>
+                <div><a href="{% url 'users-login' %}" id="login">Sign In</a></div>
+                <div><a href="{% url 'users-register' %}" id="register">Register</a></div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <nav><a href="{% url 'users-home' %}"><i class="fas fa-heartbeat"></i>Longevity</a></nav>
+    <div class="form-wrapper">
+        <h1>Register</h1>
+        {% load filters %}
+        <form method="POST">
+            {%  csrf_token %}
+            <ul>
+                {% for field in form %}
+                    <li class="form-field">
+                        <p>{{ field.errors }}</p>
+                        <p class="form-label">{{ field.label_tag }}</p>
+                        {{ field|add:'form-input' }}
+                        <p class="form-help">{{ field.help_text }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+{% endblock content %}

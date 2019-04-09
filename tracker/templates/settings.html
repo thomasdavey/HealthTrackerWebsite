@@ -1,4 +1,28 @@
 {% extends 'template.html' %}
 {% block content %}
-    <h1>Settings!</h1>
+
+    <div class = "row">
+    <div class = "flex-container">
+        <p id = "settingsTitle" style = margin-left:50px;>My Account Details</p>
+        <div id = "scrollboxLeft">My account details in here
+        </div>
+        <p id = "settingsTitle" style = margin-left:50px>My Health Details</p>
+        <div id = "scrollboxLeft">My health data in here</div>
+    </div>
+
+    <div class = "flex-container">
+        <p id = "settingsTitle" style = margin-left:20px>My Custom Foods</p>
+        <div id = "scrollBoxRight">My custom foods in here</div>
+        <p id = "settingsTitle" style = margin-left:20px>My Custom Exercises</p>
+        <div id = "scrollBoxRight">My custom exercises in here</div>
+        <p id = "settingsTitle" style = margin-left:20px>My Completed Goals</p>
+        <div id = "scrollBoxRight">My completed exercises in here</div>
+    </div>
+    </div>
+
+<div class="footer">
+    <button id = "button" type="button" name = "logout" onclick = "logOut()">Log Out</button>
+    <button id = "button" type="button" name = "changePass" onclick = "changePassword()">Change Password</button>
+    <button id = "button" type="button" name = "deleteAccount" onclick = "deleteAccount()">Delete Account</button>
+</div>
 {% endblock content %}

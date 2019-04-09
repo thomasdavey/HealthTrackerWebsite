@@ -93,3 +93,64 @@ main {
 #container {
     text-align: center;
 }
+
+.footer {
+  position: fixed;
+  margin-left: 0;
+  bottom: 0;
+  height: 12%;
+  width: 85%;
+  background-color: white;
+  color: white;
+  text-align: left;
+}
+
+.row {
+    display: flex;
+}
+
+.flex-container {
+    width: 50%;
+  flex-direction: column;
+}
+
+#scrollboxLeft {
+    overflow: auto;
+    height:195px;
+    width:470px;
+    font-size: 16px;
+    margin-left: 50px;
+    border: 6px solid;
+    border-image: linear-gradient(to bottom, #8BC1E7, #D4E8F6) 1;
+    background-color: #EBEBEB;
+}
+
+#scrollBoxRight {
+    overflow: auto;
+    height: 110px;
+    width: 470px;
+    font-size: 16px;
+    margin-left: 20px;
+    border: 6px solid;
+    border-image: linear-gradient(to bottom, #8BC1E7, #D4E8F6) 1;
+    background-color: #EBEBEB;
+}
+
+#settingsTitle {
+    margin-top: 20px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #F37335;
+}
+
+#button {
+    background-color: #EBEBEB;
+    font-size: 20px;
+    width: 296px;
+    padding: 8px 0px 8px 0px;
+    margin-left: 50px;
+    color: black;
+    border: 6px solid;
+    border-image: linear-gradient(to bottom, #8BC1E7, #D4E8F6) 1;
+}
+

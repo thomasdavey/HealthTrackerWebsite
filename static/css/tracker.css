@@ -143,6 +143,29 @@ main {
     color: #F37335;
 }
 
+#dailyLogTitle {
+    margin-left:20px;
+    text-align:left;
+    font-size: 20px;
+    margin-top: 40px;
+    color: black;
+}
+
+#dailySideBar {
+    margin-left:20px;
+    text-align:left;
+    font-size: 14px;
+    margin-top: 5px;
+    color: black;
+}
+
+#dailyLogButton {
+    background-color: white;
+    font-size: 20px;
+    border: 0px;
+    color: #00000080;
+}
+
 #button {
     background-color: #EBEBEB;
     font-size: 20px;

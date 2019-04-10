@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from datetime import date
+from .forms import MessageForm
 
 from .models import Message
 accountDetails = [
@@ -62,10 +63,21 @@ def goals(request):
 @login_required()
 def groups(request):
     messages = Message.objects.all()
+
+    form = MessageForm(request.POST or None)
+
+    if form.is_valid():
+        message = form.save(commit=False)
+        message.author = request.user
+        message.save()
+        form = MessageForm()
+
     context = {
         'messages': messages,
-        'selected': 'groups'
+        'selected': 'groups',
+        'form': form
     }
+
     return render(request, 'groups.html', context)
 
 

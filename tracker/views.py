@@ -1,47 +1,15 @@
+from django.contrib.auth.forms import PasswordChangeForm
+from django.core.checks import messages
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout, update_session_auth_hash
 from datetime import date
 from .forms import MessageForm
 
 from .models import Message
-accountDetails = [
-    {
-        'name': 'myname',
-        'age' : 'myage',
-        'weight' : 'myweight',
-        'height' : 'myheight',
-        'currentgoals' : 'mygoals'
-    }
-]
+from .models import User
 
-healthData = [
-    {
-        'bmi': 'mybmi',
-        'idealweight' : 'myideal',
-        'targetcals': 'mycals',
-        'targetfat': 'myfat',
-        'targetcarbs' : 'mycarbs',
-        'targetprotein' : 'myprotein'
-    }
-]
-
-customFoods = [
-    {
-        'food': 'foodname'
-    }
-]
-
-customExercises = [
-    {
-        'exercise': 'exercisename'
-    }
-]
-
-completedGoals = [
-    {
-        'goal': 'mygoal'
-    }
-]
 
 @login_required()
 def home(request):
@@ -83,11 +51,49 @@ def groups(request):
 
 @login_required()
 def settings(request):
+    accountDetails = [
+        {
+            'name': request.user.get_full_name(),
+            'age': 'myage',
+            'weight': 'myweight',
+            'height': 'myheight',
+            'currentgoals': 'mygoals'
+        }
+    ]
+    healthData = [
+        {
+            'bmi': 'mybmi',
+            'idealweight': 'myideal',
+            'targetcals': 'mycals',
+            'targetfat': 'myfat',
+            'targetcarbs': 'mycarbs',
+            'targetprotein': 'myprotein'
+        }
+    ]
+
+    customFoods = [
+        {
+            'food': 'foodname'
+        }
+    ]
+
+    customExercises = [
+        {
+            'exercise': 'exercisename'
+        }
+    ]
+
+    completedGoals = [
+        {
+            'goal': 'mygoal'
+        }
+    ]
     context = {
         'details': accountDetails,
         'health' : healthData,
         'foods' : customFoods,
         'exercises' : customExercises,
-        'goals' : completedGoals
+        'goals' : completedGoals,
+        'selected' : 'settings'
     }
-    return render(request, 'settings.html', context, {'selected': 'settings'})
+    return render(request, 'settings.html', context)

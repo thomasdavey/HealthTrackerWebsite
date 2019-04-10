@@ -224,3 +224,8 @@ main {
     border: 6px solid;
     border-image: linear-gradient(to bottom, #8BC1E7, #D4E8F6) 1;
 }
+
+a:link, a:visited, a:hover, a:active {
+    color: black;
+    text-decoration: none;
+}

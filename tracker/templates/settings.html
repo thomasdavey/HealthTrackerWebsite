@@ -58,8 +58,8 @@
     </div>
 
 <div class="footer">
-    <button id = "button" type="button" name = "logout" onclick = "logOut()">Log Out</button>
-    <button id = "button" type="button" name = "changePass" onclick = "changePassword()">Change Password</button>
-    <button id = "button" type="button" name = "deleteAccount" onclick = "deleteAccount()">Delete Account</button>
+    <button id = "button" type="button" name = "logout"><a href = "{% url 'users-logout' %}" >Log Out</a></button>
+    <button id = "button" type="button" name = "changePass" onclick = "">Change Password</button>
+    <button id = "button" type="button" name = "deleteAccount" onclick = "">Delete Account</button>
 </div>
 {% endblock content %}

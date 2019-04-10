@@ -19,3 +19,4 @@ class Message(models.Model):
 class GroupMember(models.Model):
     group_id = models.CharField(max_length=100, null=True)
     member = models.ForeignKey(User, on_delete=models.CASCADE, db_column='member')
+

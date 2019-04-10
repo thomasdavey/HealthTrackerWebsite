@@ -1,34 +1,28 @@
 {% extends 'template.html' %}
 {% block content %}
-
-    <div class = "row">
-    <div class = "flex-container" style = "width:68%">
-        <p id = "settingsTitle" style = margin-left:50px;>My Account Details</p>
-        <div class="ldBar label-center progress-circle" style="width:200px; height:200px;" style = "margin-left: 50px "
-             data-value="1245" data-preset="circle" data-stroke-width="5" data-stroke="#F58233"></div>
-        <div class="ldBar label-center progress-circle" style="width:200px; height:200px;" style = "margin-left: 50px"
-              data-preset="circle" data-stroke-width="5" data-stroke="#F58233"></div>
-    </div>
-
-    <div class = "flex-container" style = "width:32%">
-        <div class = "row">
-        <p id = "dailyLogTitle" style = "margin-top: 80px">Breakfast</p>
-        <button id = "dailyLogButton" type="button" name = "addBreakfast" style = "margin-top: 80px">
-            <i class="fas fa-plus-circle"></i></button>
+    <div id="daily_log_body">
+        <h2>Keep Track of Your Day</h2>
+        <div id="daily-log-progress-container">
+            <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value="25" data-preset="circle" data-stroke-width="5" data-stroke="#F58233"></div>
+            <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value="35" data-preset="circle" data-stroke-width="5" data-stroke="#8BC1E7"></div>
         </div>
-        <p id = "dailySideBar">Suggested calories: x</p>
-        <p id = "dailyLogTitle">Lunch
-        <button id = "dailyLogButton" type="button" name = "addBreakfast"><i class="fas fa-plus-circle"></i></button></p>
-        <p id = "dailySideBar">Suggested calories: x</p>
-        <p id = "dailyLogTitle">Dinner
-        <button id = "dailyLogButton" type="button" name = "addBreakfast"><i class="fas fa-plus-circle"></i></button></p>
-        <p id = "dailySideBar">Suggested calories: x</p>
-        <p id = "dailyLogTitle">Snacks
-        <button id = "dailyLogButton" type="button" name = "addBreakfast"><i class="fas fa-plus-circle"></i></button></p>
-        <p id = "dailySideBar">Suggested calories: x</p>
-        <p></p>
-        <p style = "font-size: 18px; margin-left: 70px; margin-top: 70px">Net Calories Today: x</p>
+        <div id="meal_select">
+            <div>
+                <h3>Breakfast:</h3>
+                <h4>Recommended Calories: </h4>
+            </div>
+            <div>
+                <h3>Lunch:</h3>
+                <h4>Recommended Calories: </h4>
+            </div>
+            <div>
+                <h3>Dinner:</h3>
+                <h4>Recommended Calories: </h4>
+            </div>
+            <div>
+                <h3>Snacks:</h3>
+                <h4>Recommended Calories: </h4>
+            </div>
+        </div>
     </div>
-    </div>
-
 {% endblock content %}

@@ -90,8 +90,56 @@ main {
     display: inline-block;
 }
 
-#container {
+#daily_log_body h2 {
+    font-weight: 100;
+    font-size: 30px;
     text-align: center;
+}
+
+#home-progress-container {
+    text-align: center;
+}
+
+#daily-log-progress-container {
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 20px;
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+}
+
+#daily_log_body {
+    width: calc(100% - 275px);
+    padding: 30px;
+    text-align: center;
+}
+
+#meal_select {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    width: 275px;
+    background-color: white;
+    height: 100vh;
+    text-align: left;
+    border-left: solid 1px rgba(0,0,0,0.1);
+}
+
+#meal_select div {
+    margin: 20px;
+}
+
+#meal_select h3 {
+    font-weight: 500;
+    font-size: 18px;
+    color: rgba(0,0,0,0.8);
+}
+
+#meal_select h4 {
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(0,0,0,0.4);
 }
 
 .footer {
@@ -176,4 +224,3 @@ main {
     border: 6px solid;
     border-image: linear-gradient(to bottom, #8BC1E7, #D4E8F6) 1;
 }
-

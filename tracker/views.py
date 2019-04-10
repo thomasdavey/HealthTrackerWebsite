@@ -9,6 +9,7 @@ from .forms import MessageForm
 
 from .models import Message
 from .models import User
+from users.models import Profile
 
 
 @login_required()
@@ -51,13 +52,17 @@ def groups(request):
 
 @login_required()
 def settings(request):
+    user = request.user
+    today = date.today()
     accountDetails = [
         {
-            'name': request.user.get_full_name(),
-            'age': 'myage',
-            'weight': 'myweight',
-            'height': 'myheight',
-            'currentgoals': 'mygoals'
+            'name': user.get_full_name(),
+            'age' : today.year - Profile.objects.get(user=user).birth_date.year -
+                    ((today.month, today.day) <
+                     (Profile.objects.get(user=user).birth_date.month, Profile.objects.get(user=user).birth_date.day)),
+            'weight': Profile.objects.get(user=user).weight,
+            'height': Profile.objects.get(user=user).height,
+            'currentgoals': 'goals here'
         }
     ]
     healthData = [
@@ -97,3 +102,4 @@ def settings(request):
         'selected' : 'settings'
     }
     return render(request, 'settings.html', context)
+

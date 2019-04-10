@@ -26,3 +26,16 @@ class WeightGoal(models.Model):
 
     def __str__(self):
         return f'{self.user.username}'
+
+
+class HealthData(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bmi = models.DecimalField(null=True)
+    idealweight = models.DecimalField(null=True)
+    targetcals = models.IntegerField(null=True)
+    targetfat = models.IntegerField(null=True)
+    targetcarbs = models.IntegerField(null=True)
+    targetprotein = models.IntegerField(null=True)
+
+    def __str__(self):
+        return f'{self.user.username}'

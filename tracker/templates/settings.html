@@ -4,19 +4,56 @@
     <div class = "row">
     <div class = "flex-container">
         <p id = "settingsTitle" style = margin-left:50px;>My Account Details</p>
-        <div id = "scrollboxLeft">My account details in here
+        <div id = "scrollboxLeft">
+        {% block myAccount %}
+        {% for post in details %}
+            <p>Name: {{ post.name }}</p>
+            <p>Age: {{ post.age }}</p>
+            <p>Weight: {{ post.weight }}</p>
+            <p>Height: {{ post.height }}</p>
+            <p>Current Goals: {{ post.currentgoals }}</p>
+        {% endfor %}
+        {% endblock %}
         </div>
         <p id = "settingsTitle" style = margin-left:50px>My Health Details</p>
-        <div id = "scrollboxLeft">My health data in here</div>
+        <div id = "scrollboxLeft">
+        {% block myHealth %}
+        {% for post in health %}
+            <p>BMI: {{ post.bmi }}</p>
+            <p>Ideal Weight: {{ post.idealweight }}</p>
+            <p>Target Calories: {{ post.targetcals}}</p>
+            <p>Target Fat: {{ post.targetfat }}</p>
+            <p>Target Carbs: {{ post.targetcarbs }}</p>
+            <p>Target Protein: {{ post.targetprotein }}</p>
+        {% endfor %}
+        {% endblock %}</div>
     </div>
 
     <div class = "flex-container">
         <p id = "settingsTitle" style = margin-left:20px>My Custom Foods</p>
-        <div id = "scrollBoxRight">My custom foods in here</div>
+        <div id = "scrollBoxRight">
+            {% block myFood %}
+                {% for post in foods %}
+                    <p>{{ post.food }}</p>
+                {% endfor %}
+            {% endblock %}
+        </div>
         <p id = "settingsTitle" style = margin-left:20px>My Custom Exercises</p>
-        <div id = "scrollBoxRight">My custom exercises in here</div>
+        <div id = "scrollBoxRight">
+            {% block myExercise %}
+                {% for post in exercises %}
+                    <p>{{ post.exercise }}</p>
+                {% endfor %}
+            {% endblock %}
+        </div>
         <p id = "settingsTitle" style = margin-left:20px>My Completed Goals</p>
-        <div id = "scrollBoxRight">My completed exercises in here</div>
+        <div id = "scrollBoxRight">
+            {% block myGoals %}
+                {% for post in goals %}
+                    <p>{{ post.goal }}</p>
+                {% endfor %}
+            {% endblock %}
+        </div>
     </div>
     </div>
 

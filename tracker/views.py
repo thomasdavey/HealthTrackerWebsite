@@ -3,6 +3,44 @@ from django.contrib.auth.decorators import login_required
 from datetime import date
 
 from .models import Message
+accountDetails = [
+    {
+        'name': 'myname',
+        'age' : 'myage',
+        'weight' : 'myweight',
+        'height' : 'myheight',
+        'currentgoals' : 'mygoals'
+    }
+]
+
+healthData = [
+    {
+        'bmi': 'mybmi',
+        'idealweight' : 'myideal',
+        'targetcals': 'mycals',
+        'targetfat': 'myfat',
+        'targetcarbs' : 'mycarbs',
+        'targetprotein' : 'myprotein'
+    }
+]
+
+customFoods = [
+    {
+        'food': 'foodname'
+    }
+]
+
+customExercises = [
+    {
+        'exercise': 'exercisename'
+    }
+]
+
+completedGoals = [
+    {
+        'goal': 'mygoal'
+    }
+]
 
 @login_required()
 def home(request):
@@ -33,4 +71,11 @@ def groups(request):
 
 @login_required()
 def settings(request):
-    return render(request, 'settings.html', {'selected': 'settings'})
+    context = {
+        'details': accountDetails,
+        'health' : healthData,
+        'foods' : customFoods,
+        'exercises' : customExercises,
+        'goals' : completedGoals
+    }
+    return render(request, 'settings.html', context, {'selected': 'settings'})

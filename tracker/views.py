@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from datetime import date
 
+from .models import Message
 accountDetails = [
     {
         'name': 'myname',
@@ -60,7 +61,12 @@ def goals(request):
 
 @login_required()
 def groups(request):
-    return render(request, 'groups.html', {'selected': 'groups'})
+    messages = Message.objects.all()
+    context = {
+        'messages': messages,
+        'selected': 'groups'
+    }
+    return render(request, 'groups.html', context)
 
 
 @login_required()

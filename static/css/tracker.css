@@ -161,6 +161,17 @@ main {
     padding: 40px;
 }
 
+#settings-top-bar {
+    margin-bottom: 20px;
+}
+
+#settings-top-information {
+    display: inline-block;
+    height: 150px;
+    vertical-align: top;
+    padding: 40px 0 0 30px;
+}
+
 .profile-picture {
   display: inline-block;
   width: 150px;
@@ -202,6 +213,10 @@ main {
     font-weight: 400;
 }
 
+.settings-button-container {
+    margin: 5px 0 10px 0;
+}
+
 .settings-button {
     display: inline-block;
 }
@@ -216,6 +231,11 @@ main {
     background-color: #F8A032;
     font-size: 15px;
     text-decoration: none;
+    cursor: pointer;
+}
+
+.settings-button-2 a {
+    padding: 5px 20px;
 }
 
 .settings-button a:hover {
@@ -230,20 +250,16 @@ main {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background-color: rgba(0,0,0,0.4);
-}
-
-.modal-wrapper {
-    display: table-cell;
-    vertical-align: middle;
+    overflow: auto;
+    padding: 40px 0;
 }
 
 .modal-content {
     background-color: white;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid rgba(0,0,0,0.1);
     width: 500px;
 }
 
@@ -275,6 +291,7 @@ main {
     color: white;
     background-color: #F8A032;
     font-size: 15px;
+    cursor: pointer;
 }
 
 .modal-content button:hover {

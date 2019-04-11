@@ -50,6 +50,11 @@ select {
     list-style: none;
 }
 
+.form-field a {
+    display: block;
+    overflow-wrap: break-word;
+}
+
 .form-help {
     margin: 5px 0 0 0;
 }
@@ -74,6 +79,7 @@ select {
     color: white;
     background-color: #F8A032;
     font-size: 15px;
+    cursor: pointer;
 }
 
 .form-wrapper button:hover {

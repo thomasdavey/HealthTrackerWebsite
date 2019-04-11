@@ -14,6 +14,7 @@ class Profile(models.Model):
     height = models.IntegerField(null=True)
     weight = models.IntegerField(null=True)
     activity_level = models.CharField(max_length=5, choices=ACTIVITY_LEVEL_CHOICES, null=True)
+    image = models.ImageField(default='default.png', upload_to='profile-pics')
 
     def __str__(self):
         return f'{self.user.username}'

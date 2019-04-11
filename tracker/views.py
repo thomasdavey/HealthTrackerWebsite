@@ -2,7 +2,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 from datetime import date
 from .forms import MessageForm
 from .models import Message
@@ -54,9 +55,10 @@ def settings(request):
         if 'update_password' in request.POST:
             update_password_form = PasswordChangeForm(data=request.POST, user=request.user)
             modal = 'update_password'
-            print('YAY')
             if update_password_form.is_valid():
                 update_password_form.save()
+                update_session_auth_hash(request, update_password_form.user)
+                messages.success(request, f'Password successfully changed!')
                 return redirect('tracker-settings')
     context = {
         'selected': 'Settings',

@@ -8,7 +8,27 @@
         <form method="POST">
             {%  csrf_token %}
             <ul>
-                {% for field in form %}
+                {% for field in user_form %}
+                    <li class="form-field">
+                        <p>{{ field.errors }}</p>
+                        <p class="form-label">{{ field.label_tag }}</p>
+                        {{ field|add:'form-input' }}
+                        <p class="form-help">{{ field.help_text }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+            <ul>
+                {% for field in profile_form %}
+                    <li class="form-field">
+                        <p>{{ field.errors }}</p>
+                        <p class="form-label">{{ field.label_tag }}</p>
+                        {{ field|add:'form-input' }}
+                        <p class="form-help">{{ field.help_text }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+            <ul>
+                {% for field in goal_form %}
                     <li class="form-field">
                         <p>{{ field.errors }}</p>
                         <p class="form-label">{{ field.label_tag }}</p>

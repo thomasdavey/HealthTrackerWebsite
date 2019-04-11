@@ -1,6 +1,14 @@
 {% extends 'template.html' %}
 {% block content %}
     <div id="settings-container">
+        <div class="profile-picture" style="background-image: url('{{ user.profile.image.url }}')"></div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{{ message.tags }} message-adjust">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <div class="settings-row">
             <h3>Account Details</h3>
             <div class="settings-row-section settings-first">
@@ -14,7 +22,7 @@
                 <p>{{ user.email }}</p>
             </div>
             <div><a href="#">Edit</a></div>
-            <div><a href="#" id="myBtn">Change Password</a></div>
+            <div><a id="myBtn">Change Password</a></div>
         </div>
         <div class="settings-row">
             <h3>Profile</h3>

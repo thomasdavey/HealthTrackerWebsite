@@ -22,7 +22,7 @@
                 <p>{{ user.email }}</p>
             </div>
             <div><a href="#">Edit</a></div>
-            <div><a id="myBtn">Change Password</a></div>
+            <div><a id="password-button">Change Password</a></div>
         </div>
         <div class="settings-row">
             <h3>Profile</h3>
@@ -93,7 +93,7 @@
         <div class="settings-button"><a href="#">Delete Account</a></div>
     </div>
 
-    <div id="myModal" class="modal">
+    <div class="modal" id="password-modal">
         <div class="modal-wrapper">
             <div class="modal-content">
                 <div class="close"><i class="fas fa-times"></i></div>
@@ -116,31 +116,54 @@
             </div>
         </div>
     </div>
+    <div class="modal" id="profile-modal">
+        <div class="modal-wrapper">
+            <div class="modal-content">
+                <div class="close"><i class="fas fa-times"></i></div>
+                <h3>Update Profile</h3>
+                {% load filters %}
+                <form method="POST">
+                    {%  csrf_token %}
+                    <ul>
+                        {% for field in update_profile_form %}
+                            <li class="form-field">
+                                <p>{{ field.errors }}</p>
+                                <p class="form-label">{{ field.label_tag }}</p>
+                                {{ field|add:'form-input' }}
+                                <p class="form-help">{{ field.help_text }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <button type="submit" name="update_password">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
     <script>
-        var modal = document.getElementById('myModal');
-        var wrapper = document.getElementsByClassName("modal-wrapper")[0];
-        var btn = document.getElementById("myBtn");
-        var span = document.getElementsByClassName("close")[0];
+        var passwordModal = document.getElementById('password-modal');
+        var passwordButton = document.getElementById("password-button");
+        var close = document.getElementsByClassName("close");
+        var wrapper = document.getElementsByClassName("modal-wrapper");
 
         {% if modal == 'update_password' %}
             window.onload = function() {
-                modal.style.display = "table"
+                passwordModal.style.display = "table"
             };
         {% endif %}
 
-        btn.onclick = function() {
-            modal.style.display = "table";
+        passwordButton.onclick = function() {
+            passwordModal.style.display = "table";
         };
 
-        span.onclick = function() {
-            modal.style.display = "none";
+        close.onclick = function() {
+            passwordModal.style.display = "none";
         };
 
         window.onclick = function(event) {
             if (event.target === wrapper) {
-                modal.style.display = "none";
+                passwordModal.style.display = "none";
             }
         };
     </script>

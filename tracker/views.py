@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from datetime import date
+from users.forms import ProfileUpdateForm
 from .forms import MessageForm
 from .models import Message
 
@@ -50,6 +51,7 @@ def groups(request):
 @login_required()
 def settings(request):
     update_password_form = PasswordChangeForm(user=request.user)
+    update_profile_form = ProfileUpdateForm()
     modal = 'None'
     if request.method == 'POST':
         if 'update_password' in request.POST:
@@ -60,9 +62,17 @@ def settings(request):
                 update_session_auth_hash(request, update_password_form.user)
                 messages.success(request, f'Password successfully changed!')
                 return redirect('tracker-settings')
+        if 'update_profile' in request.POST:
+            update_password_form = ProfileUpdateForm(data=request.POST)
+            modal = 'update_profile'
+            if update_profile_form.is_valid():
+                update_profile_form.save()
+                messages.success(request, f'Profile successfully updated!')
+                return redirect('tracker-settings')
     context = {
         'selected': 'Settings',
         'update_password_form': update_password_form,
+        'update_profile_form': update_profile_form,
         'modal': modal
     }
     return render(request, 'settings.html', context)

@@ -1,27 +1,32 @@
 {% extends 'template.html' %}
 {% block content %}
-    <div id="daily_log_body">
+    <div id="daily-log-body">
         <h2>Keep Track of Your Day</h2>
         <div id="daily-log-progress-container">
             <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value="25" data-preset="circle" data-stroke-width="5" data-stroke="#F58233"></div>
             <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value="35" data-preset="circle" data-stroke-width="5" data-stroke="#8BC1E7"></div>
         </div>
-        <div id="meal_select">
-            <div>
+        <div id="meal-select">
+            <div class="meal-select-meal">
                 <h3>Breakfast:</h3>
                 <h4>Recommended Calories: </h4>
             </div>
-            <div>
+            <div class="meal-select-meal">
                 <h3>Lunch:</h3>
                 <h4>Recommended Calories: </h4>
             </div>
-            <div>
+            <div class="meal-select-meal">
                 <h3>Dinner:</h3>
                 <h4>Recommended Calories: </h4>
             </div>
-            <div>
+            <div class="meal-select-meal">
                 <h3>Snacks:</h3>
                 <h4>Recommended Calories: </h4>
+            </div>
+            <div id="meal-select-ldBars">
+                <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
+                <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
+                <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
             </div>
         </div>
     </div>

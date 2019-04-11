@@ -1,0 +1,105 @@
+.form-wrapper {
+    text-align: left;
+    margin: auto;
+    background-color: white;
+    padding: 30px;
+    width: 500px;
+}
+
+.form-wrapper h1 {
+    font-size: 30px;
+    color: #F8A032;
+    margin: 10px 0 25px 0;
+    padding-bottom: 15px;
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+    font-weight: 500;
+}
+
+.form-field {
+    font-weight: 300;
+    list-style: none;
+    margin: 10px 0;
+}
+
+.form-label, .form-label label {
+    margin: 0;
+    font-size: 14px;
+}
+
+select {
+    -webkit-appearance: none;
+    background: url(../images/down_arrow.png) no-repeat 97% 50%;
+    background-size: 15px 15px;
+}
+
+.form-input {
+    border: solid 1px rgba(0,0,0,0.4);
+    border-radius: 3px;
+    padding: 7px;
+    width: 100%;
+    font-weight: 300;
+    font-size: 14px;
+    background-color: white;
+}
+
+.form-input:focus {
+    outline: none;
+}
+
+.form-field ul {
+    list-style: none;
+}
+
+.form-help {
+    margin: 5px 0 0 0;
+}
+
+.form-help, .form-field li {
+    color: rgba(0,0,0,0.4);
+    font-size: 12px;
+}
+
+.errorlist li {
+    color: red;
+    font-weight: 700;
+    font-size: 15px;
+    list-style: none;
+}
+
+.form-wrapper button {
+    margin-top: 15px;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #F8A032;
+    font-size: 15px;
+}
+
+.form-wrapper button:hover {
+    background-color: #FFBD60;
+}
+
+.form-wrapper button:focus {
+    outline: none;
+}
+
+.success {
+    width: 100%;
+    padding: 10px 15px;
+    margin: 15px 0 18px 0;
+    background-color: rgb(212,236,218);
+    border: solid 1px rgb(196,229,204);
+    border-radius: 5px;
+    color: rgb(24,86,38);
+}
+
+.error {
+    width: 100%;
+    padding: 10px 15px;
+    margin: 15px 0 18px 0;
+    background-color: rgb(247,215,218);
+    border: solid 1px rgb(244,197,203);
+    border-radius: 5px;
+    color: rgb(113,29,38);
+}

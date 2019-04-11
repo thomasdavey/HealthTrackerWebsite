@@ -1,65 +1,139 @@
 {% extends 'template.html' %}
 {% block content %}
-
-    <div class = "row">
-    <div class = "flex-container">
-        <p id = "settingsTitle" style = margin-left:50px;>My Account Details</p>
-        <div id = "scrollboxLeft">
-        {% block myAccount %}
-        {% for post in details %}
-            <p>Name: {{ post.name }}</p>
-            <p>Age: {{ post.age }}</p>
-            <p>Weight: {{ post.weight }} kg</p>
-            <p>Height: {{ post.height }} cm</p>
-            <p>Current Goals: {{ post.currentgoals }}</p>
-        {% endfor %}
-        {% endblock %}
+    <div id="settings-container">
+        <div class="settings-row">
+            <h3>Account Details</h3>
+            <div class="settings-row-section settings-first">
+                <p>Name</p>
+                <p>Username</p>
+                <p>Email Address</p>
+            </div>
+            <div class="settings-row-section settings-second">
+                <p>{{ user.first_name }} {{ user.last_name }}</p>
+                <p>{{ user.username }}</p>
+                <p>{{ user.email }}</p>
+            </div>
+            <div><a href="#">Edit</a></div>
+            <div><a href="#" id="myBtn">Change Password</a></div>
         </div>
-        <p id = "settingsTitle" style = margin-left:50px>My Health Details</p>
-        <div id = "scrollboxLeft">
-        {% block myHealth %}
-        {% for post in health %}
-            <p>BMI: {{ post.bmi }}</p>
-            <p>Ideal Weight: {{ post.idealweight }}</p>
-            <p>Target Calories: {{ post.targetcals}}</p>
-            <p>Target Fat: {{ post.targetfat }}</p>
-            <p>Target Carbs: {{ post.targetcarbs }}</p>
-            <p>Target Protein: {{ post.targetprotein }}</p>
-        {% endfor %}
-        {% endblock %}</div>
+        <div class="settings-row">
+            <h3>Profile</h3>
+            <div class="settings-row-section settings-first">
+                <p>Date of Birth</p>
+                <p>Sex</p>
+                <p>Height</p>
+                <p>Weight</p>
+                <p>Activity Level</p>
+            </div>
+            <div class="settings-row-section settings-second">
+                <p>{{ user.profile.birth_date }}</p>
+                {% if user.profile.sex == 'M' %}
+                    <p>Male</p>
+                {% else %}
+                    <p>Female</p>
+                {% endif %}
+                <p>{{ user.profile.height }} cm</p>
+                <p>{{ user.profile.weight }} kg</p>
+                {% if user.profile.activity_level == '1.2' %}
+                    <p>Sedentary</p>
+                {% elif user.profile.activity_level == '1.375' %}
+                    <p>Lightly Active</p>
+                {% elif user.profile.activity_level == '1.55' %}
+                    <p>Moderately Active</p>
+                {% else %}
+                    <p>Highly Active</p>
+                {% endif %}
+            </div>
+            <div><a href="#">Edit</a></div>
+        </div>
+        <div class="settings-row">
+            <h3>Weight Goal</h3>
+            <div class="settings-row-section settings-first">
+                <p>Target Weight</p>
+                <p>Target Date</p>
+            </div>
+            <div class="settings-row-section settings-second">
+                <p>{{ user.weightgoal.target_weight }} kg</p>
+                <p>{{ user.weightgoal.target_date }}</p>
+            </div>
+            <div><a href="#">Edit</a></div>
+        </div>
+        <div class="settings-row">
+            <h3>Exercise Goal</h3>
+            {% if user.exercisegoal %}
+                <div class="settings-row-section settings-first">
+                    <p>Target Calories</p>
+                </div>
+                <div class="settings-row-section settings-second">
+                    <p>{{ user.exercisegoal.target_calories }}</p>
+                </div>
+                <div><a href="#">Edit</a></div>
+            {% else %}
+                <p>No exercise goal created.</p>
+            {% endif %}
+        </div>
+        <div class="settings-row">
+            <h3>Completed Goals</h3>
+        </div>
+        <div class="settings-row">
+            <h3>Custom Food</h3>
+        </div>
+        <div class="settings-row">
+            <h3>Custom Exercises</h3>
+        </div>
+        <div class="settings-button"><a href="{% url 'users-logout' %}">Log Out</a></div>
+        <div class="settings-button"><a href="#">Delete Account</a></div>
     </div>
 
-    <div class = "flex-container">
-        <p id = "settingsTitle" style = margin-left:20px>My Custom Foods</p>
-        <div id = "scrollBoxRight">
-            {% block myFood %}
-                {% for post in foods %}
-                    <p>{{ post.food }}</p>
-                {% endfor %}
-            {% endblock %}
+    <div id="myModal" class="modal">
+        <div class="modal-wrapper">
+            <div class="modal-content">
+                <div class="close"><i class="fas fa-times"></i></div>
+                <h3>Change Password</h3>
+                {% load filters %}
+                <form method="POST">
+                    {%  csrf_token %}
+                    <ul>
+                        {% for field in update_password_form %}
+                            <li class="form-field">
+                                <p>{{ field.errors }}</p>
+                                <p class="form-label">{{ field.label_tag }}</p>
+                                {{ field|add:'form-input' }}
+                                <p class="form-help">{{ field.help_text }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <button type="submit" name="update_password">Submit</button>
+                </form>
+            </div>
         </div>
-        <p id = "settingsTitle" style = margin-left:20px>My Custom Exercises</p>
-        <div id = "scrollBoxRight">
-            {% block myExercise %}
-                {% for post in exercises %}
-                    <p>{{ post.exercise }}</p>
-                {% endfor %}
-            {% endblock %}
-        </div>
-        <p id = "settingsTitle" style = margin-left:20px>My Completed Goals</p>
-        <div id = "scrollBoxRight">
-            {% block myGoals %}
-                {% for post in goals %}
-                    <p>{{ post.goal }}</p>
-                {% endfor %}
-            {% endblock %}
-        </div>
-    </div>
     </div>
 
-<div class="footer">
-    <button id = "button" type="button" name = "logout"><a href = "{% url 'users-logout' %}" >Log Out</a></button>
-    <button id = "button" type="button" name = "changePass" onclick = "">Change Password</button>
-    <button id = "button" type="button" name = "deleteAccount" onclick = "">Delete Account</button>
-</div>
+
+    <script>
+        var modal = document.getElementById('myModal');
+        var wrapper = document.getElementsByClassName("modal-wrapper")[0];
+        var btn = document.getElementById("myBtn");
+        var span = document.getElementsByClassName("close")[0];
+
+        {% if modal == 'update_password' %}
+            window.onload = function() {
+                modal.style.display = "table"
+            };
+        {% endif %}
+
+        btn.onclick = function() {
+            modal.style.display = "table";
+        };
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        };
+
+        window.onclick = function(event) {
+            if (event.target === wrapper) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
 {% endblock content %}

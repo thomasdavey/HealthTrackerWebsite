@@ -1,32 +1,28 @@
 from django.contrib.auth.forms import PasswordChangeForm
-from django.core.checks import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout, update_session_auth_hash
+from django.http import HttpResponse
 from datetime import date
 from .forms import MessageForm
-
 from .models import Message
-from .models import User
-from users.models import Profile
 
 
 @login_required()
 def home(request):
     today = date.today()
     today_format = today.strftime('%A, %d %B %Y')
-    return render(request, 'dashboard.html', {'selected': 'home', 'date': today_format})
+    return render(request, 'dashboard.html', {'selected': 'Home', 'date': today_format})
 
 
 @login_required()
 def daily_log(request):
-    return render(request, 'daily_log.html', {'selected': 'daily_log'})
+    return render(request, 'daily_log.html', {'selected': 'Daily Log'})
 
 
 @login_required()
 def goals(request):
-    return render(request, 'goals.html', {'selected': 'goals'})
+    return render(request, 'goals.html', {'selected': 'Goals'})
 
 
 @login_required()
@@ -43,7 +39,7 @@ def groups(request):
 
     context = {
         'messages': messages,
-        'selected': 'groups',
+        'selected': 'Groups',
         'form': form
     }
 
@@ -52,54 +48,20 @@ def groups(request):
 
 @login_required()
 def settings(request):
-    user = request.user
-    today = date.today()
-    accountDetails = [
-        {
-            'name': user.get_full_name(),
-            'age' : today.year - Profile.objects.get(user=user).birth_date.year -
-                    ((today.month, today.day) <
-                     (Profile.objects.get(user=user).birth_date.month, Profile.objects.get(user=user).birth_date.day)),
-            'weight': Profile.objects.get(user=user).weight,
-            'height': Profile.objects.get(user=user).height,
-            'currentgoals': 'goals here'
-        }
-    ]
-    healthData = [
-        {
-            'bmi': 'mybmi',
-            'idealweight': 'myideal',
-            'targetcals': 'mycals',
-            'targetfat': 'myfat',
-            'targetcarbs': 'mycarbs',
-            'targetprotein': 'myprotein'
-        }
-    ]
-
-    customFoods = [
-        {
-            'food': 'foodname'
-        }
-    ]
-
-    customExercises = [
-        {
-            'exercise': 'exercisename'
-        }
-    ]
-
-    completedGoals = [
-        {
-            'goal': 'mygoal'
-        }
-    ]
+    update_password_form = PasswordChangeForm(user=request.user)
+    modal = 'None'
+    if request.method == 'POST':
+        if 'update_password' in request.POST:
+            update_password_form = PasswordChangeForm(data=request.POST, user=request.user)
+            modal = 'update_password'
+            print('YAY')
+            if update_password_form.is_valid():
+                update_password_form.save()
+                return redirect('tracker-settings')
     context = {
-        'details': accountDetails,
-        'health' : healthData,
-        'foods' : customFoods,
-        'exercises' : customExercises,
-        'goals' : completedGoals,
-        'selected' : 'settings'
+        'selected': 'Settings',
+        'update_password_form': update_password_form,
+        'modal': modal
     }
     return render(request, 'settings.html', context)
 

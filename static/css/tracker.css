@@ -80,7 +80,7 @@ main {
     font-size: 25px;
 }
 
-.ldBar-label {
+#daily-log-progress-container .ldBar-label {
     color: rgba(0,0,0,0.4);
     font-weight: 100;
     font-size: 25px;
@@ -90,7 +90,7 @@ main {
     display: inline-block;
 }
 
-#daily_log_body h2 {
+#daily-log-body h2 {
     font-weight: 100;
     font-size: 30px;
     text-align: center;
@@ -108,124 +108,164 @@ main {
     border-bottom: solid 1px rgba(0,0,0,0.1);
 }
 
-#daily_log_body {
+#daily-log-body {
     width: calc(100% - 275px);
     padding: 30px;
     text-align: center;
 }
 
-#meal_select {
+#meal-select {
     position: absolute;
     top: 0;
     right: 0;
     padding: 10px;
     width: 275px;
     background-color: white;
-    height: 100vh;
+    min-height: 100vh;
     text-align: left;
     border-left: solid 1px rgba(0,0,0,0.1);
 }
 
-#meal_select div {
+.meal-select-meal {
     margin: 20px;
 }
 
-#meal_select h3 {
+#meal-select h3 {
     font-weight: 500;
     font-size: 18px;
     color: rgba(0,0,0,0.8);
 }
 
-#meal_select h4 {
+#meal-select h4 {
     font-weight: 300;
     font-size: 14px;
     color: rgba(0,0,0,0.4);
 }
 
-.footer {
-  position: fixed;
-  margin-left: 0;
-  bottom: 0;
-  height: 12%;
-  width: 85%;
-  background-color: white;
-  color: white;
-  text-align: left;
+#meal-select-ldBars {
+    margin: 50px 0;
 }
 
-.row {
-    display: flex;
+#meal-select .ldBar {
+    text-align: center;
+    margin: 20px 0;
 }
 
-.flex-container {
-    width: 50%;
-  flex-direction: column;
+#meal-select .ldBar-label {
+    margin-top: -25px;
+    font-family: 'Heebo', sans-serif;
+    font-weight: 100;
 }
 
-#scrollboxLeft {
-    overflow: auto;
-    height:195px;
-    width:470px;
-    font-size: 16px;
-    margin-left: 50px;
-    border: 6px solid;
-    border-image: linear-gradient(to bottom, #8BC1E7, #D4E8F6) 1;
-    background-color: #EBEBEB;
+#settings-container {
+    padding: 40px;
 }
 
-#scrollBoxRight {
-    overflow: auto;
-    height: 110px;
-    width: 470px;
-    font-size: 16px;
-    margin-left: 20px;
-    border: 6px solid;
-    border-image: linear-gradient(to bottom, #8BC1E7, #D4E8F6) 1;
-    background-color: #EBEBEB;
+.settings-row {
+    width: 100%;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: solid 1px rgba(0,0,0,0.1);
 }
 
-#settingsTitle {
-    margin-top: 20px;
-    font-size: 20px;
+.settings-row h3 {
+    color: #F8A032;
+    font-size: 23px;
     margin-bottom: 10px;
-    color: #F37335;
 }
 
-#dailyLogTitle {
-    margin-left:20px;
-    text-align:left;
-    font-size: 20px;
-    margin-top: 40px;
-    color: black;
+.settings-row-section {
+    display: inline-block;
 }
 
-#dailySideBar {
-    margin-left:20px;
-    text-align:left;
-    font-size: 14px;
-    margin-top: 5px;
-    color: black;
+.settings-first {
+    font-weight: 300;
+    margin-right: 20px;
 }
 
-#dailyLogButton {
-    background-color: white;
-    font-size: 20px;
-    border: 0px;
-    color: #00000080;
+.settings-second {
+    font-weight: 400;
 }
 
-#button {
-    background-color: #EBEBEB;
-    font-size: 20px;
-    width: 296px;
-    padding: 8px 0px 8px 0px;
-    margin-left: 50px;
-    color: black;
-    border: 6px solid;
-    border-image: linear-gradient(to bottom, #8BC1E7, #D4E8F6) 1;
+.settings-button {
+    display: inline-block;
 }
 
-a:link, a:visited, a:hover, a:active {
-    color: black;
+.settings-button a {
+    display: inline-block;
+    margin: 15px 5px 0 0;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #F8A032;
+    font-size: 15px;
     text-decoration: none;
+}
+
+.settings-button a:hover {
+    background-color: #FFBD60;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 500px;
+}
+
+.modal-content .close {
+    float: right;
+    color: rgba(0,0,0,0.5);
+    margin: 5px 5px 0 0;
+    font-size: 20px;
+}
+
+.modal-content .close:hover {
+    color: black;
+}
+
+.modal-content h3 {
+    font-size: 25px;
+    color: #F8A032;
+    margin: 10px 0 25px 0;
+    padding-bottom: 15px;
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+    font-weight: 500;
+}
+
+.modal-content button {
+    margin-top: 15px;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #F8A032;
+    font-size: 15px;
+}
+
+.modal-content button:hover {
+    background-color: #FFBD60;
+}
+
+.modal-content button:focus {
+    outline: none;
 }

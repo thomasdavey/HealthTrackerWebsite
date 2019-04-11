@@ -6,8 +6,8 @@ from datetime import date
 
 class UserRegisterForm(UserCreationForm):
     SEX_CHOICES = [('M','Male'),('F','Female')]
-    ACTIVITY_LEVEL_CHOICES = [(1.2,'Less than 2 hours per week'),(1.375,'2-5 hours per week'),
-                              (1.55,'6-10 hours per week'),(1.725,'More than 10 hours per week')]
+    ACTIVITY_LEVEL_CHOICES = [(1.2,'Sedentary'),(1.375,'Lightly Active'),
+                              (1.55,'Moderately Active'),(1.725,'Highly Active')]
 
     email = forms.EmailField
     first_name = forms.CharField(max_length=30, required=True)

@@ -9,14 +9,14 @@
     {% load static %}
     <script src="{% static '/js/loading-bar.js' %}"></script>
     {% load static %}
-    <script src="{% static '/js/settings.js' %}"></script>
-    {% load static %}
     <link rel="stylesheet" href="{% static '/css/tracker.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/forms.css' %}">
     {% load static %}
     <link rel="stylesheet" href="{% static '/css/Chart.css' %}">
 
-    {% if title %}
-        <title>Longevity - {{ title }}</title>
+    {% if selected %}
+        <title>Longevity - {{ selected }}</title>
     {% else %}
         <title>Longevity</title>
     {% endif %}
@@ -26,27 +26,27 @@
     <nav>
         <h1 id="logo"><i class="fas fa-heartbeat"></i>Longevity</h1>
         <ul>
-            {% if selected == 'home' %}
+            {% if selected == 'Home' %}
             <li><a class="selected"><span><i class="fas fa-home"></i></span><p>Home</p></a></li>
             {% else %}
             <li><a href="{% url 'tracker-home' %}"><span><i class="fas fa-home"></i></span><p>Home</p></a></li>
             {% endif %}
-            {% if selected == 'daily_log' %}
+            {% if selected == 'Daily Log' %}
             <li><a class="selected"><span><i class="fas fa-calendar-check"></i></span><p>Daily Log</p></a></li>
             {% else %}
             <li><a href="{% url 'tracker-daily-log' %}"><span><i class="fas fa-calendar-check"></i></span><p>Daily Log</p></a></li>
             {% endif %}
-            {% if selected == 'goals' %}
+            {% if selected == 'Goals' %}
             <li><a class="selected"><span><i class="fas fa-chart-line"></i></span><p>Goals</p></a></li>
             {% else %}
             <li><a href="{% url 'tracker-goals' %}"><span><i class="fas fa-chart-line"></i></span><p>Goals</p></a></li>
             {% endif %}
-            {% if selected == 'groups' %}
+            {% if selected == 'Groups' %}
             <li><a class="selected"><span><i class="fas fa-users"></i></span><p>Groups</p></a></li>
             {% else %}
             <li><a href="{% url 'tracker-groups' %}"><span><i class="fas fa-users"></i></span><p>Groups</p></a></li>
             {% endif %}
-            {% if selected == 'settings' %}
+            {% if selected == 'Settings' %}
             <li><a class="selected"><span><i class="fas fa-cog"></i></span><p>Settings</p></a></li>
             {% else %}
             <li><a href="{% url 'tracker-settings' %}"><span><i class="fas fa-cog"></i></span><p>Settings</p></a></li>

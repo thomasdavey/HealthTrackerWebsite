@@ -5,8 +5,8 @@ from decimal import *
 
 class Profile(models.Model):
     SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
-    ACTIVITY_LEVEL_CHOICES = [('1.2', 'Less than 2 hours per week'), ('1.375', '2-5 hours per week'),
-                              ('1.55', '6-10 hours per week'), ('1.725', 'More than 10 hours per week')]
+    ACTIVITY_LEVEL_CHOICES = [('1.2', 'Sedentary'), ('1.375', 'Lightly Active'),
+                              ('1.55', 'Moderately Active'), ('1.725', 'Highly Active')]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True)
@@ -28,14 +28,9 @@ class WeightGoal(models.Model):
         return f'{self.user.username}'
 
 
-class HealthData(models.Model):
+class ExerciseGoal(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bmi = models.DecimalField(null=True)
-    idealweight = models.DecimalField(null=True)
-    targetcals = models.IntegerField(null=True)
-    targetfat = models.IntegerField(null=True)
-    targetcarbs = models.IntegerField(null=True)
-    targetprotein = models.IntegerField(null=True)
+    target_calories = models.IntegerField(null=True)
 
     def __str__(self):
         return f'{self.user.username}'

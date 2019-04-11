@@ -7,6 +7,7 @@ from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 from .forms import UserRegisterForm
 from .tokens import account_activation_token
 

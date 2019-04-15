@@ -22,6 +22,16 @@ def daily_log(request):
 
 
 @login_required()
+def add_food(request):
+    return render(request, 'add_food.html', {'selected': 'Daily Log'})
+
+
+@login_required()
+def add_exercise(request):
+    return render(request, 'add_exercise.html', {'selected': 'Daily Log'})
+
+
+@login_required()
 def goals(request):
     return render(request, 'goals.html', {'selected': 'Goals'})
 

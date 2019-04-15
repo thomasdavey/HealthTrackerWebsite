@@ -7,4 +7,6 @@ urlpatterns = [
     path('goals/', views.goals, name='tracker-goals'),
     path('groups/', views.groups, name='tracker-groups'),
     path('settings/', views.settings, name='tracker-settings'),
+    path('log/addfood/', views.add_food, name='tracker-add-food'),
+    path('log/addexercise/', views.add_exercise, name='tracker-add-exercise')
 ]

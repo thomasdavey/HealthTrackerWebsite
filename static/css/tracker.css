@@ -284,3 +284,11 @@ main {
 .modal-content button:focus {
     outline: none;
 }
+
+.add-food p{
+    margin-bottom: 10px;
+}
+
+.add-custom p{
+    margin-bottom: 10px;
+}

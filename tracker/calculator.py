@@ -7,78 +7,78 @@ def bmi(weight, height):
     return bmi
 
 
-def idealweight(height, sex):
+def ideal_weight(height, sex):
     height = height*0.393701
 
     if (sex == 'F'):
-        idealWeight = 45.5 + ((height - 60) * 2.3)
+        ideal_weight = 45.5 + ((height - 60) * 2.3)
     elif (sex == 'M'):
-        idealWeight = 50 + ((height - 60) * 2.3)
+        ideal_weight = 50 + ((height - 60) * 2.3)
 
-    return idealWeight
-
-
-def metabolicrate(weight, height, age):
-    metabolicRate = (10*weight) + (6.25*height) - (5*age) - 161
-    return metabolicRate
+    return ideal_weight
 
 
-def dailycals(metabolicRate, energyExpenditure):
-    dailyCals = metabolicRate*energyExpenditure
-    return dailyCals
+def metabolic_rate(weight, height, age):
+    metabolic_rate = (10*weight) + (6.25*height) - (5*age) - 161
+    return metabolic_rate
 
 
-def targetcalories(metabolicRate, energyExpenditure, extremity):
-    dailyCals = dailycals(metabolicRate, energyExpenditure)
-    calorieDeficit = dailyCals*(-(extremity/10))
-    targetCalories = dailyCals - calorieDeficit
-    return targetCalories
+def daily_cals(metabolic_rate, energy_expenditure):
+    daily_cals = metabolic_rate*energy_expenditure
+    return daily_cals
 
 
-def targetbreakfast(targetCalories):
-    targetBreakfast = targetCalories*0.18
-    return targetBreakfast
+def target_calories(metabolic, energy, extremity):
+    daily_cals = daily_cals(metabolic, energy)
+    calorie_deficit = daily_cals*(-(extremity/10))
+    target_calories = daily_cals - calorie_deficit
+    return target_calories
 
 
-def targetlunch(targetCalories):
-    targetlunch = targetCalories*0.3
-    return targetlunch
+def target_breakfast(target_calories):
+    target_breakfast = target_calories*0.18
+    return target_breakfast
 
 
-def targetdinner(targetCalories):
-    targetdinner = targetCalories*0.4
-    return targetdinner
+def target_lunch(target_calories):
+    target_lunch = target_calories*0.3
+    return target_lunch
 
 
-def targetsnacks(targetCalories):
-    targetsnacks = targetCalories*0.12
-    return targetsnacks
+def target_dinner(target_calories):
+    target_dinner = target_calories*0.4
+    return target_dinner
 
 
-def netcalories(totalCalories, exerciseCals):
-    netCalories = totalCalories - exerciseCals
-    return netCalories
+def target_snacks(target_calories):
+    target_snacks = target_calories*0.12
+    return target_snacks
 
 
-def calsunderbudget(targetCalories, netCalories):
-    calsUnderBudget = targetCalories - netCalories
-    return calsUnderBudget
+def net_calories(total_calories, exercise_cals):
+    net_calories = total_calories - exercise_cals
+    return net_calories
 
 
-def targetprotein(weight):
+def cals_under_budget(target_calories, net_calories):
+    cals_under_budget = target_calories - net_calories
+    return cals_under_budget
+
+
+def target_protein(weight):
     weight = weight*2.20462
-    targetProtein = weight*0.825
-    return targetProtein
+    target_protein = weight*0.825
+    return target_protein
 
 
-def targetfat(dailyCals):
-    targetfat = (dailyCals*0.25)/9
-    return targetfat
+def target_fat(daily_cals):
+    target_fat = (daily_cals*0.25)/9
+    return target_fat
 
 
-def targetcarbs(dailyCals, targetProtein, targetFat):
-    targetCarbs = (dailyCals - ((targetProtein*4) + (targetFat*9)))/4
-    return targetCarbs
+def target_carbs(daily_cals, target_protein, target_fat):
+    target_carbs = (daily_cals - ((target_protein*4) + (target_fat*9)))/4
+    return target_carbs
 
 
 def get_weight_loss_extremity(goal):

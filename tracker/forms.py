@@ -3,7 +3,8 @@ from .models import Message
 
 
 class MessageForm(forms.ModelForm):
+    message = forms.CharField(widget=forms.TextInput(attrs={'class': 'groups-temp'}))
+
     class Meta:
         model = Message
-        fields = ['group_id', 'message']
-        exclude = ['author']
+        fields = ['message']

@@ -6,17 +6,28 @@ from django.contrib.auth.models import User
 from SE2 import settings
 
 
-class Message(models.Model):
-    group_id = models.CharField(max_length=100, null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, db_column='author')
-    message = models.TextField(null=True)
-    date_posted = models.DateTimeField(auto_now_add=True)
+class Group(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    name = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return self.message
+        return f'Group {self.id}: {self.name}'
 
 
 class GroupMember(models.Model):
-    group_id = models.CharField(max_length=100, null=True)
-    member = models.ForeignKey(User, on_delete=models.CASCADE, db_column='member')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f'Group {self.group.id} member: {self.user.username}'
+
+
+class Message(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    message = models.TextField(null=True)
+    posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Group {self.group.id}: {self.author.username} - {self.message}'
 

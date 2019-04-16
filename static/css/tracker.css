@@ -174,8 +174,6 @@ main {
 
 .profile-picture {
   display: inline-block;
-  width: 150px;
-  height: 150px;
   border-radius: 50%;
 
   background-repeat: no-repeat;
@@ -301,3 +299,83 @@ main {
 .modal-content button:focus {
     outline: none;
 }
+
+.groups-list {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 275px;
+    background-color: white;
+    min-height: 100vh;
+    text-align: left;
+    border-left: solid 1px rgba(0,0,0,0.1);
+}
+
+.groups-list li {
+    list-style: none;
+}
+
+.groups-list a {
+    text-decoration: none;
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+    padding: 30px;
+    display: block;
+}
+
+.groups-messages {
+    padding: 10px 10px 60px 10px;
+    width: calc(100% - 275px);
+    background-color: rgba(0,0,0,0.03);
+}
+
+.groups-messages p {
+    padding: 5px 15px;
+    border-radius: 30px;
+    margin: 5px;
+    background-color: lightgray;
+    display: inline-block;
+}
+
+.groups-messages-user {
+    text-align: right;
+}
+
+.groups-messages-user p {
+    background-color: orange;
+    color: white
+}
+
+.groups-chat-box {
+    display: block;
+    padding: 10px;
+    position: fixed;
+    background-color: white;
+    bottom: 0;
+    width: calc(100% - 525px);
+    border-top: solid 1px rgba(0,0,0,0.1);
+}
+
+.groups-temp {
+    width: calc(100% - 40px);
+    padding: 5px 10px;
+    border-radius: 30px;
+    border: solid 1px rgba(0,0,0,0.1);
+    outline: none;
+    background-color: rgba(0,0,0,0.03);
+}
+
+#tabs form button {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    border-radius: 50%;
+    background-color: white;
+    border: solid 1px rgba(0,0,0,0.1);
+    outline: none;
+    color: rgba(0,0,0,0.5);
+}
+
+#tabs form button:hover {
+    color: black;
+}
+

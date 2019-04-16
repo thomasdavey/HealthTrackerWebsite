@@ -1,19 +1,75 @@
 {% extends 'template.html' %}
 {% block content %}
-    <h1>Groups!</h1><br>
+    <div id="tabs">
+        <div class="groups-list">
+            <ul>
+                {% for group in groups %}
+                    <li><a href="#{{ group.group.id }}">{{ group.group.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% for set in messages %}
+            <div id="{% for message in set %}{% if forloop.first %}{{ message.group.id }}{% endif %}{% endfor %}">
+                <div class="groups-messages" id="chat-{% for message in set %}{% if forloop.first %}{{ message.group.id }}{% endif %}{% endfor %}">
+                {% for message in set %}
+                    {% if message.author == user %}
+                        <div class="groups-messages-user">
+                            <p>{{ message.author.username }} - {{ message.message }}</p>
+                        </div>
+                    {% else %}
+                        <div>
+                            <p>{{ message.author.username }} - {{ message.message }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                {% for message in set %}
+                    {% if forloop.first %}
+                        <form method="POST" id="form-{{ message.group.id }}">
+                        {%  csrf_token %}
+                        {% for field in form %}
+                            <div class="groups-chat-box">
+                                {{ field }}
+                                <input type="hidden" name="group" value="{{ message.group.id }}">
+                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        {% endfor %}
+                        </form>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
 
-    {%  for message in messages %}
+    <script type="text/javascript">
+        {% for group in groups %}
+        $(document).on('submit', '#form-{{ group.group.id }}', function(e) {
+            e.preventDefault();
 
-        <p>{{ message.author.username }} - {{ message.message }}</p>
+            $.ajaxSetup ({
+                cache: false
+            });
 
-    {% endfor %}
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'tracker-groups' %}',
+                data: {
+                    csrfmiddlewaretoken: $('#form-{{ group.group.id }} input[name=csrfmiddlewaretoken]').val(),
+                    message: $('#form-{{ group.group.id }} input[name=message]').val(),
+                    group: $('#form-{{ group.group.id }} input[name=group]').val()
+                },
+                success: function() {
+                    $('#chat-{{ group.group.id }}').load(document.URL +  ' #chat-{{ group.group.id }}>*');
+                    $('#form-{{ group.group.id }} input[name=message]').val("");
+                    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                },
+            });
+        });
+        {% endfor %}
 
-    <br><br>
-
-    <form action="/tracker/groups/" method="POST">
-        {%  csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Send">
-    </form>
-
+        $(function() {
+            $("#tabs").tabs();
+        });
+    </script>
 {% endblock content %}

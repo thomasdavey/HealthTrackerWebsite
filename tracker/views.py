@@ -8,6 +8,8 @@ from datetime import date
 from users.forms import AccountUpdateForm ,ProfileUpdateForm
 from .forms import MessageForm
 from .models import Message
+from .models import GroupMember
+from .models import Group
 
 
 @login_required()
@@ -29,17 +31,25 @@ def goals(request):
 
 @login_required()
 def groups(request):
-    messages = Message.objects.all()
+    user = request.user
+    groups = GroupMember.objects.raw('SELECT * FROM tracker_groupmember WHERE user_id = ' + str(user.id))
+    messages = []
+
+    for item in groups:
+        messages.append(Message.objects.raw('SELECT * FROM tracker_message WHERE group_id = ' + str(item.group.id)))
 
     form = MessageForm(request.POST or None)
 
-    if form.is_valid():
-        message = form.save(commit=False)
-        message.author = request.user
-        message.save()
-        form = MessageForm()
+    if request.method == 'POST':
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.author = request.user
+            message.group = Group.objects.get(id=request.POST.get('group'))
+            message.save()
+            form = MessageForm()
 
     context = {
+        'groups': groups,
         'messages': messages,
         'selected': 'Groups',
         'form': form
@@ -58,6 +68,7 @@ def settings(request):
     modal = 'none'
     if request.method == 'POST':
         if 'update_account' in request.POST:
+            print(request.POST)
             update_account_form = AccountUpdateForm(data=request.POST, instance=request.user)
             modal = 'update_account'
             if update_account_form.is_valid():

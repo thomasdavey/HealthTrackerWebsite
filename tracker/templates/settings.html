@@ -2,7 +2,7 @@
 {% block content %}
     <div id="settings-container">
         <div id="settings-top-bar">
-            <div class="profile-picture" style="background-image: url('{{ user.profile.image.url }}')"></div>
+            <div class="profile-picture" style="background-image: url('{{ user.profile.image.url }}'); width: 150px; height: 150px;"></div>
             <div id="settings-top-information">
                 <h2>{{ user.first_name }} {{ user.last_name }}</h2>
                 <p>Member since {{ format_date }}</p>

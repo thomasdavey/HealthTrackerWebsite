@@ -2,29 +2,46 @@
 {% block content %}
     <div id="tabs">
         <div class="groups-list">
-            <ul>
-                {% for group in groups %}
-                    <li><a href="#{{ group.group.id }}">{{ group.group.name }}</a></li>
+            <ul id="groups-side">
+                {% for message in last %}
+                    <li>
+                        <a href="#{{ message.group.id }}">{{ message.group.name }}<br><span>{{ message.author.first_name }}: {{ message.message }}</span></a>
+                    </li>
                 {% endfor %}
             </ul>
+            <div id="groups-side-bottom">
+                <p>Hey</p>
+            </div>
         </div>
         {% for set in messages %}
             <div id="{% for message in set %}{% if forloop.first %}{{ message.group.id }}{% endif %}{% endfor %}">
                 <div class="groups-messages" id="chat-{% for message in set %}{% if forloop.first %}{{ message.group.id }}{% endif %}{% endfor %}">
                 {% for message in set %}
-                    {% if message.author == user %}
+                    {% ifchanged message.author %}
+                        {% if message.author == user %}
                         <div class="groups-messages-user">
                             <h6>{{ message.author.first_name }} {{ message.author.last_name }}</h6>
                             <p>{{ message.message }}</p>
                             <div class="profile-picture" style="background-image: url('{{ message.author.profile.image.url }}'); width: 34px; height: 34px;"></div>
                         </div>
-                    {% else %}
+                        {% else %}
                         <div>
                             <h6>{{ message.author.first_name }} {{ message.author.last_name }}</h6>
                             <div class="profile-picture" style="background-image: url('{{ message.author.profile.image.url }}'); width: 34px; height: 34px;"></div>
                             <p>{{ message.message }}</p>
                         </div>
-                    {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% if message.author == user %}
+                        <div class="groups-messages-user">
+                            <p style="margin: -3px 43px 5px 0">{{ message.message }}</p>
+                        </div>
+                        {% else %}
+                        <div>
+                            <p style="margin: -3px 0 5px 43px">{{ message.message }}</p>
+                        </div>
+                        {% endif %}
+                    {% endifchanged %}
                 {% endfor %}
                 </div>
                 {% for message in set %}
@@ -43,7 +60,6 @@
                 {% endfor %}
             </div>
         {% endfor %}
-        </div>
     </div>
 
     <script type="text/javascript">
@@ -64,6 +80,7 @@
                     group: $('#form-{{ group.group.id }} input[name=group]').val()
                 },
                 success: function() {
+                    $('#groups-side').load(document.URL +  ' #groups-side>*');
                     $('#chat-{{ group.group.id }}').load(document.URL +  ' #chat-{{ group.group.id }}>*');
                     $('#form-{{ group.group.id }} input[name=message]').val("");
                     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
@@ -73,14 +90,13 @@
         {% endfor %}
 
         $(function() {
-            $("#tabs").tabs();
-        });
+            var tabs = $("#tabs").tabs();
+            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
 
-        {% for group in groups %}
-        $(function() {
-            $('#chat-{{ group.group.id }}').load(document.URL +  ' #chat-{{ group.group.id }}>*');
-            setTimeout(arguments.callee, 1000);
+            $(function() {
+                setTimeout(arguments.callee, 1000);
+                tabs.tabs("refresh")
+            });
         });
-        {% endfor %}
     </script>
 {% endblock content %}

@@ -14,11 +14,15 @@
                 {% for message in set %}
                     {% if message.author == user %}
                         <div class="groups-messages-user">
-                            <p>{{ message.author.username }} - {{ message.message }}</p>
+                            <h6>{{ message.author.first_name }} {{ message.author.last_name }}</h6>
+                            <p>{{ message.message }}</p>
+                            <div class="profile-picture" style="background-image: url('{{ message.author.profile.image.url }}'); width: 34px; height: 34px;"></div>
                         </div>
                     {% else %}
                         <div>
-                            <p>{{ message.author.username }} - {{ message.message }}</p>
+                            <h6>{{ message.author.first_name }} {{ message.author.last_name }}</h6>
+                            <div class="profile-picture" style="background-image: url('{{ message.author.profile.image.url }}'); width: 34px; height: 34px;"></div>
+                            <p>{{ message.message }}</p>
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -71,5 +75,12 @@
         $(function() {
             $("#tabs").tabs();
         });
+
+        {% for group in groups %}
+        $(function() {
+            $('#chat-{{ group.group.id }}').load(document.URL +  ' #chat-{{ group.group.id }}>*');
+            setTimeout(arguments.callee, 1000);
+        });
+        {% endfor %}
     </script>
 {% endblock content %}

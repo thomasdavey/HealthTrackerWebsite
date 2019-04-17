@@ -326,6 +326,17 @@ main {
     padding: 10px 10px 60px 10px;
     width: calc(100% - 275px);
     background-color: rgba(0,0,0,0.03);
+    min-height: 100vh;
+}
+
+.groups-messages p, .groups-messages div {
+    vertical-align: middle;
+}
+
+.groups-messages h6 {
+    margin: 5px 0 -5px 45px;
+    color: rgba(0,0,0,0.5);
+    font-weight: 300;
 }
 
 .groups-messages p {
@@ -338,6 +349,12 @@ main {
 
 .groups-messages-user {
     text-align: right;
+}
+
+.groups-messages-user h6 {
+    margin: 5px 45px -5px 0;
+    color: rgba(0,0,0,0.5);
+    font-weight: 300;
 }
 
 .groups-messages-user p {
@@ -377,5 +394,13 @@ main {
 
 #tabs form button:hover {
     color: black;
+}
+
+.add-food p{
+    margin-bottom: 10px;
+}
+
+.add-custom p{
+    margin-bottom: 10px;
 }
 

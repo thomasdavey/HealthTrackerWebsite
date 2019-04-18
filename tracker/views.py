@@ -54,9 +54,18 @@ def groups(request):
     user = request.user
     groups = GroupMember.objects.raw('SELECT * FROM tracker_groupmember WHERE user_id = ' + str(user.id))
     messages = []
+    last = []
 
     for item in groups:
         messages.append(Message.objects.raw('SELECT * FROM tracker_message WHERE group_id = ' + str(item.group.id)))
+
+    def sortDate(elem):
+        return elem[-1].posted
+
+    messages.sort(key=sortDate, reverse=True)
+
+    for set in messages:
+        last.append(set[-1])
 
     form = MessageForm(request.POST or None)
 
@@ -71,6 +80,7 @@ def groups(request):
     context = {
         'groups': groups,
         'messages': messages,
+        'last': last,
         'selected': 'Groups',
         'form': form
     }

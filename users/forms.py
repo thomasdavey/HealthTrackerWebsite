@@ -87,3 +87,5 @@ class WeightGoalUpdateForm(forms.ModelForm):
     class Meta:
         model = WeightGoal
         fields = ['target_weight', 'target_date']
+
+

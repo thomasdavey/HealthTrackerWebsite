@@ -1,5 +1,5 @@
 from django import forms
-from .models import Message
+from .models import Message, Food
 
 
 class MessageForm(forms.ModelForm):
@@ -8,3 +8,12 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['message']
+
+
+class AddCustomFoodForm(forms.ModelForm):
+
+    class Meta:
+        model = Food
+        fields = ['name', 'calories', 'carbs', 'fat', 'protein']
+
+

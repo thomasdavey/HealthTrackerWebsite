@@ -22,6 +22,9 @@
             <div class="meal-select-meal">
                 <h3>Snacks:</h3>
                 <h4>Recommended Calories: </h4>
+                <div class="settings-button-container">
+                <div class="settings-button settings-button-2"><a id="add_food-button">Add Food</a></div>
+            </div>
             </div>
             <div id="meal-select-ldBars">
                 <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
@@ -30,4 +33,77 @@
             </div>
         </div>
     </div>
+    <div class="modal" id="add_food-modal">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3>Add Food</h3>
+            <form method="POST">
+                <select name="category">Category
+                    <option>Meat</option>
+                    <option>Fruit</option>
+                    <option>Vegetable</option>
+                    <option>Dairy</option>
+                    <option>Grain</option>
+                    <option>Sweet</option>
+                    <option>Drink</option>
+                    <option>Custom</option>
+                </select>
+                <p></p>
+                <select name="food">Food
+                    <option>Option1</option>
+                    <option>Option2</option>
+                </select>
+                <p></p>
+                <div class="settings-button settings-button-2"><a id="add_custom-button">Add Custom Food</a></div>
+                <button type="submit" name="add_food">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal" id="add_custom-modal">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3>Add Custom</h3>
+            {% load filters %}
+            <form method="POST">
+                {%  csrf_token %}
+                <input type="text" name="foodname" placeholder="Food Name"><br>
+                <input type="text" name="calories" placeholder="Calories (kcal)"><br>
+                <input type="text" name="carbs" placeholder="Carbs (g)"><br>
+                <input type="text" name="fat" placeholder="Fat (g)"><br>
+                <input type="text" name="protein" placeholder="Protein (g)"><br>
+                <button type="submit" name="add_custom">Add Custom Food</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var add_foodModal = document.getElementById('add_food-modal');
+        var add_foodButton = document.getElementById("add_food-button");
+        var add_foodClose = document.getElementsByClassName("close")[0];
+        var add_customModal = document.getElementById('add_custom-modal');
+        var add_customButton = document.getElementById("add_custom-button");
+        var add_customClose = document.getElementsByClassName("close")[1];
+
+        add_foodButton.onclick = function() {
+            add_foodModal.style.display = "flex";
+        };
+        add_foodClose.onclick = function() {
+            add_foodModal.style.display = "none";
+        };
+        add_customButton.onclick = function() {
+            add_customModal.style.display = "flex";
+        };
+        add_customClose.onclick = function() {
+            add_customModal.style.display = "none";
+        };
+
+        window.onclick = function(event) {
+            if (event.target === add_foodModal) {
+                add_foodModal.style.display = "none";
+            }
+            else if (event.target === add_customModal){
+                add_customModal.style.display = "none";
+            }
+        };
+    </script>
 {% endblock content %}

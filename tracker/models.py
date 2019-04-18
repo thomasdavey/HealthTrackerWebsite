@@ -31,3 +31,17 @@ class Message(models.Model):
     def __str__(self):
         return f'Group {self.group.id}: {self.author.username} - {self.message}'
 
+
+class Food(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=50, null=True)
+    calories = models.IntegerField(null=True)
+    carbs = models.IntegerField(null=True)
+    fat = models.IntegerField(null=True)
+    protein = models.IntegerField(null=True)
+    category = models.CharField(max_length=20, null=True)
+
+    def __str__(self):
+        return f'Food {self.name}'
+
+

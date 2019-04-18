@@ -6,6 +6,10 @@
             <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value="25" data-preset="circle" data-stroke-width="5" data-stroke="#F58233"></div>
             <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value="35" data-preset="circle" data-stroke-width="5" data-stroke="#8BC1E7"></div>
         </div>
+        <div id="daily-log-progress-container">
+            <div class="settings-button-container">
+                <div class="settings-button settings-button-2"><a id="add_exercise-button">Add Exercise</a></div>
+        </div>
         <div id="meal-select">
             <div class="meal-select-meal">
                 <h3>Breakfast:</h3>
@@ -38,6 +42,7 @@
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Add Food</h3>
             <form method="POST">
+                <div class="add-custom">
                 <select name="category">Category
                     <option>Meat</option>
                     <option>Fruit</option>
@@ -49,31 +54,79 @@
                     <option>Custom</option>
                 </select>
                 <p></p>
-                <select name="food">Food
-                    <option>Option1</option>
-                    <option>Option2</option>
+                <select name="food">
+                    {% for food in foods %}
+                        <option>{{ food }}</option>
+                    {% endfor %}
                 </select>
                 <p></p>
-                <div class="settings-button settings-button-2"><a id="add_custom-button">Add Custom Food</a></div>
+                <div class="settings-button settings-button-2"><a id="add_custom-button">Add Custom Food</a></div><br>
                 <button type="submit" name="add_food">Submit</button>
+                </div>
             </form>
         </div>
     </div>
     <div class="modal" id="add_custom-modal">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
-            <h3>Add Custom</h3>
+            <h3>Add Custom Food</h3>
             {% load filters %}
             <form method="POST">
                 {%  csrf_token %}
+                <div class="add-custom">
                 <input type="text" name="foodname" placeholder="Food Name"><br>
                 <input type="text" name="calories" placeholder="Calories (kcal)"><br>
                 <input type="text" name="carbs" placeholder="Carbs (g)"><br>
                 <input type="text" name="fat" placeholder="Fat (g)"><br>
                 <input type="text" name="protein" placeholder="Protein (g)"><br>
                 <button type="submit" name="add_custom">Add Custom Food</button>
+                </div>
             </form>
         </div>
+    </div>
+    <div class="modal" id="add_exercise-modal">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3>Add Exercise</h3>
+            {% load filters %}
+            <form method="POST">
+                {%  csrf_token %}
+                <div class="add-custom">
+                <select name="type">Exercise Type
+                    <option>Cardio</option>
+                    <option>Strength</option>
+                    <option>Custom</option>
+                </select>
+                <select name="exercise" disabled>Exercise Type
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                    <option>Option 3</option>
+                </select>
+                <div class="settings-button settings-button-2"><a id="add_customex-button">Add Custom Exercise</a></div><br>
+                <button type="submit" name="add_exercise">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal" id="add_customex-modal">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3>Add Custom Exercise</h3>
+            {% load filters %}
+            <form method="POST">
+                {%  csrf_token %}
+                <div class="add-custom">
+                <input type="text" name="exercisename" placeholder="Exercise Name"><br>
+                <select name="extype">Exercise Type
+                    <option>Cardio</option>
+                    <option>Strength</option>
+                </select>
+                <input type="text" name="calspermin" placeholder="Calories Burned per Minute"><br>
+                <button type="submit" name="add_customex">Add Custom Exercise</button>
+                </div>
+            </form>
+        </div>
+    </div>
     </div>
 
     <script>
@@ -83,6 +136,12 @@
         var add_customModal = document.getElementById('add_custom-modal');
         var add_customButton = document.getElementById("add_custom-button");
         var add_customClose = document.getElementsByClassName("close")[1];
+        var add_exerciseModal = document.getElementById('add_exercise-modal');
+        var add_exerciseButton = document.getElementById("add_exercise-button");
+        var add_exerciseClose = document.getElementsByClassName("close")[2];
+        var add_customexModal = document.getElementById('add_customex-modal');
+        var add_customexButton = document.getElementById("add_customex-button");
+        var add_customexClose = document.getElementsByClassName("close")[3];
 
         add_foodButton.onclick = function() {
             add_foodModal.style.display = "flex";
@@ -96,6 +155,18 @@
         add_customClose.onclick = function() {
             add_customModal.style.display = "none";
         };
+        add_exerciseButton.onclick = function() {
+            add_exerciseModal.style.display = "flex";
+        };
+        add_exerciseClose.onclick = function() {
+            add_exerciseModal.style.display = "none";
+        };
+        add_customexButton.onclick = function() {
+            add_customexModal.style.display = "flex";
+        };
+        add_customexClose.onclick = function() {
+            add_customexModal.style.display = "none";
+        };
 
         window.onclick = function(event) {
             if (event.target === add_foodModal) {
@@ -103,6 +174,13 @@
             }
             else if (event.target === add_customModal){
                 add_customModal.style.display = "none";
+                add_foodModal.style.display = "none";
+            }
+            else if (event.target === add_exerciseModal){
+                add_exerciseModal.style.display = "none";
+            }
+            else if (event.target === add_customexModal){
+                add_customexModal.style.display = "none";
             }
         };
     </script>

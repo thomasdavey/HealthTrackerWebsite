@@ -45,3 +45,13 @@ class Food(models.Model):
         return f'Food {self.name}'
 
 
+class Exercise(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=50, null=True)
+    type = models.CharField(max_length=20, null=True)
+    calspermin = models.IntegerField(null=True)
+
+    def __str__(self):
+        return f'Exercise {self.name}'
+
+

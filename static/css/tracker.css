@@ -429,11 +429,12 @@ main {
     color: black;
 }
 
-.add-food p{
-    margin-bottom: 10px;
+.add-custom input, select {
+    margin-bottom: 20px;
+    width: 100%;
+    font-size: 16px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    border-color: #A9A9A9;
 }
-
-.add-custom p{
-    margin-bottom: 10px;
-}
-

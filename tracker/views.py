@@ -6,8 +6,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from datetime import date
 from users.forms import AccountUpdateForm ,ProfileUpdateForm
-from .forms import MessageForm, AddCustomFoodForm
-from .models import Message
+from .forms import MessageForm, AddCustomFoodForm, AddFoodForm
+from .models import Message, Food
 from .models import GroupMember
 from .models import Group
 
@@ -21,24 +21,16 @@ def home(request):
 
 @login_required()
 def daily_log(request):
-    add_custom_form = AddCustomFoodForm(request.POST or None)
-    modal = 'none'
+    form = AddCustomFoodForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
 
-    if 'add_food' in request.POST:
-        modal = 'add_food'
-        if 'add_custom':
-            modal = 'add_custom'
-            if add_custom_form.is_valid():
-                add_custom_form = AddCustomFoodForm(data=request.POST, instance=request.user)
-                food = add_custom_form.save()
-                food.user = request.user
-                messages.success(request, f'Food successfully added!')
-                return redirect('tracker-daily-log')
+    foods = Food.objects.all()
 
     context = {
         'selected': 'Daily Log',
-        'form': add_custom_form,
-        'modal': modal
+        'foods': foods
     }
 
     return render(request, 'daily_log.html', context)

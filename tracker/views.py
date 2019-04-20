@@ -5,12 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from datetime import date
-from users.forms import AccountUpdateForm ,ProfileUpdateForm
+from users.forms import AccountUpdateForm, ProfileUpdateForm
 from .forms import MessageForm, AddCustomFoodForm, AddFoodForm
 from .models import Message, Food
 from .models import GroupMember
 from .models import Group
-
+from tracker import calculator
+from users.models import WeightGoal
 
 @login_required()
 def home(request):
@@ -21,16 +22,33 @@ def home(request):
 
 @login_required()
 def daily_log(request):
-    form = AddCustomFoodForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
+    user = request.user
 
-    foods = Food.objects.all()
+    def get_weight_loss_extremity():
+        #going to write extremity method here as it needs access to so many things
+        #and this seems the most sensible way
+        return
+
+    #age = date.today().year - user.profile.birth_date.year - \
+    #    ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
+    #meta_rate = calculator.metabolic_rate(user.profile.weight, user.profile.height, age)
+    #extremity = calculator.get_weight_loss_extremity()
+    #target_cals = calculator.target_calories(meta_rate, user.profile.activity_level, extremity)
+
+    food_form = AddFoodForm(request.POST or None)
+
+    form = AddCustomFoodForm(request.POST or None)
+    if form.is_valid():
+        food = form.save(commit=False)
+        food.user = request.user
+        food.category = "Custom"
+        food.save()
 
     context = {
         'selected': 'Daily Log',
-        'foods': foods
+        'form': form,
+        'foodForm': food_form,
+        #'target_cals': target_cals
     }
 
     return render(request, 'daily_log.html', context)

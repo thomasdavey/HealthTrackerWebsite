@@ -9,6 +9,13 @@
         <div id="daily-log-progress-container">
             <div class="settings-button-container">
                 <div class="settings-button settings-button-2"><a id="add_exercise-button">Add Exercise</a></div>
+                <p>Target calories:</p>
+                <p>Calories under budget: </p>
+                <p>Calories burned today: </p>
+                <p>Net Calories today: </p>
+                <p>Protein total: </p>
+                <p>Fat total: </p>
+                <p>Carbs total: </p>
         </div>
         <div id="meal-select">
             <div class="meal-select-meal">
@@ -43,23 +50,7 @@
             <h3>Add Food</h3>
             <form method="POST">
                 <div class="add-custom">
-                <select name="category">Category
-                    <option>Meat</option>
-                    <option>Fruit</option>
-                    <option>Vegetable</option>
-                    <option>Dairy</option>
-                    <option>Grain</option>
-                    <option>Sweet</option>
-                    <option>Drink</option>
-                    <option>Custom</option>
-                </select>
-                <p></p>
-                <select name="food">
-                    {% for food in foods %}
-                        <option>{{ food }}</option>
-                    {% endfor %}
-                </select>
-                <p></p>
+                {{ foodForm.category }}
                 <div class="settings-button settings-button-2"><a id="add_custom-button">Add Custom Food</a></div><br>
                 <button type="submit" name="add_food">Submit</button>
                 </div>
@@ -70,15 +61,10 @@
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Add Custom Food</h3>
-            {% load filters %}
             <form method="POST">
                 {%  csrf_token %}
                 <div class="add-custom">
-                <input type="text" name="foodname" placeholder="Food Name"><br>
-                <input type="text" name="calories" placeholder="Calories (kcal)"><br>
-                <input type="text" name="carbs" placeholder="Carbs (g)"><br>
-                <input type="text" name="fat" placeholder="Fat (g)"><br>
-                <input type="text" name="protein" placeholder="Protein (g)"><br>
+                {{ form }}
                 <button type="submit" name="add_custom">Add Custom Food</button>
                 </div>
             </form>
@@ -112,7 +98,6 @@
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Add Custom Exercise</h3>
-            {% load filters %}
             <form method="POST">
                 {%  csrf_token %}
                 <div class="add-custom">

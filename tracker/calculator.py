@@ -1,5 +1,3 @@
-from users.models import WeightGoal
-
 
 def bmi(weight, height):
     height = height/100
@@ -23,13 +21,13 @@ def metabolic_rate(weight, height, age):
     return metabolic_rate
 
 
-def daily_cals(metabolic_rate, energy_expenditure):
-    daily_cals = metabolic_rate*energy_expenditure
+def daily_cal(metabolic, energy):
+    daily_cals = metabolic * energy
     return daily_cals
 
 
 def target_calories(metabolic, energy, extremity):
-    daily_cals = daily_cals(metabolic, energy)
+    daily_cals = daily_cal(metabolic, energy)
     calorie_deficit = daily_cals*(-(extremity/10))
     target_calories = daily_cals - calorie_deficit
     return target_calories
@@ -81,7 +79,8 @@ def target_carbs(daily_cals, target_protein, target_fat):
     return target_carbs
 
 
-def get_weight_loss_extremity(goal):
-    #needs actual method body adding to it
-    extremity = 0
-    return extremity
+#def get_weight_loss_extremity(user):
+#    weightLoss = WeightGoal.target_weight
+#
+#    return extremity
+

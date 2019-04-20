@@ -33,13 +33,24 @@ class Message(models.Model):
 
 
 class Food(models.Model):
+
+    CATEGORIES = (
+        ('Meat', 'Meat'),
+        ('Fruit', 'Fruit'),
+        ('Vegetable', 'Vegetable'),
+        ('Dairy', 'Dairy'),
+        ('Grain', 'Grain'),
+        ('Sweet', 'Sweet'),
+        ('Drink', 'Drink'),
+        ('Custom', 'Custom')
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, null=True)
     calories = models.IntegerField(null=True)
     carbs = models.IntegerField(null=True)
     fat = models.IntegerField(null=True)
     protein = models.IntegerField(null=True)
-    category = models.CharField(max_length=20, null=True)
+    category = models.CharField(max_length=20, choices=CATEGORIES, null=True)
 
     def __str__(self):
         return f'Food {self.name}'
@@ -55,3 +66,18 @@ class Exercise(models.Model):
         return f'Exercise {self.name}'
 
 
+#class CalorieCount(models.Model):
+#    MEALS = (
+#        ('BF', 'Breakfast')
+#        ('LU', 'Lunch')
+#        ('DN', 'Dinner')
+#        ('SK', 'Snacks')
+#    )
+#
+#    username = models.CharField(max_length=50, null=True)
+#    date = models.DateField(auto_now_add=True)
+#    kcals = models.IntegerField(null=True)
+#    meal = models.CharField(max_length=20, choices=MEALS, null=True)
+#
+#    def __str__(self):
+#        return f'CalorieCount {self.kcals}'

@@ -77,6 +77,9 @@ class CalorieCount(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     date = models.DateField(auto_now_add=True)
     kcals = models.IntegerField(null=True)
+    fat = models.IntegerField(null=True)
+    carbs = models.IntegerField(null=True)
+    protein = models.IntegerField(null=True)
     meal = models.CharField(max_length=20, choices=MEALS, null=True)
 
     def __str__(self):

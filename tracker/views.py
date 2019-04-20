@@ -29,12 +29,17 @@ def daily_log(request):
         ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
     meta_rate = calculator.metabolic_rate(int(user.profile.weight), int(user.profile.height), int(age))
     extremity = calculator.get_weight_loss_extremity(user)
+    daily_cals = calculator.daily_cal(meta_rate, user.profile.activity_level)
     target_cals = calculator.target_calories(meta_rate, user.profile.activity_level, extremity)
 
     target_bk = int(calculator.target_breakfast(target_cals))
     target_l = int(calculator.target_lunch(target_cals))
     target_dn = int(calculator.target_dinner(target_cals))
     target_sn = int(calculator.target_snacks(target_cals))
+
+    target_protein = int(calculator.target_protein(user.profile.weight))
+    target_fat = int(calculator.target_fat(daily_cals))
+    target_carbs = int(calculator.target_carbs(daily_cals, target_fat, target_protein))
 
     breakfast = CalorieCount.objects.filter(user=user, date=date.today(), meal='BF')
     bcals = breakfast.aggregate(Sum('kcals'))['kcals__sum'] or 0
@@ -44,6 +49,13 @@ def daily_log(request):
     dcals = dinner.aggregate(Sum('kcals'))['kcals__sum'] or 0
     snacks = CalorieCount.objects.filter(user=user, date=date.today(), meal='SK')
     scals = snacks.aggregate(Sum('kcals'))['kcals__sum'] or 0
+
+    total_p = CalorieCount.objects.filter(user=user, date=date.today())
+    totalp = total_p.aggregate(Sum('protein'))['protein__sum'] or 0
+    total_f = CalorieCount.objects.filter(user=user, date=date.today())
+    totalf = total_f.aggregate(Sum('fat'))['fat__sum'] or 0
+    total_c = CalorieCount.objects.filter(user=user, date=date.today())
+    totalc = total_c.aggregate(Sum('carbs'))['carbs__sum'] or 0
 
     food_form = AddFoodForm(request.POST or None)
 
@@ -66,7 +78,13 @@ def daily_log(request):
         'targetb': target_bk,
         'targetl': target_l,
         'targetd': target_dn,
-        'targets': target_sn
+        'targets': target_sn,
+        'targetc': target_carbs,
+        'targetf': target_fat,
+        'targetp': target_protein,
+        'totalp': totalp,
+        'totalf': totalf,
+        'totalc': totalc
     }
 
     return render(request, 'daily_log.html', context)

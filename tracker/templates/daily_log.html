@@ -9,7 +9,7 @@
         <div id="daily-log-progress-container">
             <div class="settings-button-container">
                 <div class="settings-button settings-button-2"><a id="add_exercise-button">Add Exercise</a></div>
-                <p>Target calories:</p>
+                <p>Target calories: {{ target_cals }}</p>
                 <p>Calories under budget: </p>
                 <p>Calories burned today: </p>
                 <p>Net Calories today: </p>
@@ -19,22 +19,22 @@
         </div>
         <div id="meal-select">
             <div class="meal-select-meal">
-                <h3>Breakfast:</h3>
-                <h4>Recommended Calories: </h4>
+                <h3>Breakfast: {{ breakfast }}</h3>
+                <h4>Recommended Calories: {{ targetb }} </h4>
             </div>
             <div class="meal-select-meal">
-                <h3>Lunch:</h3>
-                <h4>Recommended Calories: </h4>
+                <h3>Lunch: {{ lunch }}</h3>
+                <h4>Recommended Calories: {{ targetl }} </h4>
             </div>
             <div class="meal-select-meal">
-                <h3>Dinner:</h3>
-                <h4>Recommended Calories: </h4>
+                <h3>Dinner: {{ dinner }}</h3>
+                <h4>Recommended Calories: {{ targetd }}</h4>
             </div>
             <div class="meal-select-meal">
-                <h3>Snacks:</h3>
-                <h4>Recommended Calories: </h4>
+                <h3>Snacks: {{ snacks }}</h3>
+                <h4>Recommended Calories: {{ targets }}</h4>
                 <div class="settings-button-container">
-                <div class="settings-button settings-button-2"><a id="add_food-button">Add Food</a></div>
+                <div class="settings-button settings-button-2"><a id="add_food-button">Add Food Breakfast</a></div>
             </div>
             </div>
             <div id="meal-select-ldBars">

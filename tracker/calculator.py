@@ -1,3 +1,4 @@
+from datetime import date
 
 def bmi(weight, height):
     height = height/100
@@ -22,15 +23,15 @@ def metabolic_rate(weight, height, age):
 
 
 def daily_cal(metabolic, energy):
-    daily_cals = metabolic * energy
-    return daily_cals
+    daily_cals = float(metabolic) * float(energy)
+    return int(daily_cals)
 
 
 def target_calories(metabolic, energy, extremity):
     daily_cals = daily_cal(metabolic, energy)
     calorie_deficit = daily_cals*(-(extremity/10))
     target_calories = daily_cals - calorie_deficit
-    return target_calories
+    return int(target_calories)
 
 
 def target_breakfast(target_calories):
@@ -79,8 +80,32 @@ def target_carbs(daily_cals, target_protein, target_fat):
     return target_carbs
 
 
-#def get_weight_loss_extremity(user):
-#    weightLoss = WeightGoal.target_weight
-#
-#    return extremity
+def get_weight_loss_extremity(user):
+    weight_loss = int(user.profile.weight - user.weightgoal.target_weight)
+    days_between = user.weightgoal.target_date - date.today()
+    num_weeks = int(days_between.days) / 7
+    kg_per_week = weight_loss / num_weeks
+    if kg_per_week > -3 and kg_per_week < -2:
+        extremity = 3;
+
+    elif kg_per_week > -2 and kg_per_week < -1:
+        extremity = 2;
+
+    elif kg_per_week > -1 and kg_per_week <= 0:
+        extremity = 1;
+
+    elif kg_per_week > 0 and kg_per_week < 1:
+        extremity = -1;
+
+    elif kg_per_week > 1 and kg_per_week < 2:
+        extremity = -2;
+
+    elif kg_per_week > 2 and kg_per_week < 3:
+        extremity = -3;
+
+    else:
+        print("Please set a different goal. This goal is too difficult to acheive within the time limit.")
+
+    return extremity
+
 

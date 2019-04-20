@@ -4,12 +4,13 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from django.db.models import Sum, F
 from datetime import date
 from users.forms import AccountUpdateForm, ProfileUpdateForm
 from .forms import MessageForm, AddCustomFoodForm, AddFoodForm
 from .models import Message, Food
 from .models import GroupMember
-from .models import Group
+from .models import Group, CalorieCount
 from tracker import calculator
 from users.models import WeightGoal
 
@@ -24,16 +25,25 @@ def home(request):
 def daily_log(request):
     user = request.user
 
-    def get_weight_loss_extremity():
-        #going to write extremity method here as it needs access to so many things
-        #and this seems the most sensible way
-        return
+    age = date.today().year - user.profile.birth_date.year - \
+        ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
+    meta_rate = calculator.metabolic_rate(int(user.profile.weight), int(user.profile.height), int(age))
+    extremity = calculator.get_weight_loss_extremity(user)
+    target_cals = calculator.target_calories(meta_rate, user.profile.activity_level, extremity)
 
-    #age = date.today().year - user.profile.birth_date.year - \
-    #    ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
-    #meta_rate = calculator.metabolic_rate(user.profile.weight, user.profile.height, age)
-    #extremity = calculator.get_weight_loss_extremity()
-    #target_cals = calculator.target_calories(meta_rate, user.profile.activity_level, extremity)
+    target_bk = int(calculator.target_breakfast(target_cals))
+    target_l = int(calculator.target_lunch(target_cals))
+    target_dn = int(calculator.target_dinner(target_cals))
+    target_sn = int(calculator.target_snacks(target_cals))
+
+    breakfast = CalorieCount.objects.filter(user=user, date=date.today(), meal='BF')
+    bcals = breakfast.aggregate(Sum('kcals'))['kcals__sum'] or 0
+    lunch = CalorieCount.objects.filter(user=user, date=date.today(), meal='LU')
+    lcals = lunch.aggregate(Sum('kcals'))['kcals__sum'] or 0
+    dinner = CalorieCount.objects.filter(user=user, date=date.today(), meal='DN')
+    dcals = dinner.aggregate(Sum('kcals'))['kcals__sum'] or 0
+    snacks = CalorieCount.objects.filter(user=user, date=date.today(), meal='SK')
+    scals = snacks.aggregate(Sum('kcals'))['kcals__sum'] or 0
 
     food_form = AddFoodForm(request.POST or None)
 
@@ -48,7 +58,15 @@ def daily_log(request):
         'selected': 'Daily Log',
         'form': form,
         'foodForm': food_form,
-        #'target_cals': target_cals
+        'target_cals': target_cals,
+        'breakfast': bcals,
+        'lunch': lcals,
+        'dinner': dcals,
+        'snacks': scals,
+        'targetb': target_bk,
+        'targetl': target_l,
+        'targetd': target_dn,
+        'targets': target_sn
     }
 
     return render(request, 'daily_log.html', context)

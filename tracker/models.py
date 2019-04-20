@@ -66,18 +66,18 @@ class Exercise(models.Model):
         return f'Exercise {self.name}'
 
 
-#class CalorieCount(models.Model):
-#    MEALS = (
-#        ('BF', 'Breakfast')
-#        ('LU', 'Lunch')
-#        ('DN', 'Dinner')
-#        ('SK', 'Snacks')
-#    )
-#
-#    username = models.CharField(max_length=50, null=True)
-#    date = models.DateField(auto_now_add=True)
-#    kcals = models.IntegerField(null=True)
-#    meal = models.CharField(max_length=20, choices=MEALS, null=True)
-#
-#    def __str__(self):
-#        return f'CalorieCount {self.kcals}'
+class CalorieCount(models.Model):
+    MEALS = (
+        ('BF', 'Breakfast'),
+        ('LU', 'Lunch'),
+        ('DN', 'Dinner'),
+        ('SK', 'Snacks')
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    date = models.DateField(auto_now_add=True)
+    kcals = models.IntegerField(null=True)
+    meal = models.CharField(max_length=20, choices=MEALS, null=True)
+
+    def __str__(self):
+        return f'CalorieCount {self.kcals}'

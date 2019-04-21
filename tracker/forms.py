@@ -1,5 +1,6 @@
 from django import forms
-from .models import Message, Food, Exercise
+from .models import Message, Food, Exercise, CalorieCount
+from users.models import Profile
 
 
 class MessageForm(forms.ModelForm):
@@ -30,4 +31,10 @@ class AddCustomExerciseForm(forms.ModelForm):
         model = Exercise
         fields = ['name', 'type', 'calspermin']
 
+
+class UpdateWeightForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = ['weight']
 

@@ -55,8 +55,8 @@ def target_snacks(target_calories):
 
 
 def net_calories(total_calories, exercise_cals):
-    net_calories = total_calories - exercise_cals
-    return net_calories
+    net_cals = total_calories - exercise_cals
+    return net_cals
 
 
 def cals_under_budget(target_calories, net_calories):

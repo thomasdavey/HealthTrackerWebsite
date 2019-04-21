@@ -10,12 +10,13 @@
             <div class="settings-button-container">
                 <div class="settings-button settings-button-2"><a id="add_exercise-button">Add Exercise</a></div>
                 <p>Target calories: {{ target_cals }}</p>
-                <p>Calories under budget: </p>
-                <p>Calories burned today: </p>
-                <p>Net Calories today: </p>
+                <p>Calories under budget: {{ cals_under }}</p>
+                <p>Calories burned today: {{ ex_cals }}</p>
+                <p>Net Calories today: {{ net_cals }}</p>
                 <p>Protein total: {{ totalp }}</p>
                 <p>Fat total: {{ totalf }}</p>
                 <p>Carbs total: {{ totalc }}</p>
+                <div class="settings-button settings-button-2"><a id="update_weight-button">Update Weight</a></div>
         </div>
         <div id="meal-select">
             <div class="meal-select-meal">
@@ -38,11 +39,11 @@
             </div>
             </div>
             <div id="meal-select-ldBars">
-                <p>Target Fat {{ targetf }}g</p>
+                <p>Target Fat: {{ targetf }}g</p>
                 <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
-                <p>Target Protein {{ targetp }}g</p>
+                <p>Target Protein: {{ targetp }}g</p>
                 <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
-                <p>Target Carbs {{ targetc }}g</p>
+                <p>Target Carbs: {{ targetc }}g</p>
                 <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
             </div>
         </div>
@@ -67,7 +68,7 @@
             <form method="POST">
                 {%  csrf_token %}
                 <div class="add-custom">
-                {{ form }}
+                    {{ form }}
                 <button type="submit" name="add_custom">Add Custom Food</button>
                 </div>
             </form>
@@ -104,13 +105,21 @@
             <form method="POST">
                 {%  csrf_token %}
                 <div class="add-custom">
-                <input type="text" name="exercisename" placeholder="Exercise Name"><br>
-                <select name="extype">Exercise Type
-                    <option>Cardio</option>
-                    <option>Strength</option>
-                </select>
-                <input type="text" name="calspermin" placeholder="Calories Burned per Minute"><br>
+                    {{ exerciseForm }}
                 <button type="submit" name="add_customex">Add Custom Exercise</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal" id="update_weight-modal">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3>Update Weight</h3>
+            <form method="POST">
+                {%  csrf_token %}
+                <div class="add-custom">
+                    {{ weightForm }}
+                <button type="submit" name="update_weight">Update Weight</button>
                 </div>
             </form>
         </div>
@@ -130,6 +139,9 @@
         var add_customexModal = document.getElementById('add_customex-modal');
         var add_customexButton = document.getElementById("add_customex-button");
         var add_customexClose = document.getElementsByClassName("close")[3];
+        var update_weightModal = document.getElementById('update_weight-modal');
+        var update_weightButton = document.getElementById("update_weight-button");
+        var update_weightClose = document.getElementsByClassName("close")[4];
 
         add_foodButton.onclick = function() {
             add_foodModal.style.display = "flex";
@@ -155,6 +167,12 @@
         add_customexClose.onclick = function() {
             add_customexModal.style.display = "none";
         };
+        update_weightButton.onclick = function() {
+            update_weightModal.style.display = "flex";
+        };
+        update_weightClose.onclick = function() {
+            update_weightModal.style.display = "none";
+        };
 
         window.onclick = function(event) {
             if (event.target === add_foodModal) {
@@ -169,6 +187,9 @@
             }
             else if (event.target === add_customexModal){
                 add_customexModal.style.display = "none";
+            }
+            else if (event.target === update_weightModal){
+                update_weightModal.style.display = "none";
             }
         };
     </script>

@@ -7,8 +7,8 @@ from django.contrib import messages
 from django.db.models import Sum, F
 from datetime import date
 from users.forms import AccountUpdateForm, ProfileUpdateForm
-from .forms import MessageForm, AddCustomFoodForm, AddFoodForm
-from .models import Message, Food
+from .forms import MessageForm, AddCustomFoodForm, AddFoodForm, UpdateWeightForm, AddCustomExerciseForm
+from .models import Message, Food, Exercise
 from .models import GroupMember
 from .models import Group, CalorieCount
 from tracker import calculator
@@ -41,22 +41,6 @@ def daily_log(request):
     target_fat = int(calculator.target_fat(daily_cals))
     target_carbs = int(calculator.target_carbs(daily_cals, target_fat, target_protein))
 
-    breakfast = CalorieCount.objects.filter(user=user, date=date.today(), meal='BF')
-    bcals = breakfast.aggregate(Sum('kcals'))['kcals__sum'] or 0
-    lunch = CalorieCount.objects.filter(user=user, date=date.today(), meal='LU')
-    lcals = lunch.aggregate(Sum('kcals'))['kcals__sum'] or 0
-    dinner = CalorieCount.objects.filter(user=user, date=date.today(), meal='DN')
-    dcals = dinner.aggregate(Sum('kcals'))['kcals__sum'] or 0
-    snacks = CalorieCount.objects.filter(user=user, date=date.today(), meal='SK')
-    scals = snacks.aggregate(Sum('kcals'))['kcals__sum'] or 0
-
-    total_p = CalorieCount.objects.filter(user=user, date=date.today())
-    totalp = total_p.aggregate(Sum('protein'))['protein__sum'] or 0
-    total_f = CalorieCount.objects.filter(user=user, date=date.today())
-    totalf = total_f.aggregate(Sum('fat'))['fat__sum'] or 0
-    total_c = CalorieCount.objects.filter(user=user, date=date.today())
-    totalc = total_c.aggregate(Sum('carbs'))['carbs__sum'] or 0
-
     food_form = AddFoodForm(request.POST or None)
 
     form = AddCustomFoodForm(request.POST or None)
@@ -65,6 +49,38 @@ def daily_log(request):
         food.user = request.user
         food.category = "Custom"
         food.save()
+
+    weight_form = UpdateWeightForm(data=request.POST, instance=request.user.profile)
+    if weight_form.is_valid():
+        weight_form.save()
+
+    exercise_form = AddCustomExerciseForm(request.POST or None)
+    if exercise_form.is_valid():
+        exercise = exercise_form.save(commit=False)
+        exercise.user = request.user
+        exercise.save()
+
+    breakfast = CalorieCount.objects.filter(user=user, date=date.today(), meal='BF')
+    bcals = breakfast.aggregate(Sum('kcals'))['kcals__sum'] or 0
+    lunch = CalorieCount.objects.filter(user=user, date=date.today(), meal='LU')
+    lcals = lunch.aggregate(Sum('kcals'))['kcals__sum'] or 0
+    dinner = CalorieCount.objects.filter(user=user, date=date.today(), meal='DN')
+    dcals = dinner.aggregate(Sum('kcals'))['kcals__sum'] or 0
+    snacks = CalorieCount.objects.filter(user=user, date=date.today(), meal='SK')
+    scals = snacks.aggregate(Sum('kcals'))['kcals__sum'] or 0
+    total_calories = bcals + lcals + dcals + scals
+
+    total_p = CalorieCount.objects.filter(user=user, date=date.today())
+    totalp = total_p.aggregate(Sum('protein'))['protein__sum'] or 0
+    total_f = CalorieCount.objects.filter(user=user, date=date.today())
+    totalf = total_f.aggregate(Sum('fat'))['fat__sum'] or 0
+    total_c = CalorieCount.objects.filter(user=user, date=date.today())
+    totalc = total_c.aggregate(Sum('carbs'))['carbs__sum'] or 0
+
+    # CHANGE THIS TO ACCESS USERS EXERCISE CALORIES BURNED
+    exercise_cals = 0
+    net_calories = calculator.net_calories(total_calories, exercise_cals)
+    cals_under = calculator.cals_under_budget(target_cals, net_calories)
 
     context = {
         'selected': 'Daily Log',
@@ -84,7 +100,12 @@ def daily_log(request):
         'targetp': target_protein,
         'totalp': totalp,
         'totalf': totalf,
-        'totalc': totalc
+        'totalc': totalc,
+        'cals_under': cals_under,
+        'net_cals': net_calories,
+        'ex_cals': exercise_cals,
+        'weightForm': weight_form,
+        'exerciseForm': exercise_form
     }
 
     return render(request, 'daily_log.html', context)

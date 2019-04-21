@@ -57,9 +57,14 @@ class Food(models.Model):
 
 
 class Exercise(models.Model):
+    TYPE = (
+        ('C', 'Cardio'),
+        ('S', 'Strength')
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, null=True)
-    type = models.CharField(max_length=20, null=True)
+    type = models.CharField(max_length=20, choices=TYPE, null=True)
     calspermin = models.IntegerField(null=True)
 
     def __str__(self):

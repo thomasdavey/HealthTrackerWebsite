@@ -41,8 +41,7 @@ class Food(models.Model):
         ('Dairy', 'Dairy'),
         ('Grain', 'Grain'),
         ('Sweet', 'Sweet'),
-        ('Drink', 'Drink'),
-        ('Custom', 'Custom')
+        ('Drink', 'Drink')
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, null=True)
@@ -76,7 +75,8 @@ class CalorieCount(models.Model):
         ('BF', 'Breakfast'),
         ('LU', 'Lunch'),
         ('DN', 'Dinner'),
-        ('SK', 'Snacks')
+        ('SK', 'Snacks'),
+        ('EX', 'Exercise')
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

@@ -18,7 +18,13 @@ from users.models import WeightGoal
 def home(request):
     today = date.today()
     today_format = today.strftime('%A, %d %B %Y')
-    return render(request, 'dashboard.html', {'selected': 'Home', 'date': today_format})
+
+    context = {
+        'selected': 'Home',
+        'date': today_format
+    }
+
+    return render(request, 'dashboard.html', context)
 
 
 @login_required()
@@ -41,25 +47,6 @@ def daily_log(request):
     target_fat = int(calculator.target_fat(daily_cals))
     target_carbs = int(calculator.target_carbs(daily_cals, target_fat, target_protein))
 
-    food_form = AddFoodForm(request.POST or None)
-
-    form = AddCustomFoodForm(request.POST or None)
-    if form.is_valid():
-        food = form.save(commit=False)
-        food.user = request.user
-        food.category = "Custom"
-        food.save()
-
-    weight_form = UpdateWeightForm(data=request.POST, instance=request.user.profile)
-    if weight_form.is_valid():
-        weight_form.save()
-
-    exercise_form = AddCustomExerciseForm(request.POST or None)
-    if exercise_form.is_valid():
-        exercise = exercise_form.save(commit=False)
-        exercise.user = request.user
-        exercise.save()
-
     breakfast = CalorieCount.objects.filter(user=user, date=date.today(), meal='BF')
     bcals = breakfast.aggregate(Sum('kcals'))['kcals__sum'] or 0
     lunch = CalorieCount.objects.filter(user=user, date=date.today(), meal='LU')
@@ -77,10 +64,41 @@ def daily_log(request):
     total_c = CalorieCount.objects.filter(user=user, date=date.today())
     totalc = total_c.aggregate(Sum('carbs'))['carbs__sum'] or 0
 
-    # CHANGE THIS TO ACCESS USERS EXERCISE CALORIES BURNED
-    exercise_cals = 0
+    ex_cals = CalorieCount.objects.filter(user=user, date=date.today(), kcals__lt=0)
+    exercise_cals = ex_cals.aggregate(Sum('kcals'))['kcals__sum'] or 0
+
+    food_form = AddFoodForm(request.POST or None)
+    if food_form.is_valid():
+        food = food_form.save(commit=False)
+        total_calories += food.calories
+        totalc += food.carbs
+        totalp += food.protein
+        totalf = food.fat
+        bcals += food.calories
+
+    form = AddCustomFoodForm(request.POST or None)
+    if form.is_valid():
+        food = form.save(commit=False)
+        food.user = request.user
+        food.save()
+
+    weight_form = UpdateWeightForm(data=request.POST, instance=request.user.profile)
+    if weight_form.is_valid():
+        weight_form.save()
+
+    exercise_form = AddCustomExerciseForm(request.POST or None)
+    if exercise_form.is_valid():
+        exercise = exercise_form.save(commit=False)
+        exercise.user = request.user
+        exercise.save()
+
     net_calories = calculator.net_calories(total_calories, exercise_cals)
     cals_under = calculator.cals_under_budget(target_cals, net_calories)
+    calorie_progress = int(net_calories / target_cals)
+    exercise_progress = int(exercise_cals / user.exercisegoal.target_calories)
+    fat_progress = totalf / target_fat
+    protein_progress = totalp / target_protein
+    carbs_progress = totalc / target_carbs
 
     context = {
         'selected': 'Daily Log',
@@ -105,7 +123,12 @@ def daily_log(request):
         'net_cals': net_calories,
         'ex_cals': exercise_cals,
         'weightForm': weight_form,
-        'exerciseForm': exercise_form
+        'exerciseForm': exercise_form,
+        'calorie_progress': calorie_progress,
+        'exercise_progress': exercise_progress,
+        'fat_progress': fat_progress,
+        'protein_progress': protein_progress,
+        'carbs_progress': carbs_progress
     }
 
     return render(request, 'daily_log.html', context)
@@ -188,13 +211,18 @@ def settings(request):
                 update_profile_form.save()
                 messages.success(request, f'Profile successfully updated!')
                 return redirect('tracker-settings')
+
+    my_exercises = Exercise.objects.filter(user=request.user)
+    exercises = list(my_exercises.values('name'))
+
     context = {
         'selected': 'Settings',
         'format_date': format_date,
         'update_account_form': update_account_form,
         'update_password_form': update_password_form,
         'update_profile_form': update_profile_form,
-        'modal': modal
+        'modal': modal,
+        'exercises': exercises
     }
     return render(request, 'settings.html', context)
 

@@ -22,7 +22,7 @@ class AddCustomFoodForm(forms.ModelForm):
 
     class Meta:
         model = Food
-        fields = ['name', 'calories', 'carbs', 'fat', 'protein']
+        fields = ['name', 'category', 'calories', 'carbs', 'fat', 'protein']
 
 
 class AddCustomExerciseForm(forms.ModelForm):

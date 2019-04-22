@@ -3,8 +3,9 @@
     <div id="daily-log-body">
         <h2>Keep Track of Your Day</h2>
         <div id="daily-log-progress-container">
-            <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value="25" data-preset="circle" data-stroke-width="5" data-stroke="#F58233"></div>
-            <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value="35" data-preset="circle" data-stroke-width="5" data-stroke="#8BC1E7"></div>
+            <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value= {{ calorie_progress }} data-preset="circle" data-stroke-width="5" data-stroke="#F58233"></div>
+            <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value= {{ exercise_progress }} data-preset="circle" data-stroke-width="5" data-stroke="#8BC1E7"></div>
+            <p>Calories Remaining       Calories Burned</p>
         </div>
         <div id="daily-log-progress-container">
             <div class="settings-button-container">
@@ -40,11 +41,11 @@
             </div>
             <div id="meal-select-ldBars">
                 <p>Target Fat: {{ targetf }}g</p>
-                <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
+                <div class="ldBar" style="width: 100%; height: 50px;" data-value= {{ fat_progress }} data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
                 <p>Target Protein: {{ targetp }}g</p>
-                <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
+                <div class="ldBar" style="width: 100%; height: 50px;" data-value= {{ protein_progress }} data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
                 <p>Target Carbs: {{ targetc }}g</p>
-                <div class="ldBar" style="width: 100%; height: 50px;" data-value="35" data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
+                <div class="ldBar" style="width: 100%; height: 50px;" data-value= {{ carbs_progress }} data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
             </div>
         </div>
     </div>
@@ -53,8 +54,9 @@
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Add Food</h3>
             <form method="POST">
+                {% csrf_token %}
                 <div class="add-custom">
-                {{ foodForm.category }}
+                {{ foodForm }}
                 <div class="settings-button settings-button-2"><a id="add_custom-button">Add Custom Food</a></div><br>
                 <button type="submit" name="add_food">Submit</button>
                 </div>

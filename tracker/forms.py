@@ -10,6 +10,26 @@ class MessageForm(forms.ModelForm):
         model = Message
         fields = ['message']
 
+class AddExerciseForm(forms.ModelForm):
+    TYPE_CHOICES = [(0,'Cardio'),(1,'Strength')]
+
+    CARDIO_TEMP = Exercise.objects.raw('SELECT * FROM tracker_exercise WHERE type = "C"')
+    CARDIO_CHOICES = []
+    for exercise in CARDIO_TEMP:
+        CARDIO_CHOICES.append((exercise.id, exercise.name))
+
+    STRENGTH_TEMP = Exercise.objects.raw('SELECT * FROM tracker_exercise WHERE type = "S"')
+    STRENGTH_CHOICES = []
+    for exercise in STRENGTH_TEMP:
+        STRENGTH_CHOICES.append((exercise.id, exercise.name))
+
+    type = forms.ChoiceField(choices=TYPE_CHOICES, widget=forms.Select(attrs={'id': 'type-choice'}))
+    cardio = forms.ChoiceField(choices=CARDIO_CHOICES, widget=forms.Select(attrs={'id': 'cardio-choice'}))
+    strength = forms.ChoiceField(choices=STRENGTH_CHOICES, widget=forms.Select(attrs={'id': 'strength-choice'}))
+
+    class Meta:
+        model = Exercise
+        fields = ['type','cardio','strength']
 
 class AddFoodForm(forms.ModelForm):
 

@@ -84,16 +84,9 @@
             <form method="POST">
                 {%  csrf_token %}
                 <div class="add-custom">
-                <select name="type">Exercise Type
-                    <option>Cardio</option>
-                    <option>Strength</option>
-                    <option>Custom</option>
-                </select>
-                <select name="exercise" disabled>Exercise Type
-                    <option>Option 1</option>
-                    <option>Option 2</option>
-                    <option>Option 3</option>
-                </select>
+                {{ temp_form.type }}
+                {{ temp_form.cardio }}
+                {{ temp_form.strength }}
                 <div class="settings-button settings-button-2"><a id="add_customex-button">Add Custom Exercise</a></div><br>
                 <button type="submit" name="add_exercise">Submit</button>
                 </div>
@@ -194,5 +187,22 @@
                 update_weightModal.style.display = "none";
             }
         };
+
+        $(document).ready(function () {
+            var option = document.getElementById('type-choice');
+            var cardio = document.getElementById('cardio-choice');
+            var strength = document.getElementById('strength-choice');
+            strength.style.display = "none";
+            option.onchange = function () {
+                if (option.value === "0") {
+                    cardio.style.display = "block";
+                    strength.style.display = "none";
+                } else {
+                    cardio.style.display = "none";
+                    strength.style.display = "block";
+                }
+            }
+
+        });
     </script>
 {% endblock content %}

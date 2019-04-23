@@ -32,7 +32,7 @@ def daily_log(request):
     user = request.user
 
     age = date.today().year - user.profile.birth_date.year - \
-        ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
+          ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
     meta_rate = calculator.metabolic_rate(int(user.profile.weight), int(user.profile.height), int(age))
     extremity = calculator.get_weight_loss_extremity(user)
     daily_cals = calculator.daily_cal(meta_rate, user.profile.activity_level)
@@ -69,12 +69,12 @@ def daily_log(request):
 
     food_form = AddFoodForm(request.POST or None)
     if food_form.is_valid():
-        food = food_form.save(commit=False)
-        total_calories += food.calories
-        totalc += food.carbs
-        totalp += food.protein
-        totalf = food.fat
-        bcals += food.calories
+        foodname = food_form.cleaned_data.__getattribute__('value')
+        foodid = list(foodname.values())[0]
+        foodid = Food.objects.filter(id=foodid)[0]
+        foodcals = foodid.calories
+        food = CalorieCount(user_id=user, kcals=foodcals)
+        food.save()
 
     form = AddCustomFoodForm(request.POST or None)
     if form.is_valid():
@@ -103,7 +103,7 @@ def daily_log(request):
     context = {
         'selected': 'Daily Log',
         'form': form,
-        'foodForm': food_form,
+        'food_form': food_form,
         'target_cals': target_cals,
         'breakfast': bcals,
         'lunch': lcals,

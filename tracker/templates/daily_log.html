@@ -53,11 +53,19 @@
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Add Food</h3>
+            {% load filters %}
             <form method="POST">
                 {% csrf_token %}
                 <div class="add-custom">
-                {{ foodForm }}
-                <div class="settings-button settings-button-2"><a id="add_custom-button">Add Custom Food</a></div><br>
+                    {{ food_form.category }}
+                    {{ food_form.meat }}
+                    {{ food_form.fruit }}
+                    {{ food_form.vegetable }}
+                    {{ food_form.dairy }}
+                    {{ food_form.grain }}
+                    {{ food_form.sweet }}
+                    {{ food_form.drink }}
+                    <div class="settings-button settings-button-2"><a id="add_custom-button">Add Custom Food</a></div><br>
                 <button type="submit" name="add_food">Submit</button>
                 </div>
             </form>
@@ -194,5 +202,91 @@
                 update_weightModal.style.display = "none";
             }
         };
+
+        $(document).ready(function(){
+            var option = document.getElementById('category_choice');
+            var meat = document.getElementById('meat_choice');
+            var fruit = document.getElementById('fruit_choice');
+            var vegetable = document.getElementById('vegetable_choice');
+            var dairy = document.getElementById('dairy_choice');
+            var grain = document.getElementById('grain_choice');
+            var sweet = document.getElementById('sweet_choice');
+            var drink = document.getElementById('drink_choice');
+
+            fruit.style.display = "none";
+            vegetable.style.display = "none";
+            dairy.style.display = "none";
+            grain.style.display = "none";
+            sweet.style.display = "none";
+            drink.style.display = "none";
+
+            option.onchange = function(){
+                if (option.value === "0"){
+                    meat.style.display = "block";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "1"){
+                    meat.style.display = "none";
+                    fruit.style.display = "block";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "2"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "block";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "3"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "block";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "4"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "block";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "5"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "block";
+                    drink.style.display = "none";
+                }
+                else {
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "block";
+                }
+            }
+
+        });
+
     </script>
 {% endblock content %}

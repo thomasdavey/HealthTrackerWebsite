@@ -68,13 +68,6 @@ def daily_log(request):
     exercise_cals = ex_cals.aggregate(Sum('kcals'))['kcals__sum'] or 0
 
     food_form = AddFoodForm(request.POST or None)
-    if food_form.is_valid():
-        foodname = food_form.cleaned_data
-        foodid = list(foodname.values())[0]
-        foodid = Food.objects.filter(id=foodid)[0]
-        foodcals = foodid.calories
-        food = CalorieCount(user_id=user, kcals=foodcals)
-        food.save()
 
     form = AddCustomFoodForm(request.POST or None)
     if form.is_valid():

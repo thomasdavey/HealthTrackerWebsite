@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.db.models import Sum, F
 from datetime import date
 from users.forms import AccountUpdateForm, ProfileUpdateForm
-from .forms import MessageForm, AddCustomFoodForm, AddFoodForm, UpdateWeightForm, AddCustomExerciseForm
+from .forms import MessageForm, AddCustomFoodForm, AddFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm
 from .models import Message, Food, Exercise
 from .models import GroupMember
 from .models import Group, CalorieCount
@@ -93,6 +93,8 @@ def daily_log(request):
     protein_progress = totalp / target_protein
     carbs_progress = totalc / target_carbs
 
+    temp_form = AddExerciseForm(request.POST or None)
+
     context = {
         'selected': 'Daily Log',
         'form': form,
@@ -121,7 +123,8 @@ def daily_log(request):
         'exercise_progress': exercise_progress,
         'fat_progress': fat_progress,
         'protein_progress': protein_progress,
-        'carbs_progress': carbs_progress
+        'carbs_progress': carbs_progress,
+        'temp_form': temp_form,
     }
 
     return render(request, 'daily_log.html', context)

@@ -69,7 +69,7 @@ def daily_log(request):
 
     food_form = AddFoodForm(request.POST or None)
     if food_form.is_valid():
-        foodname = food_form.cleaned_data.__getattribute__('value')
+        foodname = food_form.cleaned_data
         foodid = list(foodname.values())[0]
         foodid = Food.objects.filter(id=foodid)[0]
         foodcals = foodid.calories

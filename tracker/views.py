@@ -68,6 +68,7 @@ def daily_log(request):
     exercise_cals = ex_cals.aggregate(Sum('kcals'))['kcals__sum'] or 0
 
     food_form = AddFoodForm(request.POST or None)
+    #food_form stuff here
 
     form = AddCustomFoodForm(request.POST or None)
     if form.is_valid():

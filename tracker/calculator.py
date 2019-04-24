@@ -6,6 +6,7 @@ def bmi(weight, height):
     return bmi
 
 
+
 def ideal_weight(height, sex):
     height = height*0.393701
 

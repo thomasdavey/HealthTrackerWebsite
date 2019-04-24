@@ -47,6 +47,7 @@ def daily_log(request):
     target_dn = int(calculator.target_dinner(target_cals))
     target_sn = int(calculator.target_snacks(target_cals))
 
+
     target_protein = int(calculator.target_protein(user.profile.weight))
     target_fat = int(calculator.target_fat(daily_cals))
     target_carbs = int(calculator.target_carbs(daily_cals, target_fat, target_protein))

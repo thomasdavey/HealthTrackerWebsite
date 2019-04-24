@@ -111,6 +111,7 @@ class AddBreakfastForm(forms.ModelForm):
         fields = ['category', 'meat', 'fruit', 'vegetable', 'dairy', 'grain', 'sweet', 'drink']
 
 
+
 class AddLunchForm(forms.ModelForm):
     CATEGORY_CHOICES = [('meat', 'Meat'),('fruit', 'Fruit'),
                         ('vegetable','Vegetable'),('dairy','Dairy'),
@@ -164,6 +165,7 @@ class AddLunchForm(forms.ModelForm):
     class Meta:
         model = CalorieCount
         fields = ['category', 'meat', 'fruit', 'vegetable', 'dairy', 'grain', 'sweet', 'drink']
+
 
 
 class AddDinnerForm(forms.ModelForm):

@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,7 @@ from datetime import date
 from users.forms import AccountUpdateForm, ProfileUpdateForm
 from .forms import MessageForm, AddCustomFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm
 from .forms import AddBreakfastForm, AddLunchForm, AddDinnerForm, AddSnackForm
+from .forms import MessageForm, AddCustomFoodForm, AddFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm, CreateGroupForm, CreateGroupMemberForm
 from .models import Message, Food, Exercise
 from .models import GroupMember
 from .models import Group, CalorieCount
@@ -223,22 +225,47 @@ def groups(request):
     for set in messages:
         last.append(set[-1])
 
-    form = MessageForm(request.POST or None)
+    form = MessageForm()
+    create_group_form = CreateGroupForm()
+    create_group_member_form = CreateGroupMemberForm()
 
     if request.method == 'POST':
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.author = request.user
-            message.group = Group.objects.get(id=request.POST.get('group'))
-            message.save()
-            form = MessageForm()
+        print(request.POST)
+        if 'message' in request.POST:
+            form = MessageForm(data=request.POST)
+            if form.is_valid():
+                message = form.save(commit=False)
+                message.author = request.user
+                message.group = Group.objects.get(id=request.POST.get('group'))
+                message.save()
+        elif 'create' in request.POST:
+            create_group_form = CreateGroupForm(data=request.POST)
+            if create_group_form.is_valid():
+                group = create_group_form.save(commit=False)
+                group.creator = request.user
+                group.save()
+                GroupMember.objects.create(group=group, user=request.user)
+                query = User.objects.filter(username='longevity')
+                longevity = query[0]
+                welcome = "Welcome to your new group! Add some friends to start discussing your goals!"
+                Message.objects.create(group=group, author=longevity, message=welcome)
+                return redirect('tracker-groups')
+        elif 'add' in request.POST:
+            create_group_member_form = CreateGroupMemberForm(data=request.POST)
+            if create_group_member_form.is_valid():
+                group = Group.objects.get(id=request.POST.get('add'))
+                user = User.objects.get(username=request.POST.get('username'))
+                GroupMember.objects.create(group=group, user=user)
+                return redirect('tracker-groups')
 
     context = {
         'groups': groups,
         'messages': messages,
         'last': last,
         'selected': 'Groups',
-        'form': form
+        'form': form,
+        'create_group_form': create_group_form,
+        'create_group_member_form': create_group_member_form
     }
 
     return render(request, 'groups.html', context)

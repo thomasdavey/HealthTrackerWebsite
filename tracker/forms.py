@@ -1,5 +1,6 @@
 from django import forms
-from .models import Message, Food, Exercise, CalorieCount
+from .models import Message, Food, Exercise, CalorieCount, Group, GroupMember
+from django.contrib.auth.models import User
 from users.models import Profile
 
 
@@ -9,6 +10,28 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['message']
+
+class CreateGroupForm(forms.ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ['name']
+
+class CreateGroupMemberForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(), required=True)
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        query = User.objects.filter(username=username)
+
+        if not query:
+            raise forms.ValidationError("User not found.")
+
+        return username
+
+    class Meta:
+        model = GroupMember
+        fields = ['username']
 
 class AddExerciseForm(forms.ModelForm):
     TYPE_CHOICES = [('cardio','Cardio'),('strength','Strength')]

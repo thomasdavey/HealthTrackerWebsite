@@ -7,12 +7,14 @@ from django.contrib import messages
 from django.db.models import Sum, F
 from datetime import date
 from users.forms import AccountUpdateForm, ProfileUpdateForm
-from .forms import MessageForm, AddCustomFoodForm, AddFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm
+from .forms import MessageForm, AddCustomFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm
+from .forms import AddBreakfastForm, AddLunchForm, AddDinnerForm, AddSnackForm
 from .models import Message, Food, Exercise
 from .models import GroupMember
 from .models import Group, CalorieCount
 from tracker import calculator
 from users.models import WeightGoal
+
 
 @login_required()
 def home(request):
@@ -67,8 +69,60 @@ def daily_log(request):
     ex_cals = CalorieCount.objects.filter(user=user, date=date.today(), kcals__lt=0)
     exercise_cals = ex_cals.aggregate(Sum('kcals'))['kcals__sum'] or 0
 
-    food_form = AddFoodForm(request.POST or None)
-    #food_form stuff here
+    food_form_bf = AddBreakfastForm()
+    food_form_lu = AddLunchForm()
+    food_form_dn = AddDinnerForm()
+    food_form_sk = AddSnackForm()
+    if request.method == 'POST':
+        if 'add_food_bf' in request.POST:
+            item = request.POST[request.POST['category']]
+            query = Food.objects.filter(id=item)
+            for item in query:
+                total_calories += item.calories
+                totalc += item.carbs
+                totalp += item.protein
+                totalf += item.fat
+                bcals += item.calories
+                my_food = CalorieCount(user=request.user, kcals=item.calories, meal='BF',
+                                       fat=item.fat, carbs=item.carbs, protein=item.protein)
+                my_food.save()
+
+        if 'add_food_lu' in request.POST:
+            item = request.POST[request.POST['category']]
+            query = Food.objects.filter(id=item)
+            for item in query:
+                total_calories += item.calories
+                totalc += item.carbs
+                totalp += item.protein
+                totalf += item.fat
+                lcals += item.calories
+                my_food = CalorieCount(user=request.user, kcals=item.calories, meal='LU',
+                                       fat=item.fat, carbs=item.carbs, protein=item.protein)
+                my_food.save()
+        if 'add_food_dn' in request.POST:
+            item = request.POST[request.POST['category']]
+            query = Food.objects.filter(id=item)
+            for item in query:
+                total_calories += item.calories
+                totalc += item.carbs
+                totalp += item.protein
+                totalf += item.fat
+                dcals += item.calories
+                my_food = CalorieCount(user=request.user, kcals=item.calories, meal='DN',
+                                       fat=item.fat, carbs=item.carbs, protein=item.protein)
+                my_food.save()
+        if 'add_food_sk' in request.POST:
+            item = request.POST[request.POST['category']]
+            query = Food.objects.filter(id=item)
+            for item in query:
+                total_calories += item.calories
+                totalc += item.carbs
+                totalp += item.protein
+                totalf += item.fat
+                scals += item.calories
+                my_food = CalorieCount(user=request.user, kcals=item.calories, meal='SK',
+                                       fat=item.fat, carbs=item.carbs, protein=item.protein)
+                my_food.save()
 
     form = AddCustomFoodForm(request.POST or None)
     if form.is_valid():
@@ -76,9 +130,19 @@ def daily_log(request):
         food.user = request.user
         food.save()
 
-    weight_form = UpdateWeightForm(data=request.POST, instance=request.user.profile)
-    if weight_form.is_valid():
-        weight_form.save()
+    weight_lbs = int(user.profile.weight*2.20462)
+    duration = 0
+    temp_form = AddExerciseForm(request.POST or None)
+    if request.method == 'POST':
+        if 'add_exercise' in request.POST:
+            duration += int(request.POST.get('duration', 0))
+            item = request.POST[request.POST['type']]
+            query = Exercise.objects.filter(id=item)
+            for item in query:
+                cals = int(item.calspermin*duration*weight_lbs)
+                exercise_cals += cals
+                my_exercise = CalorieCount(user=request.user, kcals=-cals)
+                my_exercise.save()
 
     exercise_form = AddCustomExerciseForm(request.POST or None)
     if exercise_form.is_valid():
@@ -86,20 +150,25 @@ def daily_log(request):
         exercise.user = request.user
         exercise.save()
 
-    net_calories = calculator.net_calories(total_calories, exercise_cals)
-    cals_under = calculator.cals_under_budget(target_cals, net_calories)
-    calorie_progress = int(net_calories / target_cals)
-    exercise_progress = int(exercise_cals / user.exercisegoal.target_calories)
-    fat_progress = totalf / target_fat
-    protein_progress = totalp / target_protein
-    carbs_progress = totalc / target_carbs
+    weight_form = UpdateWeightForm(data=request.POST, instance=request.user.profile)
+    if weight_form.is_valid():
+        weight_form.save()
 
-    temp_form = AddExerciseForm(request.POST or None)
+    net_calories = calculator.net_calories(total_calories, -exercise_cals)
+    cals_under = calculator.cals_under_budget(target_cals, net_calories)
+    calorie_progress = int((net_calories / target_cals)* 100)
+    exercise_progress = int((-exercise_cals / user.exercisegoal.target_calories)* 100)
+    fat_progress = int((totalf / target_fat)* 100)
+    protein_progress = int((totalp / target_protein)* 100)
+    carbs_progress = int((totalc / target_carbs)* 100)
 
     context = {
         'selected': 'Daily Log',
         'form': form,
-        'food_form': food_form,
+        'food_form_bf': food_form_bf,
+        'food_form_lu': food_form_lu,
+        'food_form_dn': food_form_dn,
+        'food_form_sk': food_form_sk,
         'target_cals': target_cals,
         'breakfast': bcals,
         'lunch': lcals,

@@ -157,6 +157,10 @@ main {
     font-weight: 100;
 }
 
+#meal-select-ldBars, p {
+    margin-left: 20px;
+}
+
 #settings-container {
     padding: 40px;
 }
@@ -437,4 +441,21 @@ main {
     border-style: solid;
     border-radius: 3px;
     border-color: #A9A9A9;
+}
+
+#add_food-button-bf {
+    text-align: right;
+    cursor: pointer
+}
+#add_food-button-lu {
+    text-align: right;
+    cursor: pointer
+}
+#add_food-button-dn {
+    text-align: right;
+    cursor: pointer
+}
+#add_food-button-sk {
+    text-align: right;
+    cursor: pointer
 }

@@ -5,7 +5,7 @@
         <div id="daily-log-progress-container">
             <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value= {{ calorie_progress }} data-preset="circle" data-stroke-width="5" data-stroke="#F58233"></div>
             <div class="ldBar label-center progress-circle" style="width:150px; height:150px;" data-value= {{ exercise_progress }} data-preset="circle" data-stroke-width="5" data-stroke="#8BC1E7"></div>
-            <p>Calories Remaining       Calories Burned</p>
+            <p>Calorie Progress       Calories Burned</p>
         </div>
         <div id="daily-log-progress-container">
             <div class="settings-button-container">
@@ -14,42 +14,47 @@
                 <p>Calories under budget: {{ cals_under }}</p>
                 <p>Calories burned today: {{ ex_cals }}</p>
                 <p>Net Calories today: {{ net_cals }}</p>
-                <p>Protein total: {{ totalp }}</p>
-                <p>Fat total: {{ totalf }}</p>
-                <p>Carbs total: {{ totalc }}</p>
+                <div class="settings-button settings-button-2"><a id="add_custom-button">Create New Custom Food</a></div><br>
                 <div class="settings-button settings-button-2"><a id="update_weight-button">Update Weight</a></div>
         </div>
         <div id="meal-select">
             <div class="meal-select-meal">
-                <h3>Breakfast: {{ breakfast }}</h3>
+                <h3>Breakfast: {{ breakfast }}
+                    <a id="add_food-button-bf"><span><i style="text-align:right" class="fas fa-plus-circle"></i></span></a>
+                </h3>
                 <h4>Recommended Calories: {{ targetb }} </h4>
             </div>
             <div class="meal-select-meal">
-                <h3>Lunch: {{ lunch }}</h3>
+                <h3>Lunch: {{ lunch }}
+                <a id="add_food-button-lu"><span><i style="text-align:right" class="fas fa-plus-circle"></i></span></a>
+                </h3>
                 <h4>Recommended Calories: {{ targetl }} </h4>
             </div>
             <div class="meal-select-meal">
-                <h3>Dinner: {{ dinner }}</h3>
+                <h3>Dinner: {{ dinner }}
+                <a id="add_food-button-dn"><span><i style="text-align:right" class="fas fa-plus-circle"></i></span></a>
+                </h3>
                 <h4>Recommended Calories: {{ targetd }}</h4>
             </div>
             <div class="meal-select-meal">
-                <h3>Snacks: {{ snacks }}</h3>
+                <h3>Snacks: {{ snacks }}
+                <a id="add_food-button-sk"><span><i style="text-align:right" class="fas fa-plus-circle"></i></span></a>
+                </h3>
                 <h4>Recommended Calories: {{ targets }}</h4>
                 <div class="settings-button-container">
-                <div class="settings-button settings-button-2"><a id="add_food-button">Add Food Breakfast</a></div>
             </div>
             </div>
             <div id="meal-select-ldBars">
-                <p>Target Fat: {{ targetf }}g</p>
+                <p>Fat: {{ totalf }}g / {{ targetf }}g target</p>
                 <div class="ldBar" style="width: 100%; height: 50px;" data-value= {{ fat_progress }} data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
-                <p>Target Protein: {{ targetp }}g</p>
+                <p>Protein: {{ totalp }}g / {{ targetp }}g target</p>
                 <div class="ldBar" style="width: 100%; height: 50px;" data-value= {{ protein_progress }} data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
-                <p>Target Carbs: {{ targetc }}g</p>
+                <p>Carbs: {{ totalc }}g / {{ targetc }}g target</p>
                 <div class="ldBar" style="width: 100%; height: 50px;" data-value= {{ carbs_progress }} data-preset="line" data-stroke-width="5" data-stroke="#8BC1E7"></div>
             </div>
         </div>
     </div>
-    <div class="modal" id="add_food-modal">
+    <div class="modal" id="add_food-modal-bf">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Add Food</h3>
@@ -57,16 +62,78 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="add-custom">
-                    {{ food_form.category }}
-                    {{ food_form.meat }}
-                    {{ food_form.fruit }}
-                    {{ food_form.vegetable }}
-                    {{ food_form.dairy }}
-                    {{ food_form.grain }}
-                    {{ food_form.sweet }}
-                    {{ food_form.drink }}
-                    <div class="settings-button settings-button-2"><a id="add_custom-button">Add Custom Food</a></div><br>
-                <button type="submit" name="add_food">Submit</button>
+                    {{ food_form_bf.category }}
+                    {{ food_form_bf.meat }}
+                    {{ food_form_bf.fruit }}
+                    {{ food_form_bf.vegetable }}
+                    {{ food_form_bf.dairy }}
+                    {{ food_form_bf.grain }}
+                    {{ food_form_bf.sweet }}
+                    {{ food_form_bf.drink }}
+                <button type="submit" name="add_food_bf">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+        <div class="modal" id="add_food-modal-lu">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3>Add Food</h3>
+            {% load filters %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="add-custom">
+                    {{ food_form_lu.category }}
+                    {{ food_form_lu.meat }}
+                    {{ food_form_lu.fruit }}
+                    {{ food_form_lu.vegetable }}
+                    {{ food_form_lu.dairy }}
+                    {{ food_form_lu.grain }}
+                    {{ food_form_lu.sweet }}
+                    {{ food_form_lu.drink }}
+                <button type="submit" name="add_food_lu">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+        <div class="modal" id="add_food-modal-dn">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3>Add Food</h3>
+            {% load filters %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="add-custom">
+                    {{ food_form_dn.category }}
+                    {{ food_form_dn.meat }}
+                    {{ food_form_dn.fruit }}
+                    {{ food_form_dn.vegetable }}
+                    {{ food_form_dn.dairy }}
+                    {{ food_form_dn.grain }}
+                    {{ food_form_dn.sweet }}
+                    {{ food_form_dn.drink }}
+                <button type="submit" name="add_food_dn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+        <div class="modal" id="add_food-modal-sk">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3>Add Food</h3>
+            {% load filters %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="add-custom">
+                    {{ food_form_sk.category }}
+                    {{ food_form_sk.meat }}
+                    {{ food_form_sk.fruit }}
+                    {{ food_form_sk.vegetable }}
+                    {{ food_form_sk.dairy }}
+                    {{ food_form_sk.grain }}
+                    {{ food_form_sk.sweet }}
+                    {{ food_form_sk.drink }}
+                <button type="submit" name="add_food_sk">Submit</button>
                 </div>
             </form>
         </div>
@@ -92,16 +159,10 @@
             <form method="POST">
                 {%  csrf_token %}
                 <div class="add-custom">
-                <select name="type">Exercise Type
-                    <option>Cardio</option>
-                    <option>Strength</option>
-                    <option>Custom</option>
-                </select>
-                <select name="exercise" disabled>Exercise Type
-                    <option>Option 1</option>
-                    <option>Option 2</option>
-                    <option>Option 3</option>
-                </select>
+                    {{ temp_form.type }}
+                    {{ temp_form.cardio }}
+                    {{ temp_form.strength }}
+                    {{ temp_form.duration }}
                 <div class="settings-button settings-button-2"><a id="add_customex-button">Add Custom Exercise</a></div><br>
                 <button type="submit" name="add_exercise">Submit</button>
                 </div>
@@ -137,27 +198,54 @@
     </div>
 
     <script>
-        var add_foodModal = document.getElementById('add_food-modal');
-        var add_foodButton = document.getElementById("add_food-button");
-        var add_foodClose = document.getElementsByClassName("close")[0];
+        var add_foodModalB = document.getElementById('add_food-modal-bf');
+        var add_foodButtonB = document.getElementById("add_food-button-bf");
+        var add_foodCloseB = document.getElementsByClassName("close")[0];
+        var add_foodModalL = document.getElementById('add_food-modal-lu');
+        var add_foodButtonL = document.getElementById("add_food-button-lu");
+        var add_foodCloseL = document.getElementsByClassName("close")[1];
+        var add_foodModalD = document.getElementById('add_food-modal-dn');
+        var add_foodButtonD = document.getElementById("add_food-button-dn");
+        var add_foodCloseD = document.getElementsByClassName("close")[2];
+        var add_foodModalS = document.getElementById('add_food-modal-sk');
+        var add_foodButtonS = document.getElementById("add_food-button-sk");
+        var add_foodCloseS = document.getElementsByClassName("close")[3];
         var add_customModal = document.getElementById('add_custom-modal');
         var add_customButton = document.getElementById("add_custom-button");
-        var add_customClose = document.getElementsByClassName("close")[1];
+        var add_customClose = document.getElementsByClassName("close")[4];
         var add_exerciseModal = document.getElementById('add_exercise-modal');
         var add_exerciseButton = document.getElementById("add_exercise-button");
-        var add_exerciseClose = document.getElementsByClassName("close")[2];
+        var add_exerciseClose = document.getElementsByClassName("close")[5];
         var add_customexModal = document.getElementById('add_customex-modal');
         var add_customexButton = document.getElementById("add_customex-button");
-        var add_customexClose = document.getElementsByClassName("close")[3];
+        var add_customexClose = document.getElementsByClassName("close")[6];
         var update_weightModal = document.getElementById('update_weight-modal');
         var update_weightButton = document.getElementById("update_weight-button");
-        var update_weightClose = document.getElementsByClassName("close")[4];
+        var update_weightClose = document.getElementsByClassName("close")[7];
 
-        add_foodButton.onclick = function() {
-            add_foodModal.style.display = "flex";
+        add_foodButtonB.onclick = function() {
+            add_foodModalB.style.display = "flex";
         };
-        add_foodClose.onclick = function() {
-            add_foodModal.style.display = "none";
+        add_foodCloseB.onclick = function() {
+            add_foodModalB.style.display = "none";
+        };
+        add_foodButtonL.onclick = function() {
+            add_foodModalL.style.display = "flex";
+        };
+        add_foodCloseL.onclick = function() {
+            add_foodModalL.style.display = "none";
+        };
+        add_foodButtonD.onclick = function() {
+            add_foodModalD.style.display = "flex";
+        };
+        add_foodCloseD.onclick = function() {
+            add_foodModalD.style.display = "none";
+        };
+        add_foodButtonS.onclick = function() {
+            add_foodModalS.style.display = "flex";
+        };
+        add_foodCloseS.onclick = function() {
+            add_foodModalS.style.display = "none";
         };
         add_customButton.onclick = function() {
             add_customModal.style.display = "flex";
@@ -185,12 +273,20 @@
         };
 
         window.onclick = function(event) {
-            if (event.target === add_foodModal) {
-                add_foodModal.style.display = "none";
+            if (event.target === add_foodModalB) {
+                add_foodModalB.style.display = "none";
+            }
+            else if (event.target === add_foodModalL) {
+                add_foodModalL.style.display = "none";
+            }
+            if (event.target === add_foodModalD) {
+                add_foodModalD.style.display = "none";
+            }
+            if (event.target === add_foodModalS) {
+                add_foodModalS.style.display = "none";
             }
             else if (event.target === add_customModal){
                 add_customModal.style.display = "none";
-                add_foodModal.style.display = "none";
             }
             else if (event.target === add_exerciseModal){
                 add_exerciseModal.style.display = "none";
@@ -204,14 +300,36 @@
         };
 
         $(document).ready(function(){
-            var option = document.getElementById('category_choice');
-            var meat = document.getElementById('meat_choice');
-            var fruit = document.getElementById('fruit_choice');
-            var vegetable = document.getElementById('vegetable_choice');
-            var dairy = document.getElementById('dairy_choice');
-            var grain = document.getElementById('grain_choice');
-            var sweet = document.getElementById('sweet_choice');
-            var drink = document.getElementById('drink_choice');
+            var type = document.getElementById('type_choice');
+            var cardio = document.getElementById('cardio_choice');
+            var strength = document.getElementById('strength_choice');
+            var duration = document.getElementById('duration');
+
+            strength.style.display = "none";
+
+            type.onchange = function(){
+                if (type.value === "cardio"){
+                    cardio.style.display = "block";
+                    strength.style.display = "none";
+                    duration.style.display = "block";
+                }
+                else {
+                    cardio.style.display = "none";
+                    strength.style.display = "block";
+                    duration.style.display = "block";
+                }
+            }
+        });
+
+        $(document).ready(function(){
+            var option = document.getElementById('category_choice_bf');
+            var meat = document.getElementById('meat_choice_bf');
+            var fruit = document.getElementById('fruit_choice_bf');
+            var vegetable = document.getElementById('vegetable_choice_bf');
+            var dairy = document.getElementById('dairy_choice_bf');
+            var grain = document.getElementById('grain_choice_bf');
+            var sweet = document.getElementById('sweet_choice_bf');
+            var drink = document.getElementById('drink_choice_bf');
 
             fruit.style.display = "none";
             vegetable.style.display = "none";
@@ -221,7 +339,7 @@
             drink.style.display = "none";
 
             option.onchange = function(){
-                if (option.value === "0"){
+                if (option.value === "meat"){
                     meat.style.display = "block";
                     fruit.style.display = "none";
                     vegetable.style.display = "none";
@@ -230,7 +348,7 @@
                     sweet.style.display = "none";
                     drink.style.display = "none";
                 }
-                else if (option.value === "1"){
+                else if (option.value === "fruit"){
                     meat.style.display = "none";
                     fruit.style.display = "block";
                     vegetable.style.display = "none";
@@ -239,7 +357,7 @@
                     sweet.style.display = "none";
                     drink.style.display = "none";
                 }
-                else if (option.value === "2"){
+                else if (option.value === "vegetable"){
                     meat.style.display = "none";
                     fruit.style.display = "none";
                     vegetable.style.display = "block";
@@ -248,7 +366,7 @@
                     sweet.style.display = "none";
                     drink.style.display = "none";
                 }
-                else if (option.value === "3"){
+                else if (option.value === "dairy"){
                     meat.style.display = "none";
                     fruit.style.display = "none";
                     vegetable.style.display = "none";
@@ -257,7 +375,7 @@
                     sweet.style.display = "none";
                     drink.style.display = "none";
                 }
-                else if (option.value === "4"){
+                else if (option.value === "grain"){
                     meat.style.display = "none";
                     fruit.style.display = "none";
                     vegetable.style.display = "none";
@@ -266,7 +384,262 @@
                     sweet.style.display = "none";
                     drink.style.display = "none";
                 }
-                else if (option.value === "5"){
+                else if (option.value === "sweet"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "block";
+                    drink.style.display = "none";
+                }
+                else {
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "block";
+                }
+            }
+
+        });
+
+    $(document).ready(function(){
+            var option = document.getElementById('category_choice_lu');
+            var meat = document.getElementById('meat_choice_lu');
+            var fruit = document.getElementById('fruit_choice_lu');
+            var vegetable = document.getElementById('vegetable_choice_lu');
+            var dairy = document.getElementById('dairy_choice_lu');
+            var grain = document.getElementById('grain_choice_lu');
+            var sweet = document.getElementById('sweet_choice_lu');
+            var drink = document.getElementById('drink_choice_lu');
+
+            fruit.style.display = "none";
+            vegetable.style.display = "none";
+            dairy.style.display = "none";
+            grain.style.display = "none";
+            sweet.style.display = "none";
+            drink.style.display = "none";
+
+            option.onchange = function(){
+                if (option.value === "meat"){
+                    meat.style.display = "block";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "fruit"){
+                    meat.style.display = "none";
+                    fruit.style.display = "block";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "vegetable"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "block";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "dairy"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "block";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "grain"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "block";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "sweet"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "block";
+                    drink.style.display = "none";
+                }
+                else {
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "block";
+                }
+            }
+
+        });
+
+    $(document).ready(function(){
+            var option = document.getElementById('category_choice_dn');
+            var meat = document.getElementById('meat_choice_dn');
+            var fruit = document.getElementById('fruit_choice_dn');
+            var vegetable = document.getElementById('vegetable_choice_dn');
+            var dairy = document.getElementById('dairy_choice_dn');
+            var grain = document.getElementById('grain_choice_dn');
+            var sweet = document.getElementById('sweet_choice_dn');
+            var drink = document.getElementById('drink_choice_dn');
+
+            fruit.style.display = "none";
+            vegetable.style.display = "none";
+            dairy.style.display = "none";
+            grain.style.display = "none";
+            sweet.style.display = "none";
+            drink.style.display = "none";
+
+            option.onchange = function(){
+                if (option.value === "meat"){
+                    meat.style.display = "block";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "fruit"){
+                    meat.style.display = "none";
+                    fruit.style.display = "block";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "vegetable"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "block";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "dairy"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "block";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "grain"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "block";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "sweet"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "block";
+                    drink.style.display = "none";
+                }
+                else {
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "block";
+                }
+            }
+
+        });
+
+    $(document).ready(function(){
+            var option = document.getElementById('category_choice_sk');
+            var meat = document.getElementById('meat_choice_sk');
+            var fruit = document.getElementById('fruit_choice_sk');
+            var vegetable = document.getElementById('vegetable_choice_sk');
+            var dairy = document.getElementById('dairy_choice_sk');
+            var grain = document.getElementById('grain_choice_sk');
+            var sweet = document.getElementById('sweet_choice_sk');
+            var drink = document.getElementById('drink_choice_sk');
+
+            fruit.style.display = "none";
+            vegetable.style.display = "none";
+            dairy.style.display = "none";
+            grain.style.display = "none";
+            sweet.style.display = "none";
+            drink.style.display = "none";
+
+            option.onchange = function(){
+                if (option.value === "meat"){
+                    meat.style.display = "block";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "fruit"){
+                    meat.style.display = "none";
+                    fruit.style.display = "block";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "vegetable"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "block";
+                    dairy.style.display = "none";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "dairy"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "block";
+                    grain.style.display = "none";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "grain"){
+                    meat.style.display = "none";
+                    fruit.style.display = "none";
+                    vegetable.style.display = "none";
+                    dairy.style.display = "none";
+                    grain.style.display = "block";
+                    sweet.style.display = "none";
+                    drink.style.display = "none";
+                }
+                else if (option.value === "sweet"){
                     meat.style.display = "none";
                     fruit.style.display = "none";
                     vegetable.style.display = "none";

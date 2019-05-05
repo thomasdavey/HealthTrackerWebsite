@@ -6,16 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.db.models import Sum, F
-from datetime import date
+from datetime import date, timedelta, datetime
 from users.forms import AccountUpdateForm, ProfileUpdateForm
-from .forms import MessageForm, AddCustomFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm
 from .forms import AddBreakfastForm, AddLunchForm, AddDinnerForm, AddSnackForm
-from .forms import MessageForm, AddCustomFoodForm, AddFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm, CreateGroupForm, CreateGroupMemberForm
+from .forms import MessageForm, AddCustomFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm, CreateGroupForm, CreateGroupMemberForm
 from .models import Message, Food, Exercise
 from .models import GroupMember
 from .models import Group, CalorieCount
 from tracker import calculator
-from users.models import WeightGoal
 
 
 @login_required()
@@ -205,7 +203,31 @@ def daily_log(request):
 
 @login_required()
 def goals(request):
-    return render(request, 'goals.html', {'selected': 'Goals'})
+    user = request.user
+
+    age = date.today().year - user.profile.birth_date.year - \
+          ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
+    meta_rate = calculator.metabolic_rate(int(user.profile.weight), int(user.profile.height), int(age))
+    extremity = calculator.get_weight_loss_extremity(user)
+    target_cals = calculator.target_calories(meta_rate, user.profile.activity_level, extremity)
+
+    days = []
+    calories = []
+    for n in range(7):
+        day = date.today() - timedelta(days=7-n)
+        count = CalorieCount.objects.filter(user=user, date=day)
+        calories.append(count.aggregate(Sum('kcals'))['kcals__sum'] or 0)
+        days.append(day.strftime('%d %b'))
+
+    print(calories)
+
+    context = {
+        'selected': 'Goals',
+        'target_cals': target_cals,
+        'days': days,
+        'calories': calories,
+    }
+    return render(request, 'goals.html', context)
 
 
 @login_required()
@@ -246,7 +268,7 @@ def groups(request):
                 group.creator = request.user
                 group.save()
                 GroupMember.objects.create(group=group, user=request.user)
-                query = User.objects.filter(username='longevity')
+                query = User.objects.filter(username='Longevity')
                 longevity = query[0]
                 welcome = "Welcome to your new group! Add some friends to start discussing your goals!"
                 Message.objects.create(group=group, author=longevity, message=welcome)

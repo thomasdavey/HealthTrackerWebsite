@@ -1,42 +1,110 @@
 {% extends 'template.html' %}
 {% block content %}
-    <h1>Goals!</h1>
-    <canvas id="myChart" width="400" height="400"></canvas>
+    <div id="goals-main">
+        <div id="goals-top">
+            <div id="goals-top-left">
+                <h3>Current Weight:</h3>
+                <h3>Target Weight:</h3>
+                <div id="goals-progress">
+                    <div class="ldBar label-center progress-circle" style="width:175px; height:175px;" data-value="25" data-preset="circle" data-stroke-width="7" data-stroke="#F8A032"></div>
+                </div>
+            </div>
+            <div id="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+        <div id="goals-bottom">
+            <div class="table">
+                <div class="table-block">
+                    <div class="table-cell">Current Weight Goal</div>
+                    <div class="table-cell">Start Weight<span>5</span></div>
+                    <div class="table-cell">Current Weight<span>5</span></div>
+                    <div class="table-cell">Target Weight<span>5</span></div>
+                    <div class="table-cell">Progress<span>5</span></div>
+                </div>
+                <div class="table-block">
+                    <div class="table-cell">Current Exercise Goal</div>
+                    <div class="table-cell">Date Set<span>5</span></div>
+                    <div class="table-cell">Review Date<span>5</span></div>
+                    <div class="table-cell">Daily Burn Target<span>5</span></div>
+                    <div class="table-cell">Today's Progress<span>5</span></div>
+                </div>
+                <div class="table-block">
+                    <div class="table-cell">
+                        <div id="table-button-weight">Update Weight Goal</div>
+                        <div id="table-button-exercise">Update Exercise Goal</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 <script>
 var ctx = document.getElementById('myChart').getContext('2d');
+Chart.pluginService.register({
+    beforeDraw: function (chart, easing) {
+        if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+            var helpers = Chart.helpers;
+            var ctx = chart.chart.ctx;
+            var chartArea = chart.chartArea;
+
+            ctx.save();
+            ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+            ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+            ctx.restore();
+        }
+    }
+});
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: [
+            {% for day in days %}
+                '{{ day }}',
+            {% endfor %}
+        ],
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
+            fill: false,
+            data: [
+                {% for count in calories %}
+                    {{ count }},
+                {% endfor %}
             ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+            borderWidth: 3,
+            borderColor: '#F58233',
+            backgroundColor: 'white',
+            pointRadius: 4,
+            lineTension: 0
+        }, {
+            fill: false,
+            data: [{{ target_cals }},{{ target_cals }},{{ target_cals }},{{ target_cals }},{{ target_cals }},{{ target_cals }},{{ target_cals }}],
+            borderWidth: 4,
+            borderColor: 'red',
+            pointRadius: 0
         }]
     },
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
         scales: {
             yAxes: [{
-                ticks: {
-                    beginAtZero: true
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Calorie Intake'
+                }
+            }],
+            xAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Last 7 Days'
                 }
             }]
+        },
+        chartArea: {
+            backgroundColor: 'rgba(0,0,0,0.03)'
         }
     }
 });

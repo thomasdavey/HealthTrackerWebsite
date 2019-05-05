@@ -80,7 +80,7 @@ main {
     font-size: 25px;
 }
 
-#daily-log-progress-container .ldBar-label {
+.ldBar-label {
     color: rgba(0,0,0,0.4);
     font-weight: 100;
     font-size: 25px;
@@ -440,6 +440,110 @@ main {
 
 #tabs form button:hover {
     color: black;
+}
+
+#goals-main {
+    background-color: rgb(254,246,235);
+    height: 100%;
+    min-height: 100vh;
+}
+
+#goals-top {
+    background-color: white;
+    border-bottom: 1px solid rgb(232,232,233);
+    height: 390px;
+    white-space: nowrap;
+}
+
+#goals-top-left {
+    display: inline-block;
+    width: 33%;
+    min-width: 300px;
+    height: 100%;
+    vertical-align: top;
+    padding: 30px;
+}
+
+#goals-top-left h3 {
+    text-align: center;
+    font-weight: 100;
+    font-size: 25px;
+    color: rgba(0,0,0,0.6);
+    padding: 15px 0;
+}
+
+#goals-progress {
+    margin: 15px auto 0 auto;
+    text-align: center;
+}
+
+#chart-container {
+    display: inline-block;
+    width: calc(67% - 5px);
+    min-width: 600px;
+    height: 100%;
+    padding: 30px 30px 20px 0;
+}
+
+#myChart {
+
+}
+
+#goals-bottom {
+    text-align: center;
+    padding: 30px;
+}
+
+.table {
+    display: inline-block;
+}
+
+.table-block {
+    display: inline-block;
+    width: 250px;
+    vertical-align: top;
+}
+
+.table-cell {
+    margin-top: -1px;
+    margin-left: -5px;
+    border: 1px solid rgba(0,0,0,0.2);
+    background-color: white;
+    padding: 5px 15px;
+    text-align: left;
+    font-weight: 300;
+}
+
+.table-cell span {
+    float: right;
+    font-weight: 500;
+    margin-right: 60px;
+}
+
+.table-cell:nth-child(even) {
+    background-color: #F2F2F2;
+}
+
+.table-block:nth-child(3) .table-cell {
+    background-color: white;
+    height: 176px;
+    padding: 25px;
+}
+
+#table-button-weight, #table-button-exercise {
+    width: 100%;
+    padding: 15px;
+    color: white;
+    text-align: center;
+}
+
+#table-button-weight {
+    background-color: rgb(248,160,50);
+}
+
+#table-button-exercise {
+    background-color: rgb(139,193,231);
+    margin-top: 16px;
 }
 
 .add-custom input, select {

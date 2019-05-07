@@ -28,8 +28,8 @@
                 <p>{{ user.email }}</p>
             </div>
             <div class="settings-button-container">
-                <div class="settings-button settings-button-2"><a id="account-button">Edit</a></div>
-                <div class="settings-button settings-button-2"><a id="password-button">Change Password</a></div>
+                <div class="settings-button settings-button-2"><a>Edit</a></div>
+                <div class="settings-button settings-button-2"><a>Change Password</a></div>
             </div>
         </div>
         <div class="settings-row">
@@ -61,7 +61,7 @@
                 {% endif %}
             </div>
             <div class="settings-button-container">
-                <div class="settings-button settings-button-2"><a id="profile-button">Edit</a></div>
+                <div class="settings-button settings-button-2"><a>Edit</a></div>
             </div>
         </div>
         <div class="settings-row">
@@ -80,17 +80,15 @@
         </div>
         <div class="settings-row">
             <h3>Exercise Goal</h3>
-            {% if user.exercisegoal %}
-                <div class="settings-row-section settings-first">
-                    <p>Target Calories</p>
-                </div>
-                <div class="settings-row-section settings-second">
-                    <p>{{ user.exercisegoal.target_calories }}</p>
-                </div>
-                <div><a href="#">Edit</a></div>
-            {% else %}
-                <p>No exercise goal created.</p>
-            {% endif %}
+            <div class="settings-row-section settings-first">
+                <p>Target Calories</p>
+            </div>
+            <div class="settings-row-section settings-second">
+                <p>{{ user.exercisegoal.target_calories }}</p>
+            </div>
+            <div class="settings-button-container">
+                <div class="settings-button settings-button-2"><a>Edit</a></div>
+            </div>
         </div>
         <div class="settings-row">
             <h3>Completed Goals</h3>
@@ -100,13 +98,12 @@
         </div>
         <div class="settings-row">
             <h3>Custom Exercises</h3>
-            <p>{{ exercises }}</p>
         </div>
         <div class="settings-button"><a href="{% url 'users-logout' %}">Log Out</a></div>
         <div class="settings-button"><a href="#">Delete Account</a></div>
     </div>
 
-    <div class="modal" id="account-modal">
+    <div class="modal">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Update Account</h3>
@@ -127,7 +124,7 @@
             </form>
         </div>
     </div>
-    <div class="modal" id="password-modal">
+    <div class="modal">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Change Password</h3>
@@ -148,7 +145,7 @@
             </form>
         </div>
     </div>
-    <div class="modal" id="profile-modal">
+    <div class="modal">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <h3>Update Profile</h3>
@@ -170,58 +167,24 @@
         </div>
     </div>
 
-
     <script>
-        var accountModal = document.getElementById('account-modal');
-        var accountButton = document.getElementById("account-button");
-        var accountClose = document.getElementsByClassName("close")[0];
-        var passwordModal = document.getElementById('password-modal');
-        var passwordButton = document.getElementById("password-button");
-        var passwordClose = document.getElementsByClassName("close")[1];
-        var profileModal = document.getElementById('profile-modal');
-        var profileButton = document.getElementById("profile-button");
-        var profileClose = document.getElementsByClassName("close")[2];
+        var modal = document.getElementsByClassName('modal');
+        var open = document.getElementsByClassName('settings-button-2');
+        var close = document.getElementsByClassName('close');
+        var nav = document.getElementsByTagName('nav')[0];
+        var page = document.getElementById('settings-container');
 
-        {% if modal == 'update_account' %}
-            window.onload = function() {
-                accountModal.style.display = "flex"
+        for (var i=0; i<modal.length; i++) (function (i) {
+            open[i].onclick = function() {
+                modal[i].style.display = 'flex';
+                nav.style.filter = 'blur(3px)';
+                page.style.filter = 'blur(3px)';
             };
-        {% elif modal == 'update_password' %}
-            window.onload = function() {
-                passwordModal.style.display = "flex"
+            close[i].onclick = function() {
+                modal[i].style.display = 'none';
+                nav.style.filter = 'blur(0px)';
+                page.style.filter = 'blur(0px)';
             };
-        {% elif modal == 'update_profile' %}
-            window.onload = function() {
-                profileModal.style.display = "flex"
-            };
-        {% endif %}
-
-        accountButton.onclick = function() {
-            accountModal.style.display = "flex";
-        };
-        accountClose.onclick = function() {
-            accountModal.style.display = "none";
-        };
-        passwordButton.onclick = function() {
-            passwordModal.style.display = "flex";
-        };
-        passwordClose.onclick = function() {
-            passwordModal.style.display = "none";
-        };
-        profileButton.onclick = function() {
-            profileModal.style.display = "flex";
-        };
-        profileClose.onclick = function() {
-            profileModal.style.display = "none";
-        };
-        window.onclick = function(event) {
-            if (event.target === accountModal) {
-                accountModal.style.display = "none";
-            } else if (event.target === passwordModal) {
-                passwordModal.style.display = "none";
-            } else if (event.target === profileModal) {
-                profileModal.style.display = "none";
-            }
-        };
+        })(i);
     </script>
 {% endblock content %}

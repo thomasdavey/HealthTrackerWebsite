@@ -1,112 +1,161 @@
+from django.contrib.auth.models import User
+from django.db.models import Sum
 from datetime import date
-
-def bmi(weight, height):
-    height = height/100
-    bmi = weight / (height*height)
-    return bmi
+from .models import CalorieCount
 
 
+class Calculator:
+    user = User
+    height = 0.0
+    weight = 0.0
+    sex = ''
+    age = 0
+    energy = 0.0
 
-def ideal_weight(height, sex):
-    height = height*0.393701
+    def __init__(self, user):
+        today = date.today()
+        dob = user.profile.birth_date
 
-    if (sex == 'F'):
-        ideal_weight = 45.5 + ((height - 60) * 2.3)
-    elif (sex == 'M'):
-        ideal_weight = 50 + ((height - 60) * 2.3)
+        self.user = user
+        self.height = user.profile.height
+        self.weight = user.profile.weight
+        self.sex = user.profile.sex
+        self.age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+        self.energy = user.profile.activity_level
 
-    return ideal_weight
+    def bmi(self):
+        h = self.height / 100
+        w = self.weight
+        return w / (h*h)
 
+    def ideal_weight(self):
+        h = self.height * 0.393701
+        s = self.sex
 
-def metabolic_rate(weight, height, age):
-    metabolic_rate = (10*weight) + (6.25*height) - (5*age) - 161
-    return metabolic_rate
+        if s == 'M':
+            return 50 + ((h - 60) * 2.3)
+        else:
+            return 45.5 + ((h - 60) * 2.3)
 
+    def metabolic_rate(self):
+        h = self.height
+        w = self.weight
+        a = self.age
+        s = self.sex
 
-def daily_cal(metabolic, energy):
-    daily_cals = float(metabolic) * float(energy)
-    return int(daily_cals)
+        if s == 'M':
+            return (10*w) + (6.25*h) - (5*a) + 5
+        else:
+            return (10*w) + (6.25*h) - (5*a) - 161
 
+    def daily_calories(self):
+        return int(float(self.metabolic_rate()) * float(self.energy))
 
-def target_calories(metabolic, energy, extremity):
-    daily_cals = daily_cal(metabolic, energy)
-    calorie_deficit = daily_cals*(-(extremity/10))
-    target_calories = daily_cals - calorie_deficit
-    return int(target_calories)
+    def extremity(self):
+        loss = int(self.weight - self.user.weightgoal.target_weight)
+        days = self.user.weightgoal.target_date - date.today()
+        weeks = int(days.days) / 7
+        print(weeks)
+        kg = loss / weeks
+        print(kg)
 
+        if -3 < kg <= -2:
+            return 3
+        elif -2 < kg <= -1:
+            return 2
+        elif -1 < kg <= 0:
+            return 1
+        elif 0 < kg <= 1:
+            return -1
+        elif 1 < kg <= 2:
+            return -2
+        elif 2 < kg <= 3:
+            return -3
+        else:
+            print("Please set a different goal. This goal is too difficult to achieve within the time limit.")
+            print(kg)
 
-def target_breakfast(target_calories):
-    target_breakfast = target_calories*0.18
-    return target_breakfast
+    def target_calories(self):
+        deficit = self.daily_calories() * (-(self.extremity()/10))
+        return int(self.daily_calories() - deficit)
 
+    def target_breakfast(self):
+        return int(self.target_calories() * 0.18)
 
-def target_lunch(target_calories):
-    target_lunch = target_calories*0.3
-    return target_lunch
+    def target_lunch(self):
+        return int(self.target_calories() * 0.3)
 
+    def target_dinner(self):
+        return int(self.target_calories() * 0.4)
 
-def target_dinner(target_calories):
-    target_dinner = target_calories*0.4
-    return target_dinner
+    def target_snack(self):
+        return int(self.target_calories() * 0.12)
 
+    def target_protein(self):
+        return self.weight * 2.20462 * 0.825
 
-def target_snacks(target_calories):
-    target_snacks = target_calories*0.12
-    return target_snacks
+    def target_fat(self):
+        return (self.daily_calories()*0.25)/9
 
-
-def net_calories(total_calories, exercise_cals):
-    net_cals = int(total_calories) - int(exercise_cals)
-    return net_cals
-
-
-def cals_under_budget(target_calories, net_calories):
-    cals_under_budget = int(target_calories) - int(net_calories)
-    return cals_under_budget
-
-
-def target_protein(weight):
-    weight = weight*2.20462
-    target_protein = weight*0.825
-    return target_protein
-
-
-def target_fat(daily_cals):
-    target_fat = (daily_cals*0.25)/9
-    return target_fat
-
-
-def target_carbs(daily_cals, target_protein, target_fat):
-    target_carbs = (daily_cals - ((target_protein*4) + (target_fat*9)))/4
-    return target_carbs
-
-
-def get_weight_loss_extremity(user):
-    weight_loss = int(user.profile.weight - user.weightgoal.target_weight)
-    days_between = user.weightgoal.target_date - date.today()
-    num_weeks = int(days_between.days) / 7
-    kg_per_week = weight_loss / num_weeks
-    if kg_per_week > -3 and kg_per_week < -2:
-        extremity = 3;
-
-    elif kg_per_week > -2 and kg_per_week < -1:
-        extremity = 2;
-
-    elif kg_per_week > -1 and kg_per_week <= 0:
-        extremity = 1;
-
-    elif kg_per_week > 0 and kg_per_week < 1:
-        extremity = -1;
-
-    elif kg_per_week > 1 and kg_per_week < 2:
-        extremity = -2;
-
-    elif kg_per_week > 2 and kg_per_week < 3:
-        extremity = -3;
-
-    else:
-        print("Please set a different goal. This goal is too difficult to acheive within the time limit.")
-
-    return extremity
+    def target_carbs(self):
+        return (self.daily_calories() - ((self.target_protein()*4) + (self.target_fat()*9)))/4
 
 
+class Accessor:
+    user = User
+
+    def __init__(self, user):
+        self.user = user
+
+    def total_breakfast(self):
+        total = CalorieCount.objects.filter(user=self.user, date=date.today(), meal='BF')
+        return total.aggregate(Sum('kcals'))['kcals__sum'] or 0
+
+    def total_lunch(self):
+        total = CalorieCount.objects.filter(user=self.user, date=date.today(), meal='LU')
+        return total.aggregate(Sum('kcals'))['kcals__sum'] or 0
+
+    def total_dinner(self):
+        total = CalorieCount.objects.filter(user=self.user, date=date.today(), meal='DN')
+        return total.aggregate(Sum('kcals'))['kcals__sum'] or 0
+
+    def total_snacks(self):
+        total = CalorieCount.objects.filter(user=self.user, date=date.today(), meal='SK')
+        return total.aggregate(Sum('kcals'))['kcals__sum'] or 0
+
+    def total_calories(self):
+        return self.total_breakfast() + self.total_lunch() + self.total_dinner() + self.total_snacks()
+
+    def total_protein(self):
+        total = CalorieCount.objects.filter(user=self.user, date=date.today())
+        return total.aggregate(Sum('protein'))['protein__sum'] or 0
+
+    def total_fat(self):
+        total = CalorieCount.objects.filter(user=self.user, date=date.today())
+        return total.aggregate(Sum('fat'))['fat__sum'] or 0
+
+    def total_carbs(self):
+        total = CalorieCount.objects.filter(user=self.user, date=date.today())
+        return total.aggregate(Sum('carbs'))['carbs__sum'] or 0
+
+    def total_exercise(self):
+        total = CalorieCount.objects.filter(user=self.user, date=date.today(), kcals__lt=0)
+        if total:
+            return -(total.aggregate(Sum('kcals'))['kcals__sum'])
+        else:
+            return 0
+
+    def net_calories(self):
+        return int(self.total_calories()) - int(self.total_exercise())
+
+    def calories_under(self):
+        cal = Calculator(self.user)
+        return int(cal.target_calories()) - int(self.net_calories())
+
+    def calorie_progress(self):
+        cal = Calculator(self.user)
+        return int((self.total_calories()/cal.target_calories())*100)
+
+    def exercise_progress(self):
+        cal = Calculator(self.user)
+        return int((self.total_exercise()/self.user.exercisegoal.target_calories)*100)

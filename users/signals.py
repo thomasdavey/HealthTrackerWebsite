@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Profile
 from .models import WeightGoal
+from .models import ExerciseGoal
 
 
 @receiver(post_save, sender=User)
@@ -25,3 +26,14 @@ def create_weight_goal(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_weight_goal(sender, instance, **kwargs):
     instance.weightgoal.save()
+
+
+@receiver(post_save, sender=User)
+def create_exercise_goal(sender, instance, created, **kwargs):
+    if created:
+        ExerciseGoal.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_exercise_goal(sender, instance, **kwargs):
+    instance.exercisegoal.save()

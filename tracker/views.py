@@ -8,12 +8,12 @@ from django.contrib import messages
 from django.db.models import Sum, F
 from datetime import date, timedelta, datetime
 from users.forms import AccountUpdateForm, ProfileUpdateForm
-from .forms import AddBreakfastForm, AddLunchForm, AddDinnerForm, AddSnackForm
-from .forms import MessageForm, AddCustomFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddExerciseForm, CreateGroupForm, CreateGroupMemberForm
+from .forms import AddFoodForm
+from .forms import MessageForm, AddCustomFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddCardioForm, AddStrengthForm, CreateGroupForm, CreateGroupMemberForm
 from .models import Message, Food, Exercise
 from .models import GroupMember
 from .models import Group, CalorieCount
-from tracker import calculator
+from .calculator import Calculator, Accessor
 
 
 @login_required()
@@ -32,170 +32,82 @@ def home(request):
 @login_required()
 def daily_log(request):
     user = request.user
+    cal = Calculator(user)
+    acc = Accessor(user)
 
-    age = date.today().year - user.profile.birth_date.year - \
-          ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
-    meta_rate = calculator.metabolic_rate(int(user.profile.weight), int(user.profile.height), int(age))
-    extremity = calculator.get_weight_loss_extremity(user)
-    daily_cals = calculator.daily_cal(meta_rate, user.profile.activity_level)
-    target_cals = calculator.target_calories(meta_rate, user.profile.activity_level, extremity)
-
-    target_bk = int(calculator.target_breakfast(target_cals))
-    target_l = int(calculator.target_lunch(target_cals))
-    target_dn = int(calculator.target_dinner(target_cals))
-    target_sn = int(calculator.target_snacks(target_cals))
-
-
-    target_protein = int(calculator.target_protein(user.profile.weight))
-    target_fat = int(calculator.target_fat(daily_cals))
-    target_carbs = int(calculator.target_carbs(daily_cals, target_fat, target_protein))
-
-    breakfast = CalorieCount.objects.filter(user=user, date=date.today(), meal='BF')
-    bcals = breakfast.aggregate(Sum('kcals'))['kcals__sum'] or 0
-    lunch = CalorieCount.objects.filter(user=user, date=date.today(), meal='LU')
-    lcals = lunch.aggregate(Sum('kcals'))['kcals__sum'] or 0
-    dinner = CalorieCount.objects.filter(user=user, date=date.today(), meal='DN')
-    dcals = dinner.aggregate(Sum('kcals'))['kcals__sum'] or 0
-    snacks = CalorieCount.objects.filter(user=user, date=date.today(), meal='SK')
-    scals = snacks.aggregate(Sum('kcals'))['kcals__sum'] or 0
-    total_calories = bcals + lcals + dcals + scals
-
-    total_p = CalorieCount.objects.filter(user=user, date=date.today())
-    totalp = total_p.aggregate(Sum('protein'))['protein__sum'] or 0
-    total_f = CalorieCount.objects.filter(user=user, date=date.today())
-    totalf = total_f.aggregate(Sum('fat'))['fat__sum'] or 0
-    total_c = CalorieCount.objects.filter(user=user, date=date.today())
-    totalc = total_c.aggregate(Sum('carbs'))['carbs__sum'] or 0
-
-    ex_cals = CalorieCount.objects.filter(user=user, date=date.today(), kcals__lt=0)
-    exercise_cals = ex_cals.aggregate(Sum('kcals'))['kcals__sum'] or 0
-
-    food_form_bf = AddBreakfastForm()
-    food_form_lu = AddLunchForm()
-    food_form_dn = AddDinnerForm()
-    food_form_sk = AddSnackForm()
+    food_form = AddFoodForm()
     if request.method == 'POST':
-        if 'add_food_bf' in request.POST:
+        if 'Breakfast' in request.POST:
             item = request.POST[request.POST['category']]
             query = Food.objects.filter(id=item)
             for item in query:
-                total_calories += item.calories
-                totalc += item.carbs
-                totalp += item.protein
-                totalf += item.fat
-                bcals += item.calories
                 my_food = CalorieCount(user=request.user, kcals=item.calories, meal='BF',
                                        fat=item.fat, carbs=item.carbs, protein=item.protein)
                 my_food.save()
 
-        if 'add_food_lu' in request.POST:
+        if 'Lunch' in request.POST:
             item = request.POST[request.POST['category']]
             query = Food.objects.filter(id=item)
             for item in query:
-                total_calories += item.calories
-                totalc += item.carbs
-                totalp += item.protein
-                totalf += item.fat
-                lcals += item.calories
                 my_food = CalorieCount(user=request.user, kcals=item.calories, meal='LU',
                                        fat=item.fat, carbs=item.carbs, protein=item.protein)
                 my_food.save()
-        if 'add_food_dn' in request.POST:
+        if 'Dinner' in request.POST:
             item = request.POST[request.POST['category']]
             query = Food.objects.filter(id=item)
             for item in query:
-                total_calories += item.calories
-                totalc += item.carbs
-                totalp += item.protein
-                totalf += item.fat
-                dcals += item.calories
                 my_food = CalorieCount(user=request.user, kcals=item.calories, meal='DN',
                                        fat=item.fat, carbs=item.carbs, protein=item.protein)
                 my_food.save()
-        if 'add_food_sk' in request.POST:
+        if 'Snack' in request.POST:
             item = request.POST[request.POST['category']]
             query = Food.objects.filter(id=item)
             for item in query:
-                total_calories += item.calories
-                totalc += item.carbs
-                totalp += item.protein
-                totalf += item.fat
-                scals += item.calories
                 my_food = CalorieCount(user=request.user, kcals=item.calories, meal='SK',
                                        fat=item.fat, carbs=item.carbs, protein=item.protein)
                 my_food.save()
 
-    form = AddCustomFoodForm(request.POST or None)
-    if form.is_valid():
-        food = form.save(commit=False)
+    strength_form = AddStrengthForm()
+    cardio_form = AddCardioForm()
+    if request.method == 'POST':
+        if 'strength' in request.POST or 'cardio' in request.POST:
+            weight_lbs = int(user.profile.weight * 2.20462)
+            duration = int(request.POST.get('duration', 0))
+            item = request.POST['exercise']
+            query = Exercise.objects.filter(id=item)
+            for item in query:
+                calories = int(item.calspermin * duration * weight_lbs)
+                CalorieCount.objects.create(user=request.user, kcals=-calories)
+
+    custom_food_form = AddCustomFoodForm(request.POST or None)
+    if custom_food_form.is_valid():
+        food = custom_food_form.save(commit=False)
         food.user = request.user
         food.save()
 
-    weight_lbs = int(user.profile.weight*2.20462)
-    duration = 0
-    temp_form = AddExerciseForm(request.POST or None)
-    if request.method == 'POST':
-        if 'add_exercise' in request.POST:
-            duration += int(request.POST.get('duration', 0))
-            item = request.POST[request.POST['type']]
-            query = Exercise.objects.filter(id=item)
-            for item in query:
-                cals = int(item.calspermin*duration*weight_lbs)
-                exercise_cals += cals
-                my_exercise = CalorieCount(user=request.user, kcals=-cals)
-                my_exercise.save()
-
-    exercise_form = AddCustomExerciseForm(request.POST or None)
-    if exercise_form.is_valid():
-        exercise = exercise_form.save(commit=False)
+    custom_exercise_form = AddCustomExerciseForm(request.POST or None)
+    if custom_exercise_form.is_valid():
+        exercise = custom_exercise_form.save(commit=False)
         exercise.user = request.user
         exercise.save()
 
-    weight_form = UpdateWeightForm(data=request.POST, instance=request.user.profile)
-    if weight_form.is_valid():
-        weight_form.save()
-
-    net_calories = calculator.net_calories(total_calories, -exercise_cals)
-    cals_under = calculator.cals_under_budget(target_cals, net_calories)
-    calorie_progress = int((net_calories / target_cals)* 100)
-    exercise_progress = int((-exercise_cals / user.exercisegoal.target_calories)* 100)
-    fat_progress = int((totalf / target_fat)* 100)
-    protein_progress = int((totalp / target_protein)* 100)
-    carbs_progress = int((totalc / target_carbs)* 100)
+    update_weight_form = UpdateWeightForm(instance=request.user.profile)
+    if 'update_weight' in request.POST:
+        update_weight_form = UpdateWeightForm(data=request.POST, instance=request.user.profile)
+        if update_weight_form.is_valid():
+            update_weight_form.save()
+            return redirect('tracker-daily-log')
 
     context = {
         'selected': 'Daily Log',
-        'form': form,
-        'food_form_bf': food_form_bf,
-        'food_form_lu': food_form_lu,
-        'food_form_dn': food_form_dn,
-        'food_form_sk': food_form_sk,
-        'target_cals': target_cals,
-        'breakfast': bcals,
-        'lunch': lcals,
-        'dinner': dcals,
-        'snacks': scals,
-        'targetb': target_bk,
-        'targetl': target_l,
-        'targetd': target_dn,
-        'targets': target_sn,
-        'targetc': target_carbs,
-        'targetf': target_fat,
-        'targetp': target_protein,
-        'totalp': totalp,
-        'totalf': totalf,
-        'totalc': totalc,
-        'cals_under': cals_under,
-        'net_cals': net_calories,
-        'ex_cals': exercise_cals,
-        'weightForm': weight_form,
-        'exerciseForm': exercise_form,
-        'calorie_progress': calorie_progress,
-        'exercise_progress': exercise_progress,
-        'fat_progress': fat_progress,
-        'protein_progress': protein_progress,
-        'carbs_progress': carbs_progress,
-        'temp_form': temp_form,
+        'cal': cal,
+        'acc': acc,
+        'food_form': food_form,
+        'custom_food_form': custom_food_form,
+        'strength_form': strength_form,
+        'cardio_form': cardio_form,
+        'custom_exercise_form': custom_exercise_form,
+        'update_weight_form': update_weight_form,
     }
 
     return render(request, 'daily_log.html', context)
@@ -204,12 +116,7 @@ def daily_log(request):
 @login_required()
 def goals(request):
     user = request.user
-
-    age = date.today().year - user.profile.birth_date.year - \
-          ((date.today().month, date.today().day) < (user.profile.birth_date.month, user.profile.birth_date.day))
-    meta_rate = calculator.metabolic_rate(int(user.profile.weight), int(user.profile.height), int(age))
-    extremity = calculator.get_weight_loss_extremity(user)
-    target_cals = calculator.target_calories(meta_rate, user.profile.activity_level, extremity)
+    cal = Calculator(user)
 
     days = []
     calories = []
@@ -223,7 +130,7 @@ def goals(request):
 
     context = {
         'selected': 'Goals',
-        'target_cals': target_cals,
+        'cal': cal,
         'days': days,
         'calories': calories,
     }
@@ -268,7 +175,7 @@ def groups(request):
                 group.creator = request.user
                 group.save()
                 GroupMember.objects.create(group=group, user=request.user)
-                query = User.objects.filter(username='Longevity')
+                query = User.objects.filter(username='longevity')
                 longevity = query[0]
                 welcome = "Welcome to your new group! Add some friends to start discussing your goals!"
                 Message.objects.create(group=group, author=longevity, message=welcome)
@@ -279,6 +186,10 @@ def groups(request):
                 group = Group.objects.get(id=request.POST.get('add'))
                 user = User.objects.get(username=request.POST.get('username'))
                 GroupMember.objects.create(group=group, user=user)
+                query = User.objects.filter(username='admin')
+                admin = query[0]
+                message = user.first_name + " " + user.last_name + " was added to the group."
+                Message.objects.create(group=group, author=admin, message=message)
                 return redirect('tracker-groups')
 
     context = {

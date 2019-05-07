@@ -4,9 +4,15 @@
         <div class="groups-list">
             <ul id="groups-side">
                 {% for message in last %}
-                    <li>
-                        <a href="#{{ message.group.id }}">{{ message.group.name }}<br><span>{{ message.author.first_name }}: {{ message.message }}</span></a>
-                    </li>
+                    {% if message.author.username == 'admin' %}
+                        <li>
+                            <a href="#{{ message.group.id }}">{{ message.group.name }}<br><span>{{ message.message }}</span></a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="#{{ message.group.id }}">{{ message.group.name }}<br><span>{{ message.author.first_name }}: {{ message.message }}</span></a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
             <div id="groups-side-bottom">
@@ -26,6 +32,8 @@
                             <p>{{ message.message }}</p>
                             <div class="profile-picture" style="background-image: url('{{ message.author.profile.image.url }}'); width: 34px; height: 34px;"></div>
                         </div>
+                        {% elif message.author.username == 'admin' %}
+                        <p class="groups-messages-added">{{ message.message }}</p>
                         {% else %}
                         <div>
                             <h6>{{ message.author.first_name }} {{ message.author.last_name }}</h6>

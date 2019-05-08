@@ -1,5 +1,10 @@
 {% extends 'template.html' %}
 {% block content %}
+    <div class="nav-mobile">
+        <i class="fas fa-bars nav-mobile-button"></i>
+        <i class="fas fa-plus nav-mobile-add"></i>
+    </div>
+
     <div id="daily-log-body">
         <div id="meal-select">
             <div class="meal-select-meal">
@@ -257,6 +262,8 @@
                 mealPanel.style.filter = 'blur(3px)';
                 mealText.innerHTML = 'Add ' + meals[i];
                 mealName.name = meals[i];
+                $('main').toggleClass('transform-3');
+                $('#meal-select').toggleClass('transform-2');
             };
             close[0].onclick = function() {
                 modal[0].style.display = 'none';
@@ -310,6 +317,11 @@
                     mealFields[j+1].style.display = 'block';
                 }
             }
-        }
+        };
+
+        $('.nav-mobile-add').click(function() {
+            $('main').toggleClass('transform-3');
+            $('#meal-select').toggleClass('transform-2');
+        });
     </script>
 {% endblock content %}

@@ -1,3 +1,7 @@
+/* File that contains all CSS styling for pages post-login */
+
+/* TEMPLATE */
+
 * {
     margin: 0;
     padding: 0;
@@ -15,6 +19,7 @@ nav {
     overflow: hidden;
     background-image: linear-gradient(to bottom, #F37335, #FDC830);
     color: white;
+    transition: 0.5s;
 }
 
 #logo {
@@ -55,7 +60,75 @@ nav a span {
 
 main {
     margin-left: 250px;
+    transition: 0.5s;
 }
+
+.nav-mobile {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    background-image: linear-gradient(to top, #FBC33B, #F68934);
+    width: 100%;
+    color: white;
+    font-size: 20px;
+    top: 0;
+    transition: 0.5s;
+    outline: solid 12px rgba(0,0,0,0.07);
+    height: 50px;
+}
+
+.nav-mobile-button {
+    padding: 15px 20px;
+    float: left;
+}
+
+.nav-mobile-add {
+    padding: 15px 20px;
+    float: right;
+}
+
+.nav-mobile-button:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.nav-mobile-add:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.transform {
+    transform: translateX(250px);
+}
+
+.transform-2 {
+    transform: translateX(0px);
+}
+
+.transform-3 {
+    transform: translateX(-300px);
+}
+
+.transform-4 {
+    transform: translateX(-275px);
+}
+
+/* TEMPLATE MOBILE */
+
+@media screen and (max-width: 600px) {
+    nav {
+        transform: translateX(-250px);
+    }
+
+    .nav-mobile {
+        display: block;
+    }
+
+    main {
+        margin-left: 0;
+        padding-top: 50px;
+    }
+}
+
+/* HOME PAGE */
 
 #home-container {
     color: rgba(0,0,0,0.4);
@@ -102,6 +175,39 @@ main {
     margin: 0;
     font-weight: 100;
 }
+
+/* HOME MOBILE */
+
+@media screen and (max-width: 600px) {
+    #home-container h1 {
+        margin-top: 50px;
+        font-size: 35px;
+    }
+
+    #home-container h2 {
+        font-size: 25px;
+    }
+
+    #home-container h3 {
+        font-size: 23px;
+        margin: 30px 0 20px 0;
+    }
+
+    .progress-circle {
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .progress-circle .ldBar {
+        display: inline-block;
+    }
+
+    .progress-circle p {
+        margin-top: -5px;
+    }
+}
+
+/* DAILY LOG PAGE */
 
 #daily-log-body {
     width: calc(100% - 300px);
@@ -231,11 +337,13 @@ main {
     position: fixed;
     top: 0;
     right: 0;
+    z-index: 1;
     width: 300px;
     background-color: white;
     min-height: 100vh;
     text-align: left;
     border-left: solid 1px rgba(0,0,0,0.1);
+    transition: 0.5s;
 }
 
 .meal-select-meal {
@@ -267,158 +375,196 @@ main {
     color: rgba(0,0,0,0.8);
 }
 
-#settings-container {
-    padding: 40px;
+/* DAILY LOG MOBILE */
+
+@media screen and (max-width: 600px) {
+    #meal-select {
+        transform: translateX(300px);
+    }
+
+    #daily-log-body {
+        width: 100%;
+    }
+
+    #daily-log-nutrition-wrapper {
+        width: 100%;
+    }
+
+    .progress-line {
+        text-align: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .progress-line .ldBar {
+        float: none;
+    }
+
+    .progress-line-text, .progress-line .ldBar {
+        display: block;
+        margin: 10px auto;
+    }
+
+    .progress-line-text {
+        width: 100%;
+    }
+
+    .progress-line-text h4, .progress-line-text h5 {
+        text-align: center;
+    }
 }
 
-#settings-top-bar {
-    margin-bottom: 20px;
-}
+/* GOALS PAGE */
 
-#settings-top-information {
-    display: inline-block;
-    height: 150px;
-    vertical-align: top;
-    padding: 40px 0 0 30px;
-}
-
-.profile-picture {
-    display: inline-block;
-    border-radius: 50%;
-
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-}
-
-.message-adjust {
-    margin-top: 0;
-}
-
-.settings-row {
-    width: 100%;
-    padding: 0 0 10px 20px;
-    margin-bottom: 20px;
-    border-bottom: solid 1px rgba(0,0,0,0.1);
-}
-
-.settings-row h3 {
-    color: #F8A032;
-    font-size: 23px;
-    margin-bottom: 10px;
-}
-
-.settings-row-section {
-    display: inline-block;
-}
-
-.settings-first {
-    font-weight: 300;
-    margin-right: 20px;
-}
-
-.settings-second {
-    font-weight: 400;
-}
-
-.settings-button-container {
-    margin: 5px 0 10px 0;
-}
-
-.settings-button {
-    display: inline-block;
-}
-
-.settings-button a {
-    display: inline-block;
-    margin: 15px 5px 0 0;
-    padding: 10px 30px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    background-color: #F8A032;
-    font-size: 15px;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.settings-button-2 a {
-    padding: 5px 20px;
-}
-
-.settings-button a:hover {
-    background-color: #FFBD60;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
+#goals-main {
+    background-color: rgb(254,246,235);
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    overflow: auto;
-    padding: 40px 0;
+    min-height: 100vh;
 }
 
-.modal-content {
+#goals-top {
     background-color: white;
-    margin: auto;
+    border-bottom: 1px solid rgb(232,232,233);
+    height: 390px;
+    white-space: nowrap;
+}
+
+#goals-top-left {
+    display: inline-block;
+    width: 33%;
+    min-width: 300px;
+    height: 100%;
+    vertical-align: top;
     padding: 30px;
-    border-radius: 10px;
-    width: 500px;
+    text-align: center;
 }
 
-.modal-content .close {
-    float: right;
-    color: rgba(0,0,0,0.5);
-    margin: 5px 5px 0 0;
-    font-size: 20px;
-}
-
-.modal-content .close:hover {
-    color: black;
-}
-
-.modal-content h3 {
+#goals-top-left h3 {
+    font-weight: 100;
     font-size: 25px;
-    color: #F8A032;
-    margin: 10px 0 25px 0;
-    padding-bottom: 15px;
-    border-bottom: solid 1px rgba(0,0,0,0.1);
+    color: rgba(0,0,0,0.6);
+    padding: 15px 0;
+}
+
+#goals-top-left .progress-circle {
+    display: inline-block;
+}
+
+#chart-container {
+    display: inline-block;
+    width: calc(67% - 5px);
+    min-width: 600px;
+    height: 100%;
+    padding: 30px 30px 20px 0;
+}
+
+#goals-bottom {
+    text-align: center;
+    padding: 30px;
+}
+
+.table {
+    display: inline-block;
+}
+
+.table-block {
+    display: inline-block;
+    width: 250px;
+    vertical-align: top;
+}
+
+.table-cell {
+    margin-top: -1px;
+    margin-left: -5px;
+    border: 1px solid rgba(0,0,0,0.2);
+    background-color: white;
+    padding: 5px 15px;
+    text-align: left;
+    font-weight: 300;
+}
+
+.table-cell span {
+    float: right;
     font-weight: 500;
+    width: 80px;
+    text-align: left;
 }
 
-.modal-content button {
-    margin: 15px 5px 0 0;
-    padding: 10px 30px;
-    border: none;
-    border-radius: 5px;
+.table-cell:nth-child(even) {
+    background-color: #F2F2F2;
+}
+
+.table-block:nth-child(3) .table-cell {
+    background-color: white;
+    height: 176px;
+    padding: 25px;
+}
+
+#table-button-weight, #table-button-exercise {
+    width: 100%;
+    padding: 15px;
     color: white;
+    text-align: center;
+}
+
+#table-button-weight {
     background-color: #F8A032;
-    font-size: 15px;
-    cursor: pointer;
 }
 
-.modal-content button:hover {
-    background-color: #FFBD60;
+#table-button-weight:hover {
+    background-color: #F9B157;
+    cursor: default;
 }
 
-.modal-content button:focus {
-    outline: none;
+#table-button-exercise {
+    background-color: #8BC1E7;
+    margin-top: 16px;
 }
+
+#table-button-exercise:hover {
+    background-color: #A0CCEB;
+    margin-top: 16px;
+    cursor: default;
+}
+
+/* GOALS MOBILE */
+
+@media screen and (max-width: 600px) {
+    #goals-top {
+        height: auto;
+    }
+
+    #goals-top-left {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        padding: 20px 20px 10px 20px;
+    }
+
+    #chart-container {
+        display: block;
+        width: 100%;
+        min-height: 275px;
+        height: auto;
+        min-width: 0;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+}
+
+/* GROUPS PAGE */
 
 .groups-list {
     position: fixed;
     top: 0;
     right: 0;
+    z-index: 1;
     width: 275px;
     background-color: white;
     min-height: 100vh;
     text-align: left;
     border-left: solid 1px rgba(0,0,0,0.1);
+    transition: 0.5s;
 }
 
 .groups-list li {
@@ -569,113 +715,164 @@ main {
     color: black;
 }
 
-#goals-main {
-    background-color: rgb(254,246,235);
-    height: 100%;
-    min-height: 100vh;
+/* GROUPS MOBILE */
+
+@media screen and (max-width: 600px) {
+    .groups-list {
+        transform: translateX(275px);
+    }
+
+    .groups-messages {
+        width: 100%;
+        padding-top: 20px;
+    }
+
+    .groups-chat-box {
+        width: 100%;
+    }
 }
 
-#goals-top {
-    background-color: white;
-    border-bottom: 1px solid rgb(232,232,233);
-    height: 390px;
-    white-space: nowrap;
+/* SETTINGS PAGE */
+
+#settings-container {
+    padding: 40px;
 }
 
-#goals-top-left {
+#settings-top-bar {
+    margin-bottom: 20px;
+}
+
+#settings-top-information {
     display: inline-block;
-    width: 33%;
-    min-width: 300px;
-    height: 100%;
+    height: 150px;
     vertical-align: top;
-    padding: 30px;
-    text-align: center;
+    padding: 40px 0 0 30px;
 }
 
-#goals-top-left h3 {
-    font-weight: 100;
-    font-size: 25px;
-    color: rgba(0,0,0,0.6);
-    padding: 15px 0;
-}
-
-#goals-top-left .progress-circle {
+.profile-picture {
     display: inline-block;
+    border-radius: 50%;
+
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
 }
 
-#chart-container {
-    display: inline-block;
-    width: calc(67% - 5px);
-    min-width: 600px;
-    height: 100%;
-    padding: 30px 30px 20px 0;
+.message-adjust {
+    margin-top: 0;
 }
 
-#goals-bottom {
-    text-align: center;
-    padding: 30px;
-}
-
-.table {
-    display: inline-block;
-}
-
-.table-block {
-    display: inline-block;
-    width: 250px;
-    vertical-align: top;
-}
-
-.table-cell {
-    margin-top: -1px;
-    margin-left: -5px;
-    border: 1px solid rgba(0,0,0,0.2);
-    background-color: white;
-    padding: 5px 15px;
-    text-align: left;
-    font-weight: 300;
-}
-
-.table-cell span {
-    float: right;
-    font-weight: 500;
-    width: 80px;
-    text-align: left;
-}
-
-.table-cell:nth-child(even) {
-    background-color: #F2F2F2;
-}
-
-.table-block:nth-child(3) .table-cell {
-    background-color: white;
-    height: 176px;
-    padding: 25px;
-}
-
-#table-button-weight, #table-button-exercise {
+.settings-row {
     width: 100%;
-    padding: 15px;
+    padding: 0 0 10px 20px;
+    margin-bottom: 20px;
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+}
+
+.settings-row h3 {
+    color: #F8A032;
+    font-size: 23px;
+    margin-bottom: 10px;
+}
+
+.settings-row-section {
+    display: inline-block;
+}
+
+.settings-first {
+    font-weight: 300;
+    margin-right: 20px;
+}
+
+.settings-second {
+    font-weight: 400;
+}
+
+.settings-button-container {
+    margin: 5px 0 10px 0;
+}
+
+.settings-button {
+    display: inline-block;
+}
+
+.settings-button a {
+    display: inline-block;
+    margin: 15px 5px 0 0;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
     color: white;
-    text-align: center;
-}
-
-#table-button-weight {
     background-color: #F8A032;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-#table-button-weight:hover {
-    background-color: #F9B157;
-    cursor: default;
+.settings-button-2 a {
+    padding: 5px 20px;
 }
 
-#table-button-exercise {
-    background-color: #8BC1E7;
-    margin-top: 16px;
+.settings-button a:hover {
+    background-color: #FFBD60;
 }
 
-#table-button-exercise:hover {
-    background-color: #A0CCEB;
-    margin-top: 16px;
-    cursor: default;
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow: auto;
+    padding: 40px 0;
+}
+
+.modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 500px;
+}
+
+.modal-content .close {
+    float: right;
+    color: rgba(0,0,0,0.5);
+    margin: 5px 5px 0 0;
+    font-size: 20px;
+}
+
+.modal-content .close:hover {
+    color: black;
+}
+
+.modal-content h3 {
+    font-size: 25px;
+    color: #F8A032;
+    margin: 10px 0 25px 0;
+    padding-bottom: 15px;
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+    font-weight: 500;
+}
+
+.modal-content button {
+    margin: 15px 5px 0 0;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #F8A032;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #FFBD60;
+}
+
+.modal-content button:focus {
+    outline: none;
 }

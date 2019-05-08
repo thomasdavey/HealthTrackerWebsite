@@ -1,3 +1,5 @@
+/* File that contains all CSS styling for form */
+
 .form-wrapper {
     text-align: left;
     margin: auto;
@@ -72,7 +74,7 @@ select {
 }
 
 .form-wrapper button {
-    margin: 15px;
+    margin: 15px 15px 0 0;
     padding: 10px 30px;
     border: none;
     border-radius: 5px;
@@ -108,4 +110,13 @@ select {
     border: solid 1px rgb(244,197,203);
     border-radius: 5px;
     color: rgb(113,29,38);
+}
+
+/* MOBILE */
+
+@media screen and (max-width: 600px) {
+    .form-wrapper {
+        width: 100%;
+        padding: 40px;
+    }
 }

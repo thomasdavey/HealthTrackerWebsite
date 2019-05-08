@@ -1,3 +1,7 @@
+/* File that contains all CSS styling for pages pre-login */
+
+/* LANDING PAGE */
+
 * {
     margin: 0;
     padding: 0;
@@ -74,8 +78,22 @@ html, body, #background, #landing {
     border-color: rgba(255,255,255,0);
 }
 
+/* LANDING PAGE MOBILE */
+
+@media screen and (max-width: 600px) {
+    #logo {
+        font-size: 55px;
+    }
+
+    #login, #register {
+        width: 200px;
+    }
+}
+
+/* LOGIN AND REGISTRATION PAGES */
+
 nav {
-    background-image: linear-gradient(to top, #fbc33b, #F68934);;
+    background-image: linear-gradient(to top, #FBC33B, #F68934);
     font-size: 35px;
     text-align: center;
     padding: 15px;

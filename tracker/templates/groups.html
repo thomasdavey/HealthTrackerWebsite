@@ -1,5 +1,9 @@
 {% extends 'template.html' %}
 {% block content %}
+    <div class="nav-mobile">
+        <i class="fas fa-bars nav-mobile-button"></i>
+        <i class="fas fa-user-friends nav-mobile-add"></i>
+    </div>
     <div id="tabs">
         <div class="groups-list">
             <ul id="groups-side">
@@ -205,15 +209,24 @@
 
         createGroupButton.onclick = function() {
             createGroupModal.style.display = "flex";
+            $('main').toggleClass('transform-4');
+            $('.groups-list').toggleClass('transform-2');
         };
         createGroupClose.onclick = function() {
             createGroupModal.style.display = "none";
         };
         addMemberButton.onclick = function() {
             addMemberModal.style.display = "flex";
+            $('main').toggleClass('transform-4');
+            $('.groups-list').toggleClass('transform-2');
         };
         addMemberClose.onclick = function() {
             addMemberModal.style.display = "none";
         };
+
+        $('.nav-mobile-add').click(function() {
+            $('main').toggleClass('transform-4');
+            $('.groups-list').toggleClass('transform-2');
+        });
     </script>
 {% endblock content %}

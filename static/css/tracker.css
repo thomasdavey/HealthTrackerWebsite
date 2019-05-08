@@ -84,6 +84,10 @@ main {
     text-align: center;
 }
 
+.progress-circle-no-percent .ldBar-label:after {
+    content: '';
+}
+
 .ldBar-label {
     color: rgba(0,0,0,0.4);
     font-weight: 100;
@@ -116,10 +120,6 @@ main {
     width: 100%;
     padding-bottom: 20px;
     border-bottom: solid 1px rgba(0,0,0,0.1);
-}
-
-#daily-log-top .ldBar-label:after {
-    content: '';
 }
 
 #daily-log-bottom {
@@ -167,6 +167,64 @@ main {
 
 .daily-log-bottom-button a:hover, #meal-select a:hover {
     color: rgba(0,0,0,0.8);
+}
+
+#daily-log-nutrition {
+    width: 100%;
+    border-top: solid 1px rgba(0,0,0,0.1);
+    margin-bottom: 50px;
+}
+
+#daily-log-nutrition-wrapper {
+    width: 500px;
+    display: inline-block;
+}
+
+#daily-log-nutrition h2 {
+    padding: 20px 0;
+    font-weight: 100;
+}
+
+.progress-line {
+    display: block;
+}
+
+.progress-line-text, .progress-line .ldBar {
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.progress-line-text {
+    float: left;
+    clear: both;
+}
+
+.progress-line .ldBar {
+    float: right;
+    transform: translateY(5px);
+}
+
+.progress-line h4, .progress-line h5 {
+    text-align: left;
+}
+
+.progress-line h4 {
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(0,0,0,0.8);
+}
+
+.progress-line h5 {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(0,0,0,0.4);
+}
+
+.progress-line .ldBar-label {
+    font-size: 17px;
+    font-weight: 200;
+    margin-top: -50px;
 }
 
 #meal-select {
@@ -407,7 +465,7 @@ main {
 }
 
 #groups-side-bottom p {
-    margin: 15px 30px 15px 50px;
+    margin: 10px 30px 10px 50px;
     font-weight: 300;
 }
 
@@ -531,19 +589,18 @@ main {
     height: 100%;
     vertical-align: top;
     padding: 30px;
+    text-align: center;
 }
 
 #goals-top-left h3 {
-    text-align: center;
     font-weight: 100;
     font-size: 25px;
     color: rgba(0,0,0,0.6);
     padding: 15px 0;
 }
 
-#goals-progress {
-    margin: 15px auto 0 auto;
-    text-align: center;
+#goals-top-left .progress-circle {
+    display: inline-block;
 }
 
 #chart-container {
@@ -552,10 +609,6 @@ main {
     min-width: 600px;
     height: 100%;
     padding: 30px 30px 20px 0;
-}
-
-#myChart {
-
 }
 
 #goals-bottom {
@@ -586,7 +639,8 @@ main {
 .table-cell span {
     float: right;
     font-weight: 500;
-    margin-right: 60px;
+    width: 80px;
+    text-align: left;
 }
 
 .table-cell:nth-child(even) {
@@ -607,10 +661,21 @@ main {
 }
 
 #table-button-weight {
-    background-color: rgb(248,160,50);
+    background-color: #F8A032;
+}
+
+#table-button-weight:hover {
+    background-color: #F9B157;
+    cursor: default;
 }
 
 #table-button-exercise {
-    background-color: rgb(139,193,231);
+    background-color: #8BC1E7;
     margin-top: 16px;
+}
+
+#table-button-exercise:hover {
+    background-color: #A0CCEB;
+    margin-top: 16px;
+    cursor: default;
 }

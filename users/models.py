@@ -24,6 +24,7 @@ class Profile(models.Model):
 
 class WeightGoal(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    start_weight = models.IntegerField(null=True)
     target_weight = models.IntegerField(null=True)
     start_date = models.DateField(auto_now_add=True, null=True)
     target_date = models.DateField(null=True)

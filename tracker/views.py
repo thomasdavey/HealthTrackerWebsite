@@ -9,7 +9,7 @@ from django.db.models import Sum, F
 from datetime import date, timedelta, datetime
 from users.forms import AccountUpdateForm, ProfileUpdateForm
 from .forms import AddFoodForm
-from .forms import MessageForm, AddCustomFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddCardioForm, AddStrengthForm, CreateGroupForm, CreateGroupMemberForm
+from .forms import MessageForm, AddCustomFoodForm, UpdateWeightForm, AddCustomExerciseForm, AddCardioForm, AddStrengthForm, CreateGroupForm, CreateGroupMemberForm, UpdateWeightGoalForm, UpdateExerciseGoalForm
 from .models import Message, Food, Exercise
 from .models import GroupMember
 from .models import Group, CalorieCount
@@ -20,10 +20,25 @@ from .calculator import Calculator, Accessor
 def home(request):
     today = date.today()
     today_format = today.strftime('%A, %d %B %Y')
+    acc = Accessor(request.user)
+
+    start = request.user.weightgoal.start_date
+    end = request.user.weightgoal.target_date
+    days = (end - date.today()).days
+    days_progress = (days/(end - start).days)*100
+
+    start_weight = request.user.weightgoal.start_weight
+    end_weight = request.user.weightgoal.target_weight
+    current_weight = request.user.profile.weight
+    goal_progress = int(100-(((current_weight-end_weight)/(start_weight-end_weight))*100))
 
     context = {
         'selected': 'Home',
-        'date': today_format
+        'date': today_format,
+        'acc': acc,
+        'days': days,
+        'days_progress': days_progress,
+        'goal_progress': goal_progress,
     }
 
     return render(request, 'dashboard.html', context)
@@ -35,6 +50,10 @@ def daily_log(request):
     cal = Calculator(user)
     acc = Accessor(user)
 
+    carb_progress = int((acc.total_carbs()/cal.target_carbs())*100)
+    protein_progress = int((acc.total_protein()/cal.target_protein())*100)
+    fat_progress = int((acc.total_fat()/cal.target_fat())*100)
+
     food_form = AddFoodForm()
     if request.method == 'POST':
         if 'Breakfast' in request.POST:
@@ -44,7 +63,7 @@ def daily_log(request):
                 my_food = CalorieCount(user=request.user, kcals=item.calories, meal='BF',
                                        fat=item.fat, carbs=item.carbs, protein=item.protein)
                 my_food.save()
-
+                return redirect('tracker-daily-log')
         if 'Lunch' in request.POST:
             item = request.POST[request.POST['category']]
             query = Food.objects.filter(id=item)
@@ -52,6 +71,7 @@ def daily_log(request):
                 my_food = CalorieCount(user=request.user, kcals=item.calories, meal='LU',
                                        fat=item.fat, carbs=item.carbs, protein=item.protein)
                 my_food.save()
+                return redirect('tracker-daily-log')
         if 'Dinner' in request.POST:
             item = request.POST[request.POST['category']]
             query = Food.objects.filter(id=item)
@@ -59,6 +79,7 @@ def daily_log(request):
                 my_food = CalorieCount(user=request.user, kcals=item.calories, meal='DN',
                                        fat=item.fat, carbs=item.carbs, protein=item.protein)
                 my_food.save()
+                return redirect('tracker-daily-log')
         if 'Snack' in request.POST:
             item = request.POST[request.POST['category']]
             query = Food.objects.filter(id=item)
@@ -66,6 +87,7 @@ def daily_log(request):
                 my_food = CalorieCount(user=request.user, kcals=item.calories, meal='SK',
                                        fat=item.fat, carbs=item.carbs, protein=item.protein)
                 my_food.save()
+                return redirect('tracker-daily-log')
 
     strength_form = AddStrengthForm()
     cardio_form = AddCardioForm()
@@ -79,13 +101,14 @@ def daily_log(request):
                 calories = int(item.calspermin * duration * weight_lbs)
                 CalorieCount.objects.create(user=request.user, kcals=-calories)
 
-    custom_food_form = AddCustomFoodForm(request.POST or None)
+    custom_food_form = AddCustomFoodForm()
     if custom_food_form.is_valid():
         food = custom_food_form.save(commit=False)
         food.user = request.user
+        food.category = 'Custom'
         food.save()
 
-    custom_exercise_form = AddCustomExerciseForm(request.POST or None)
+    custom_exercise_form = AddCustomExerciseForm()
     if custom_exercise_form.is_valid():
         exercise = custom_exercise_form.save(commit=False)
         exercise.user = request.user
@@ -108,6 +131,9 @@ def daily_log(request):
         'cardio_form': cardio_form,
         'custom_exercise_form': custom_exercise_form,
         'update_weight_form': update_weight_form,
+        'carb_progress': carb_progress,
+        'protein_progress': protein_progress,
+        'fat_progress': fat_progress,
     }
 
     return render(request, 'daily_log.html', context)
@@ -117,6 +143,17 @@ def daily_log(request):
 def goals(request):
     user = request.user
     cal = Calculator(user)
+    acc = Accessor(user)
+
+    start = request.user.weightgoal.start_date
+    end = request.user.weightgoal.target_date
+    days_between = (end - date.today()).days
+    days_progress = (days_between / (end - start).days) * 100
+
+    start_weight = request.user.weightgoal.start_weight
+    end_weight = request.user.weightgoal.target_weight
+    current_weight = request.user.profile.weight
+    goal_progress = int(100 - (((current_weight - end_weight) / (start_weight - end_weight)) * 100))
 
     days = []
     calories = []
@@ -126,13 +163,35 @@ def goals(request):
         calories.append(count.aggregate(Sum('kcals'))['kcals__sum'] or 0)
         days.append(day.strftime('%d %b'))
 
-    print(calories)
+    weight_form = UpdateWeightGoalForm(instance=user.weightgoal)
+    exercise_form = UpdateExerciseGoalForm(instance=user.exercisegoal)
+    if request.method == 'POST':
+        if 'weight' in request.POST:
+            weight_form = UpdateWeightGoalForm(data=request.POST, instance=user.weightgoal)
+            if weight_form.is_valid():
+                user.weightgoal.target_weight = weight_form.cleaned_data.get('target_weight')
+                user.weightgoal.target_date = weight_form.cleaned_data.get('target_date')
+                user.weightgoal.start_date = date.today()
+                weight_form.save()
+                return redirect('tracker-goals')
+        if 'exercise' in request.POST:
+            exercise_form = UpdateExerciseGoalForm(data=request.POST, instance=user.exercisegoal)
+            if exercise_form.is_valid():
+                user.exercisegoal.target_calories = exercise_form.cleaned_data.get('target_calories')
+                exercise_form.save()
+                return redirect('tracker-goals')
 
     context = {
         'selected': 'Goals',
         'cal': cal,
+        'acc': acc,
         'days': days,
         'calories': calories,
+        'days_progress': days_progress,
+        'days_between': days_between,
+        'goal_progress': goal_progress,
+        'weight_form': weight_form,
+        'exercise_form': exercise_form,
     }
     return render(request, 'goals.html', context)
 
@@ -160,7 +219,6 @@ def groups(request):
     create_group_member_form = CreateGroupMemberForm()
 
     if request.method == 'POST':
-        print(request.POST)
         if 'message' in request.POST:
             form = MessageForm(data=request.POST)
             if form.is_valid():
@@ -215,7 +273,6 @@ def settings(request):
     modal = 'none'
     if request.method == 'POST':
         if 'update_account' in request.POST:
-            print(request.POST)
             update_account_form = AccountUpdateForm(data=request.POST, instance=request.user)
             modal = 'update_account'
             if update_account_form.is_valid():
@@ -232,7 +289,6 @@ def settings(request):
                 return redirect('tracker-settings')
         if 'update_profile' in request.POST:
             update_profile_form = ProfileUpdateForm(data=request.POST, files=request.FILES, instance=request.user.profile)
-            print(request.FILES)
             modal = 'update_profile'
             if update_profile_form.is_valid():
                 update_profile_form.save()

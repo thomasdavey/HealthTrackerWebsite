@@ -34,6 +34,7 @@ def register(request):
             user.profile.height = profile_form.cleaned_data.get('height')
             user.profile.weight = profile_form.cleaned_data.get('weight')
             user.profile.activity_level = profile_form.cleaned_data.get('activity_level')
+            user.weightgoal.start_weight = goal_form.cleaned_data.get('weight')
             user.weightgoal.target_weight = goal_form.cleaned_data.get('target_weight')
             user.weightgoal.target_date = goal_form.cleaned_data.get('target_date')
             cal = Calculator(user)

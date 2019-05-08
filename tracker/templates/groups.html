@@ -215,12 +215,5 @@
         addMemberClose.onclick = function() {
             addMemberModal.style.display = "none";
         };
-        window.onclick = function(event) {
-            if (event.target === createGroupModal) {
-                createGroupModal.style.display = "none";
-            } else if (event.target === addMemberModal) {
-                addMemberModal.style.display = "none";
-            }
-        };
     </script>
 {% endblock content %}

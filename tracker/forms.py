@@ -1,7 +1,7 @@
 from django import forms
 from .models import Message, Food, Exercise, CalorieCount, Group, GroupMember
 from django.contrib.auth.models import User
-from users.models import Profile
+from users.models import Profile, WeightGoal, ExerciseGoal
 
 
 class MessageForm(forms.ModelForm):
@@ -131,7 +131,7 @@ class AddCustomFoodForm(forms.ModelForm):
 
     class Meta:
         model = Food
-        fields = ['name', 'category', 'calories', 'carbs', 'fat', 'protein']
+        fields = ['name', 'calories', 'carbs', 'fat', 'protein']
 
 
 class AddCustomExerciseForm(forms.ModelForm):
@@ -147,3 +147,16 @@ class UpdateWeightForm(forms.ModelForm):
         model = Profile
         fields = ['weight']
 
+
+class UpdateWeightGoalForm(forms.ModelForm):
+
+    class Meta:
+        model = WeightGoal
+        fields = ['target_weight', 'target_date']
+
+
+class UpdateExerciseGoalForm(forms.ModelForm):
+
+    class Meta:
+        model = ExerciseGoal
+        fields = ['target_calories']

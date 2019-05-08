@@ -55,9 +55,7 @@ class Calculator:
         loss = int(self.weight - self.user.weightgoal.target_weight)
         days = self.user.weightgoal.target_date - date.today()
         weeks = int(days.days) / 7
-        print(weeks)
         kg = loss / weeks
-        print(kg)
 
         if -3 < kg <= -2:
             return 3
@@ -73,7 +71,6 @@ class Calculator:
             return -3
         else:
             print("Please set a different goal. This goal is too difficult to achieve within the time limit.")
-            print(kg)
 
     def target_calories(self):
         deficit = self.daily_calories() * (-(self.extremity()/10))
@@ -92,13 +89,13 @@ class Calculator:
         return int(self.target_calories() * 0.12)
 
     def target_protein(self):
-        return self.weight * 2.20462 * 0.825
+        return int(self.weight * 2.20462 * 0.825)
 
     def target_fat(self):
-        return (self.daily_calories()*0.25)/9
+        return int((self.daily_calories()*0.25)/9)
 
     def target_carbs(self):
-        return (self.daily_calories() - ((self.target_protein()*4) + (self.target_fat()*9)))/4
+        return int((self.daily_calories() - ((self.target_protein()*4) + (self.target_fat()*9)))/4)
 
 
 class Accessor:
@@ -154,7 +151,7 @@ class Accessor:
 
     def calorie_progress(self):
         cal = Calculator(self.user)
-        return int((self.total_calories()/cal.target_calories())*100)
+        return int(100-((self.total_calories()/cal.target_calories())*100))
 
     def exercise_progress(self):
         cal = Calculator(self.user)

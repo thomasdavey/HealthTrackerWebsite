@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-GB'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
@@ -129,6 +129,7 @@ LOGIN_URL = 'users-login'
 LOGIN_REDIRECT_URL = 'users-home'
 LOGOUT_REDIRECT_URL = 'users-login'
 
+DEFAULT_FROM_EMAIL = "Team Longevity <longevitytracker@gmail.com>"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'longevitytracker@gmail.com'

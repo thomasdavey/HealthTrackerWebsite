@@ -35,11 +35,11 @@
             <div id="daily-log-top">
                 <h2>Keep Track of Your Day</h2>
                 <div id="daily-log-progress-container">
-                    <div class="progress-circle">
-                        <div class="ldBar label-center" style="width:150px; height:150px;" data-value= {{ acc.calorie_progress }} data-preset="circle" data-stroke-width="5" data-stroke="#F8A032"></div>
+                    <div class="progress-circle progress-circle-no-percent">
+                        <div class="ldBar label-center" data-fill-dir="" style="width:150px; height:150px;" data-value= {{ acc.calorie_progress }} data-preset="circle" data-stroke-width="5" data-stroke="#F8A032"></div>
                         <p>Calories Remaining</p>
                     </div>
-                    <div class="progress-circle">
+                    <div class="progress-circle progress-circle-no-percent">
                         <div class="ldBar label-center" style="width:150px; height:150px;" data-value= {{ acc.exercise_progress }} data-preset="circle" data-stroke-width="5" data-stroke="#8BC1E7"></div>
                         <p>Calories Burned</p>
                     </div>
@@ -64,6 +64,32 @@
                         <img src="{% static '/images/weight.png' %}">
                         <h3>Update Weight</h3>
                         <a class="modal-open"><span><i class="fas fa-cog"></i></span></a>
+                    </div>
+                </div>
+            </div>
+            <div id="daily-log-nutrition">
+                <div id="daily-log-nutrition-wrapper">
+                    <h2>Nutritional Information</h2>
+                    <div class="progress-line">
+                        <div class="progress-line-text">
+                            <h4>Carbohydrates: {{ acc.total_carbs }}g</h4>
+                            <h5>Recommended Amount: {{ cal.target_carbs }}g</h5>
+                        </div>
+                        <div class="ldBar" style="width: 300px; height: 100%;" data-value= {{ carb_progress }} data-preset="line" data-stroke-width="3" data-stroke-trail-width="0.3" data-stroke="#77DD77"></div>
+                    </div>
+                    <div class="progress-line">
+                        <div class="progress-line-text">
+                            <h4>Protein: {{ acc.total_protein }}g</h4>
+                            <h5>Recommended Amount: {{ cal.target_protein }}g</h5>
+                        </div>
+                        <div class="ldBar" style="width: 300px; height: 100%;" data-value= {{ protein_progress }} data-preset="line" data-stroke-width="3" data-stroke-trail-width="0.3" data-stroke="#77DD77"></div>
+                    </div>
+                    <div class="progress-line">
+                        <div class="progress-line-text">
+                            <h4>Fat: {{ acc.total_fat }}g</h4>
+                            <h5>Recommended Amount: {{ cal.target_fat }}g</h5>
+                        </div>
+                        <div class="ldBar" style="width: 300px; height: 100%;" data-value= {{ fat_progress }} data-preset="line" data-stroke-width="3" data-stroke-trail-width="0.3" data-stroke="#77DD77"></div>
                     </div>
                 </div>
             </div>
@@ -119,6 +145,7 @@
                     {% endfor %}
                 </ul>
                 <button type="submit" name="strength">Submit</button>
+                <button class="modal-open" type="button">Add Custom</button>
             </form>
         </div>
     </div>
@@ -140,6 +167,7 @@
                     {% endfor %}
                 </ul>
                 <button type="submit" name="cardio">Submit</button>
+                <button class="modal-open" type="button">Add Custom</button>
             </form>
         </div>
     </div>
@@ -185,6 +213,27 @@
             </form>
         </div>
     </div>
+    <div class="modal" style="background-color: transparent">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3 id="modal-meal">Add Custom Exercise</h3>
+            {% load filters %}
+            <form method="POST">
+                {% csrf_token %}
+                <ul>
+                    {% for field in custom_exercise_form %}
+                        <li class="form-field">
+                            <p>{{ field.errors }}</p>
+                            <p class="form-label">{{ field.label_tag }}</p>
+                            {{ field|add:'form-input' }}
+                            <p class="form-help">{{ field.help_text }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button type="submit" name="submit">Submit</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         var meals = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
@@ -217,18 +266,26 @@
             };
         })(i);
 
-        for (var j=0; j<4; j++) (function(j) {
+        for (var j=0; j<6; j++) (function(j) {
             open[j+4].onclick = function() {
-                modal[j+1].style.display = 'flex';
+                if (j < 5) {
+                    modal[j + 1].style.display = 'flex';
+                } else {
+                    modal[j].style.display = 'flex'
+                }
                 nav.style.filter = 'blur(3px)';
                 page.style.filter = 'blur(3px)';
                 mealPanel.style.filter = 'blur(3px)';
             };
-            close[j+1].onclick = function() {
-                modal[j+1].style.display = 'none';
-                nav.style.filter = 'blur(0px)';
-                page.style.filter = 'blur(0px)';
-                mealPanel.style.filter = 'blur(0px)';
+            if (j < 5) {
+                close[j+1].onclick = function() {
+                    modal[j+1].style.display = 'none';
+                    if (j < 3) {
+                        nav.style.filter = 'blur(0px)';
+                        page.style.filter = 'blur(0px)';
+                        mealPanel.style.filter = 'blur(0px)';
+                    }
+                }
             }
         })(j);
 

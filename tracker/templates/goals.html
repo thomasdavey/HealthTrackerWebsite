@@ -3,10 +3,11 @@
     <div id="goals-main">
         <div id="goals-top">
             <div id="goals-top-left">
-                <h3>Current Weight:</h3>
-                <h3>Target Weight:</h3>
-                <div id="goals-progress">
-                    <div class="ldBar label-center progress-circle" style="width:175px; height:175px;" data-value="25" data-preset="circle" data-stroke-width="7" data-stroke="#F8A032"></div>
+                <h3>Current Weight: {{ user.profile.weight }}kg</h3>
+                <h3>Target Weight: {{ user.weightgoal.target_weight }}kg</h3>
+                <div class="progress-circle progress-circle-no-percent">
+                    <div class="ldBar label-center" style="width:175px; height:175px;" data-value="{{ days_progress }}" data-preset="circle" data-stroke-width="5" data-stroke="#F8A032"></div>
+                    <p>Days Until Goal</p>
                 </div>
             </div>
             <div id="chart-container">
@@ -17,96 +18,164 @@
             <div class="table">
                 <div class="table-block">
                     <div class="table-cell">Current Weight Goal</div>
-                    <div class="table-cell">Start Weight<span>5</span></div>
-                    <div class="table-cell">Current Weight<span>5</span></div>
-                    <div class="table-cell">Target Weight<span>5</span></div>
-                    <div class="table-cell">Progress<span>5</span></div>
+                    <div class="table-cell">Start Weight<span>{{ user.weightgoal.start_weight }} kg</span></div>
+                    <div class="table-cell">Current Weight<span>{{ user.profile.weight }} kg</span></div>
+                    <div class="table-cell">Target Weight<span>{{ user.weightgoal.target_weight }} kg</span></div>
+                    <div class="table-cell">Progress<span>{{ goal_progress }} %</span></div>
                 </div>
                 <div class="table-block">
                     <div class="table-cell">Current Exercise Goal</div>
-                    <div class="table-cell">Date Set<span>5</span></div>
-                    <div class="table-cell">Review Date<span>5</span></div>
-                    <div class="table-cell">Daily Burn Target<span>5</span></div>
-                    <div class="table-cell">Today's Progress<span>5</span></div>
+                    <div class="table-cell">Date Set<span>TEMP</span></div>
+                    <div class="table-cell">Review Date<span>TEMP</span></div>
+                    <div class="table-cell">Daily Burn Target<span>{{ user.exercisegoal.target_calories }} kcal</span></div>
+                    <div class="table-cell">Today's Progress<span>{{ acc.exercise_progress }} %</span></div>
                 </div>
                 <div class="table-block">
                     <div class="table-cell">
-                        <div id="table-button-weight">Update Weight Goal</div>
-                        <div id="table-button-exercise">Update Exercise Goal</div>
+                        <div class="modal-open" id="table-button-weight">Update Weight Goal</div>
+                        <div class="modal-open" id="table-button-exercise">Update Exercise Goal</div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-<script>
-var ctx = document.getElementById('myChart').getContext('2d');
-Chart.pluginService.register({
-    beforeDraw: function (chart, easing) {
-        if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-            var helpers = Chart.helpers;
-            var ctx = chart.chart.ctx;
-            var chartArea = chart.chartArea;
 
-            ctx.save();
-            ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
-            ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
-            ctx.restore();
+    <div class="modal">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3 id="modal-meal">Update Weight Goal</h3>
+            {% load filters %}
+            <form method="POST">
+                {% csrf_token %}
+                <ul>
+                    {% for field in weight_form %}
+                        <li class="form-field">
+                            <p>{{ field.errors }}</p>
+                            <p class="form-label">{{ field.label_tag }}</p>
+                            {{ field|add:'form-input' }}
+                            <p class="form-help">{{ field.help_text }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button type="submit" name="weight">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal">
+        <div class="modal-content">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <h3 id="modal-meal">Update Exercise Goal</h3>
+            {% load filters %}
+            <form method="POST">
+                {% csrf_token %}
+                <ul>
+                    {% for field in exercise_form %}
+                        <li class="form-field">
+                            <p>{{ field.errors }}</p>
+                            <p class="form-label">{{ field.label_tag }}</p>
+                            {{ field|add:'form-input' }}
+                            <p class="form-help">{{ field.help_text }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button type="submit" name="exercise">Submit</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+    var modal = document.getElementsByClassName('modal');
+    var open = document.getElementsByClassName('modal-open');
+    var close = document.getElementsByClassName('close');
+
+    var nav = document.getElementsByTagName('nav')[0];
+    var page = document.getElementById('goals-main');
+
+    for (var i=0; i<modal.length; i++) (function (i) {
+        open[i].onclick = function() {
+            modal[i].style.display = 'flex';
+            nav.style.filter = 'blur(3px)';
+            page.style.filter = 'blur(3px)';
+        };
+        close[i].onclick = function() {
+            modal[i].style.display = 'none';
+            nav.style.filter = 'blur(0px)';
+            page.style.filter = 'blur(0px)';
+        };
+    })(i);
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    Chart.pluginService.register({
+        beforeDraw: function (chart, easing) {
+            if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+                var helpers = Chart.helpers;
+                var ctx = chart.chart.ctx;
+                var chartArea = chart.chartArea;
+
+                ctx.save();
+                ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+                ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+                ctx.restore();
+            }
         }
-    }
-});
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: [
-            {% for day in days %}
-                '{{ day }}',
-            {% endfor %}
-        ],
-        datasets: [{
-            fill: false,
-            data: [
-                {% for count in calories %}
-                    {{ count }},
+    });
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [
+                {% for day in days %}
+                    '{{ day }}',
                 {% endfor %}
             ],
-            borderWidth: 3,
-            borderColor: '#F58233',
-            backgroundColor: 'white',
-            pointRadius: 4,
-            lineTension: 0
-        }, {
-            fill: false,
-            data: [{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }}],
-            borderWidth: 4,
-            borderColor: 'red',
-            pointRadius: 0
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: {
-            display: false
-        },
-        scales: {
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Calorie Intake'
-                }
-            }],
-            xAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Last 7 Days'
-                }
+            datasets: [{
+                fill: false,
+                data: [
+                    {% for count in calories %}
+                        {{ count }},
+                    {% endfor %}
+                ],
+                borderWidth: 3,
+                borderColor: '#F58233',
+                backgroundColor: 'white',
+                pointRadius: 4,
+                lineTension: 0
+            }, {
+                fill: false,
+                data: [{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }},{{ cal.target_calories }}],
+                borderWidth: 4,
+                borderColor: 'red',
+                pointRadius: 0
             }]
         },
-        chartArea: {
-            backgroundColor: 'rgba(0,0,0,0.03)'
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Calorie Intake'
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Last 7 Days'
+                    }
+                }]
+            },
+            chartArea: {
+                backgroundColor: 'rgba(0,0,0,0.03)'
+            }
         }
-    }
-});
+    });
+
+    window.onload = function() {
+        var progressText = document.getElementsByClassName('ldBar-label');
+        progressText[0].innerHTML = {{ days_between }};
+    };
 </script>
 {% endblock content %}

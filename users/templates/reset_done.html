@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+    <nav><a href="{% url 'users-home' %}"><i class="fas fa-heartbeat"></i>Longevity</a></nav>
+    <div class="form-wrapper">
+        <div class="success">An email has been sent to the address provided. Please click the link in the email to reset your password!</div>
+        <div class="login-button"><a href="{% url 'users-login' %}">Login</a></div>
+    </div>
+{% endblock content %}

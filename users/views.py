@@ -76,3 +76,4 @@ def activate(request, uidb64, token):
     else:
         messages.error(request, f'An error occurred. Your account was not activated.')
         return redirect('users-login')
+

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <nav><a href="{% url 'users-home' %}"><i class="fas fa-heartbeat"></i>Longevity</a></nav>
+    <div class="form-wrapper">
+        <h1>Reset Password</h1>
+        {% if email %}
+        <h3>Please enter the email address associated with your account below. You will be sent an email with containing a link to reset your password!</h3>
+        {% endif %}
+        {% load filters %}
+        <form method="POST">
+            {%  csrf_token %}
+            <ul>
+                {% for field in form %}
+                <li class="form-field">
+                    <p>{{ field.errors }}</p>
+                    <p class="form-label">{{ field.label_tag }}</p>
+                    {{ field|add:'form-input' }}
+                    <p class="form-help">{{ field.help_text }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+            <p>{{ form.non_field_errors }}</p>
+            <button type="submit">Confirm</button>
+        </form>
+    </div>
+{% endblock content %}

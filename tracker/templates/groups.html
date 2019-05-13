@@ -209,16 +209,20 @@
 
         createGroupButton.onclick = function() {
             createGroupModal.style.display = "flex";
-            $('main').toggleClass('transform-4');
-            $('.groups-list').toggleClass('transform-2');
+            if ($(window).width() <= 600) {
+                $('main').toggleClass('transform-4');
+                $('.groups-list').toggleClass('transform-2');
+            }
         };
         createGroupClose.onclick = function() {
             createGroupModal.style.display = "none";
         };
         addMemberButton.onclick = function() {
             addMemberModal.style.display = "flex";
-            $('main').toggleClass('transform-4');
-            $('.groups-list').toggleClass('transform-2');
+            if ($(window).width() <= 600) {
+                $('main').toggleClass('transform-4');
+                $('.groups-list').toggleClass('transform-2');
+            }
         };
         addMemberClose.onclick = function() {
             addMemberModal.style.display = "none";

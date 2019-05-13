@@ -262,8 +262,10 @@
                 mealPanel.style.filter = 'blur(3px)';
                 mealText.innerHTML = 'Add ' + meals[i];
                 mealName.name = meals[i];
-                $('main').toggleClass('transform-3');
-                $('#meal-select').toggleClass('transform-2');
+                if ($(window).width() <= 600) {
+                    $('main').toggleClass('transform-3');
+                    $('#meal-select').toggleClass('transform-2');
+                }
             };
             close[0].onclick = function() {
                 modal[0].style.display = 'none';
@@ -319,7 +321,7 @@
             }
         };
 
-        $('.nav-mobile-add').click(function() {
+        $('.nav-mobile-add').click(function () {
             $('main').toggleClass('transform-3');
             $('#meal-select').toggleClass('transform-2');
         });

@@ -195,7 +195,7 @@ class UpdateExerciseGoalForm(forms.ModelForm):
 
     class Meta:
         model = ExerciseGoal
-        fields = ['target_calories']
+        fields = ['target_calories', 'review_date']
         labels = {
             'target_calories': 'Target Calories (kcal)'
         }

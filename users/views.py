@@ -7,6 +7,8 @@ from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.models import User
+from datetime import date
+from dateutil.relativedelta import *
 from tracker.calculator import Calculator
 from .forms import UserRegisterForm
 from .forms import ProfileRegistrationForm
@@ -39,6 +41,8 @@ def register(request):
             user.weightgoal.target_date = goal_form.cleaned_data.get('target_date')
             cal = Calculator(user)
             user.exercisegoal.target_calories = int(cal.target_calories() * ((float(user.profile.activity_level) - 1)/2))
+            now = date.today()
+            user.exercisegoal.review_date = now + relativedelta(months=+1)
             user.is_active = False
             user.save()
 

@@ -193,8 +193,12 @@ def goals(request):
             exercise_form = UpdateExerciseGoalForm(data=request.POST, instance=user.exercisegoal)
             if exercise_form.is_valid():
                 user.exercisegoal.target_calories = exercise_form.cleaned_data.get('target_calories')
+                user.exercisegoal.review_date = exercise_form.cleaned_data.get('review_date')
                 exercise_form.save()
                 return redirect('tracker-goals')
+
+    exercise_set = request.user.exercisegoal.start_date.strftime("%d/%m/%y")
+    exercise_review = request.user.exercisegoal.review_date.strftime("%d/%m/%y")
 
     context = {
         'selected': 'Goals',
@@ -205,6 +209,8 @@ def goals(request):
         'days_progress': days_progress,
         'days_between': days_between,
         'goal_progress': goal_progress,
+        'exercise_set': exercise_set,
+        'exercise_review': exercise_review,
         'weight_form': weight_form,
         'exercise_form': exercise_form,
     }

@@ -35,6 +35,8 @@ class WeightGoal(models.Model):
 
 class ExerciseGoal(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    start_date = models.DateField(auto_now_add=True, null=True)
+    review_date = models.DateField(null=True)
     target_calories = models.IntegerField(null=True)
 
     def __str__(self):

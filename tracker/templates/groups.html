@@ -31,15 +31,15 @@
                 {% for message in set %}
                     {% ifchanged message.author %}
                         {% if message.author == user %}
-                        <div class="groups-messages-user">
+                        <div class="chat-message groups-messages-user">
                             <h6>{{ message.author.first_name }} {{ message.author.last_name }}</h6>
                             <p>{{ message.message }}</p>
                             <div class="profile-picture" style="background-image: url('{{ message.author.profile.image.url }}'); width: 34px; height: 34px;"></div>
                         </div>
                         {% elif message.author.username == 'admin' %}
-                        <p class="groups-messages-added">{{ message.message }}</p>
+                        <p class="chat-message groups-messages-added">{{ message.message }}</p>
                         {% else %}
-                        <div>
+                        <div class="chat-message">
                             <h6>{{ message.author.first_name }} {{ message.author.last_name }}</h6>
                             <div class="profile-picture" style="background-image: url('{{ message.author.profile.image.url }}'); width: 34px; height: 34px;"></div>
                             <p>{{ message.message }}</p>
@@ -47,11 +47,11 @@
                         {% endif %}
                     {% else %}
                         {% if message.author == user %}
-                        <div class="groups-messages-user">
+                        <div class="chat-message groups-messages-user">
                             <p style="margin: -3px 43px 5px 0">{{ message.message }}</p>
                         </div>
                         {% else %}
-                        <div>
+                        <div class="chat-message">
                             <p style="margin: -3px 0 5px 43px">{{ message.message }}</p>
                         </div>
                         {% endif %}
@@ -190,13 +190,34 @@
             });
         });
 
+        var messageCount = $('.chat-message').length;
+
         $(function() {
-            var tabs = $("#tabs").tabs();
-            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            var tabs = $("#tabs").tabs({
+                activate: function(event, ui) {
+                    $('.nav-mobile').removeClass('move-5');
+                    $('.groups-list').removeClass('move-4');
+                    $('#groups-side-bottom').removeClass('move-4');
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+            });
+            window.scrollTo(0, document.body.scrollHeight);
+
+            $(function() {
+                setTimeout(arguments.callee, 100);
+                if (messageCount !== $('.chat-message').length) {
+                    $('#groups-side').load(document.URL +  ' #groups-side>*');
+                    messageCount = $('.chat-message').length;
+                    $("html, body").animate({ scrollTop: $(document).height() });
+                }
+            });
 
             $(function() {
                 setTimeout(arguments.callee, 1000);
-                tabs.tabs("refresh")
+                {% for group in groups %}
+                    $('#chat-{{ group.group.id }}').load(document.URL +  ' #chat-{{ group.group.id }}>*');
+                {% endfor %}
+                tabs.tabs("refresh");
             });
         });
 
@@ -209,28 +230,21 @@
 
         createGroupButton.onclick = function() {
             createGroupModal.style.display = "flex";
-            if ($(window).width() <= 600) {
-                $('main').toggleClass('transform-4');
-                $('.groups-list').toggleClass('transform-2');
-            }
         };
         createGroupClose.onclick = function() {
             createGroupModal.style.display = "none";
         };
         addMemberButton.onclick = function() {
             addMemberModal.style.display = "flex";
-            if ($(window).width() <= 600) {
-                $('main').toggleClass('transform-4');
-                $('.groups-list').toggleClass('transform-2');
-            }
         };
         addMemberClose.onclick = function() {
             addMemberModal.style.display = "none";
         };
 
         $('.nav-mobile-add').click(function() {
-            $('main').toggleClass('transform-4');
-            $('.groups-list').toggleClass('transform-2');
+            $('.nav-mobile').toggleClass('move-5');
+            $('.groups-list').toggleClass('move-4');
+            $('#groups-side-bottom').toggleClass('move-4');
         });
     </script>
 {% endblock content %}

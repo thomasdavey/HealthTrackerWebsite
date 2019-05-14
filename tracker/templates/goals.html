@@ -92,19 +92,12 @@
     var open = document.getElementsByClassName('modal-open');
     var close = document.getElementsByClassName('close');
 
-    var nav = document.getElementsByTagName('nav')[0];
-    var page = document.getElementById('goals-main');
-
     for (var i=0; i<modal.length; i++) (function (i) {
         open[i].onclick = function() {
             modal[i].style.display = 'flex';
-            nav.style.filter = 'blur(3px)';
-            page.style.filter = 'blur(3px)';
         };
         close[i].onclick = function() {
             modal[i].style.display = 'none';
-            nav.style.filter = 'blur(0px)';
-            page.style.filter = 'blur(0px)';
         };
     })(i);
 

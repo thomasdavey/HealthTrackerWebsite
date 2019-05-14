@@ -54,8 +54,9 @@ def daily_log(request):
     protein_progress = int((acc.total_protein()/cal.target_protein())*100)
     fat_progress = int((acc.total_fat()/cal.target_fat())*100)
 
-    food_form = AddFoodForm()
+    food_form = AddFoodForm(user=request.user)
     if request.method == 'POST':
+        print(request.POST)
         if 'Breakfast' in request.POST:
             item = request.POST[request.POST['category']]
             query = Food.objects.filter(id=item)
@@ -89,8 +90,8 @@ def daily_log(request):
                 my_food.save()
                 return redirect('tracker-daily-log')
 
-    strength_form = AddStrengthForm()
-    cardio_form = AddCardioForm()
+    strength_form = AddStrengthForm(user=request.user)
+    cardio_form = AddCardioForm(user=request.user)
     if request.method == 'POST':
         if 'strength' in request.POST or 'cardio' in request.POST:
             weight_lbs = int(user.profile.weight * 2.20462)
@@ -102,17 +103,31 @@ def daily_log(request):
                 CalorieCount.objects.create(user=request.user, kcals=-calories)
 
     custom_food_form = AddCustomFoodForm()
-    if custom_food_form.is_valid():
-        food = custom_food_form.save(commit=False)
-        food.user = request.user
-        food.category = 'Custom'
-        food.save()
+    if request.method == 'POST':
+        if 'custom_food' in request.POST:
+            custom_food_form = AddCustomFoodForm(data=request.POST)
+            if custom_food_form.is_valid():
+                food = custom_food_form.save(commit=False)
+                food.user = request.user
+                food.category = 'Custom'
+                food.save()
+                return redirect('tracker-daily-log')
 
     custom_exercise_form = AddCustomExerciseForm()
-    if custom_exercise_form.is_valid():
-        exercise = custom_exercise_form.save(commit=False)
-        exercise.user = request.user
-        exercise.save()
+    if request.method == 'POST':
+        if 'custom_exercise' in request.POST:
+            custom_exercise_form = AddCustomExerciseForm(data=request.POST)
+            if custom_exercise_form.is_valid():
+                exercise = custom_exercise_form.save(commit=False)
+                exercise.user = request.user
+                weight_lbs = int(user.profile.weight * 2.20462)
+                calories = request.POST.get('calories')
+                duration = request.POST.get('duration')
+                calspermin = float(int(calories)/int(duration)/weight_lbs)
+                print(calspermin)
+                exercise.calspermin = calspermin
+                exercise.save()
+                return redirect('tracker-daily-log')
 
     update_weight_form = UpdateWeightForm(instance=request.user.profile)
     if 'update_weight' in request.POST:

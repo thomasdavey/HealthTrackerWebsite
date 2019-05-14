@@ -18,7 +18,7 @@
 }
 
 .form-wrapper h3 {
-    font-size: 15px;
+    font-size: 14px;
     padding-bottom: 10px;
     font-weight: 300;
 }
@@ -133,8 +133,16 @@ select {
 /* MOBILE */
 
 @media screen and (max-width: 600px) {
+    html, body {
+        overflow-x: hidden;
+    }
+
     .form-wrapper {
         width: 100%;
         padding: 40px;
+    }
+
+    .form-input {
+        font-size: 16px;
     }
 }

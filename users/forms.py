@@ -31,6 +31,10 @@ class ProfileRegistrationForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['birth_date', 'sex', 'height', 'weight', 'activity_level']
+        labels = {
+            'height': 'Height (cm)',
+            'weight': 'Weight (kg)',
+        }
 
 
 class GoalRegistrationForm(forms.ModelForm):
@@ -46,6 +50,9 @@ class GoalRegistrationForm(forms.ModelForm):
     class Meta:
         model = WeightGoal
         fields = ['target_weight', 'target_date']
+        labels = {
+            'target_weight': 'Target weight (kg)'
+        }
 
 
 class AccountUpdateForm(forms.ModelForm):
@@ -73,6 +80,10 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['birth_date', 'sex', 'height', 'weight', 'activity_level', 'image']
+        labels = {
+            'height': 'Height (cm)',
+            'weight': 'Weight (kg)',
+        }
 
 
 class WeightGoalUpdateForm(forms.ModelForm):
@@ -87,5 +98,6 @@ class WeightGoalUpdateForm(forms.ModelForm):
     class Meta:
         model = WeightGoal
         fields = ['target_weight', 'target_date']
-
-
+        labels = {
+            'target_weight': 'Target weight (kg)'
+        }

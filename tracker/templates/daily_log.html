@@ -214,7 +214,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <button type="submit" name="submit">Submit</button>
+                <button type="submit" name="custom_food">Submit</button>
             </form>
         </div>
     </div>
@@ -235,7 +235,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <button type="submit" name="submit">Submit</button>
+                <button type="submit" name="custom_exercise">Submit</button>
             </form>
         </div>
     </div>
@@ -250,28 +250,15 @@
         var modal = document.getElementsByClassName('modal');
         var open = document.getElementsByClassName('modal-open');
         var close = document.getElementsByClassName('close');
-        var nav = document.getElementsByTagName('nav')[0];
-        var page = document.getElementById('daily-log-container');
-        var mealPanel = document.getElementById('meal-select');
 
         for (var i=0; i<4; i++) (function (i) {
             open[i].onclick = function() {
                 modal[0].style.display = 'flex';
-                nav.style.filter = 'blur(3px)';
-                page.style.filter = 'blur(3px)';
-                mealPanel.style.filter = 'blur(3px)';
                 mealText.innerHTML = 'Add ' + meals[i];
                 mealName.name = meals[i];
-                if ($(window).width() <= 600) {
-                    $('main').toggleClass('transform-3');
-                    $('#meal-select').toggleClass('transform-2');
-                }
             };
             close[0].onclick = function() {
                 modal[0].style.display = 'none';
-                nav.style.filter = 'blur(0px)';
-                page.style.filter = 'blur(0px)';
-                mealPanel.style.filter = 'blur(0px)';
             };
         })(i);
 
@@ -282,18 +269,10 @@
                 } else {
                     modal[j].style.display = 'flex'
                 }
-                nav.style.filter = 'blur(3px)';
-                page.style.filter = 'blur(3px)';
-                mealPanel.style.filter = 'blur(3px)';
             };
             if (j < 5) {
                 close[j+1].onclick = function() {
                     modal[j+1].style.display = 'none';
-                    if (j < 3) {
-                        nav.style.filter = 'blur(0px)';
-                        page.style.filter = 'blur(0px)';
-                        mealPanel.style.filter = 'blur(0px)';
-                    }
                 }
             }
         })(j);
@@ -322,8 +301,8 @@
         };
 
         $('.nav-mobile-add').click(function () {
-            $('main').toggleClass('transform-3');
-            $('#meal-select').toggleClass('transform-2');
+            $('.nav-mobile').toggleClass('move-3');
+            $('#meal-select').toggleClass('move-4');
         });
     </script>
 {% endblock content %}

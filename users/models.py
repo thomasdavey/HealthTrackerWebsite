@@ -5,6 +5,7 @@ from tracker import calculator
 from datetime import date
 
 
+# Model containing profile information for a registered user
 class Profile(models.Model):
     SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     ACTIVITY_LEVEL_CHOICES = [('1.2', 'Sedentary'), ('1.375', 'Lightly Active'),
@@ -22,6 +23,7 @@ class Profile(models.Model):
         return f'{self.user.username}'
 
 
+# Model containing information on weight goal objects
 class WeightGoal(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     start_weight = models.IntegerField(null=True)
@@ -33,6 +35,7 @@ class WeightGoal(models.Model):
         return f'{self.user.username}'
 
 
+# Model containing information on exercise goal objects
 class ExerciseGoal(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     target_calories = models.IntegerField(null=True)

@@ -4,6 +4,9 @@ from datetime import date
 from .models import CalorieCount
 
 
+# Calculator class contains methods necessary for individual user's health values
+# contains a constructor for a User object with all variables
+# calculates all values needed for calories and nutrients tracking
 class Calculator:
     user = User
     height = 0.0
@@ -51,6 +54,8 @@ class Calculator:
     def daily_calories(self):
         return int(float(self.metabolic_rate()) * float(self.energy))
 
+    # this method determines the calorie deficit that the user will be recommended based on their goal
+    # it also ensures that the user is unable to set an unrealistic goal
     def extremity(self):
         loss = int(self.weight - self.user.weightgoal.target_weight)
         days = self.user.weightgoal.target_date - date.today()
@@ -98,6 +103,7 @@ class Calculator:
         return int((self.daily_calories() - ((self.target_protein()*4) + (self.target_fat()*9)))/4)
 
 
+# Accessor class deals with returning information from the database for calorie, exercise, goals and nutrient tracking
 class Accessor:
     user = User
 

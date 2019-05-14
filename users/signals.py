@@ -6,6 +6,7 @@ from .models import WeightGoal
 from .models import ExerciseGoal
 
 
+# This file contains methods for creating and saving profiles, weight goals, and exercise goals.
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:

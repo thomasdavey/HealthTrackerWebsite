@@ -6,6 +6,7 @@ from .models import Profile
 from .models import WeightGoal
 
 
+# Form allowing a user to register a basic account with Longevity
 class UserRegisterForm(UserCreationForm):
 
     class Meta:
@@ -13,6 +14,7 @@ class UserRegisterForm(UserCreationForm):
         fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
 
 
+# Form allowing the user to register basic profile and health information
 class ProfileRegistrationForm(forms.ModelForm):
     birth_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'placeholder': 'dd/mm/yyyy', 'type': 'date'}))
 
@@ -33,6 +35,7 @@ class ProfileRegistrationForm(forms.ModelForm):
         fields = ['birth_date', 'sex', 'height', 'weight', 'activity_level']
 
 
+# Form allowing user to input an initial goal when registering
 class GoalRegistrationForm(forms.ModelForm):
     target_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'placeholder': 'dd/mm/yyyy', 'type': 'date'}))
 
@@ -48,6 +51,7 @@ class GoalRegistrationForm(forms.ModelForm):
         fields = ['target_weight', 'target_date']
 
 
+# Form allowing a user to update their account details
 class AccountUpdateForm(forms.ModelForm):
 
     class Meta:
@@ -55,6 +59,7 @@ class AccountUpdateForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'username', 'email']
 
 
+# Form allowing a user to update their profile information
 class ProfileUpdateForm(forms.ModelForm):
     image = forms.FileField(required=False, widget=forms.FileInput)
 
@@ -75,6 +80,7 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['birth_date', 'sex', 'height', 'weight', 'activity_level', 'image']
 
 
+# Form allowing a user to update their weight goal
 class WeightGoalUpdateForm(forms.ModelForm):
 
     def clean_target_date(self):

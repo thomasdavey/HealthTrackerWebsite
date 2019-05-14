@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from users.models import Profile, WeightGoal, ExerciseGoal
 
 
+# Form for sending a message to a group on the groups page
 class MessageForm(forms.ModelForm):
     message = forms.CharField(widget=forms.TextInput(attrs={'class': 'groups-temp'}))
 
@@ -12,6 +13,7 @@ class MessageForm(forms.ModelForm):
         fields = ['message']
 
 
+# Form for creating a new group on the groups page
 class CreateGroupForm(forms.ModelForm):
 
     class Meta:
@@ -19,6 +21,7 @@ class CreateGroupForm(forms.ModelForm):
         fields = ['name']
 
 
+# Form for adding a user to an existing group on the groups page
 class CreateGroupMemberForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(), required=True)
 
@@ -36,6 +39,7 @@ class CreateGroupMemberForm(forms.ModelForm):
         fields = ['username']
 
 
+# Form allowing a user to record a strength exercise
 class AddStrengthForm(forms.ModelForm):
 
     STRENGTH_TEMP = Exercise.objects.raw('SELECT * FROM tracker_exercise WHERE type = "S"')
@@ -51,6 +55,7 @@ class AddStrengthForm(forms.ModelForm):
         fields = ['exercise', 'duration']
 
 
+# Form allowing a user to record a cardio exercise
 class AddCardioForm(forms.ModelForm):
 
     CARDIO_TEMP = Exercise.objects.raw('SELECT * FROM tracker_exercise WHERE type = "C"')
@@ -66,6 +71,7 @@ class AddCardioForm(forms.ModelForm):
         fields = ['exercise', 'duration']
 
 
+# Form allowing a user to record a preset or saved custom food
 class AddFoodForm(forms.ModelForm):
     CATEGORY_CHOICES = [('meat', 'Meat'),('fruit', 'Fruit'),
                         ('vegetable','Vegetable'),('dairy','Dairy'),
@@ -127,6 +133,7 @@ class AddFoodForm(forms.ModelForm):
         fields = ['category', 'meat', 'fruit', 'vegetable', 'dairy', 'grain', 'sweet', 'drink', 'custom']
 
 
+# Form that allows a user to input and save their own custom food
 class AddCustomFoodForm(forms.ModelForm):
 
     class Meta:
@@ -134,6 +141,7 @@ class AddCustomFoodForm(forms.ModelForm):
         fields = ['name', 'calories', 'carbs', 'fat', 'protein']
 
 
+# Form that allows a user to input and save their own custom exercise
 class AddCustomExerciseForm(forms.ModelForm):
 
     class Meta:
@@ -141,6 +149,7 @@ class AddCustomExerciseForm(forms.ModelForm):
         fields = ['name', 'type', 'calspermin']
 
 
+# Form allowing a user to update their current weight
 class UpdateWeightForm(forms.ModelForm):
 
     class Meta:
@@ -148,6 +157,7 @@ class UpdateWeightForm(forms.ModelForm):
         fields = ['weight']
 
 
+# Form allowing a user to update their current weight goal
 class UpdateWeightGoalForm(forms.ModelForm):
 
     class Meta:
@@ -155,6 +165,7 @@ class UpdateWeightGoalForm(forms.ModelForm):
         fields = ['target_weight', 'target_date']
 
 
+# Form allowing a user to update their current exercise goal
 class UpdateExerciseGoalForm(forms.ModelForm):
 
     class Meta:

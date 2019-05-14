@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from SE2 import settings
 
 
+# Model containing information for a group of registered users
 class Group(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     name = models.CharField(max_length=100, null=True)
@@ -14,6 +15,7 @@ class Group(models.Model):
         return f'Group {self.id}: {self.name}'
 
 
+# Model containing information for a registered member of a group
 class GroupMember(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -22,6 +24,7 @@ class GroupMember(models.Model):
         return f'Group {self.group.id} member: {self.user.username}'
 
 
+# Model containing information on a message sent by a user to a group
 class Message(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -32,6 +35,7 @@ class Message(models.Model):
         return f'Group {self.group.id}: {self.author.username} - {self.message}'
 
 
+# Model containing information for food objects
 class Food(models.Model):
 
     CATEGORIES = (
@@ -55,6 +59,7 @@ class Food(models.Model):
         return f'Food {self.name}'
 
 
+# Model containing information for exercise objects
 class Exercise(models.Model):
     TYPE = (
         ('C', 'Cardio'),
@@ -70,6 +75,8 @@ class Exercise(models.Model):
         return f'Exercise {self.name}'
 
 
+# Model containing the calorie counts and nutrient information for each meal
+# also used for tracking calories lost during exercise, meal and nutrients are left blank for these
 class CalorieCount(models.Model):
     MEALS = (
         ('BF', 'Breakfast'),

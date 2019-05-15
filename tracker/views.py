@@ -16,6 +16,7 @@ from .models import Group, CalorieCount
 from .calculator import Calculator, Accessor
 
 
+# Method for passing the correct information to the home page template
 @login_required()
 def home(request):
     today = date.today()
@@ -32,6 +33,8 @@ def home(request):
     current_weight = request.user.profile.weight
     goal_progress = int(100-(((current_weight-end_weight)/(start_weight-end_weight))*100))
 
+    # The home page displays the correct date and a summary of the user's day
+    # including goal progress and calories consumed so far
     context = {
         'selected': 'Home',
         'date': today_format,
@@ -44,6 +47,7 @@ def home(request):
     return render(request, 'dashboard.html', context)
 
 
+# Method for passing the correct information to the daily log page template
 @login_required()
 def daily_log(request):
     user = request.user
@@ -54,6 +58,7 @@ def daily_log(request):
     protein_progress = int((acc.total_protein()/cal.target_protein())*100)
     fat_progress = int((acc.total_fat()/cal.target_fat())*100)
 
+    # this generates the add food form for each meal and saves the users input to the database
     food_form = AddFoodForm(user=request.user)
     if request.method == 'POST':
         print(request.POST)
@@ -90,6 +95,7 @@ def daily_log(request):
                 my_food.save()
                 return redirect('tracker-daily-log')
 
+    # this generates the appropriate exercise form for each type and saves the user's input to the database
     strength_form = AddStrengthForm(user=request.user)
     cardio_form = AddCardioForm(user=request.user)
     if request.method == 'POST':
@@ -136,6 +142,7 @@ def daily_log(request):
             update_weight_form.save()
             return redirect('tracker-daily-log')
 
+    # Daily log page displays several modal forms, and calorie, exercise and nutrient progress compared with targets
     context = {
         'selected': 'Daily Log',
         'cal': cal,
@@ -154,6 +161,7 @@ def daily_log(request):
     return render(request, 'daily_log.html', context)
 
 
+# Method for passing the correct information to the goals page template
 @login_required()
 def goals(request):
     user = request.user
@@ -178,6 +186,7 @@ def goals(request):
         calories.append(count.aggregate(Sum('kcals'))['kcals__sum'] or 0)
         days.append(day.strftime('%d %b'))
 
+    # this generates the appropriate modal form for updating either food or exercise goals
     weight_form = UpdateWeightGoalForm(instance=user.weightgoal)
     exercise_form = UpdateExerciseGoalForm(instance=user.exercisegoal)
     if request.method == 'POST':
@@ -200,6 +209,7 @@ def goals(request):
     exercise_set = request.user.exercisegoal.start_date.strftime("%d/%m/%y")
     exercise_review = request.user.exercisegoal.review_date.strftime("%d/%m/%y")
 
+    # Goals page displays goal progress information for both food and exercise, and allows the user to update these
     context = {
         'selected': 'Goals',
         'cal': cal,
@@ -217,6 +227,7 @@ def goals(request):
     return render(request, 'goals.html', context)
 
 
+# Method for passing the correct information to the groups page template
 @login_required()
 def groups(request):
     user = request.user
@@ -239,6 +250,7 @@ def groups(request):
     create_group_form = CreateGroupForm()
     create_group_member_form = CreateGroupMemberForm()
 
+    # this generates the appropriate form for sending a message, creating a group, or adding a member
     if request.method == 'POST':
         if 'message' in request.POST:
             form = MessageForm(data=request.POST)
@@ -271,6 +283,7 @@ def groups(request):
                 Message.objects.create(group=group, author=admin, message=message)
                 return redirect('tracker-groups')
 
+    # Groups page displays a list of groups that the user is a member of, messages from these, and various forms
     context = {
         'groups': groups,
         'messages': messages,
@@ -284,6 +297,7 @@ def groups(request):
     return render(request, 'groups.html', context)
 
 
+# Method for passing the correct information to the settings page template
 @login_required()
 def settings(request):
     joined_date = request.user.date_joined
@@ -292,6 +306,8 @@ def settings(request):
     update_password_form = PasswordChangeForm(user=request.user)
     update_profile_form = ProfileUpdateForm(instance=request.user.profile)
     modal = 'none'
+
+    # this generates forms for updating the users account details, password, and profile information
     if request.method == 'POST':
         print(request.POST)
         if 'update_account' in request.POST:
@@ -330,6 +346,7 @@ def settings(request):
     my_exercises = Exercise.objects.filter(user=request.user)
     my_foods = Food.objects.filter(user=request.user)
 
+    # the settings page displays user's information, custom foods and exercises, completed goals, and various forms
     context = {
         'selected': 'Settings',
         'format_date': format_date,

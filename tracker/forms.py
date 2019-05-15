@@ -5,6 +5,7 @@ from datetime import date
 from users.models import Profile, WeightGoal, ExerciseGoal
 
 
+# Form for sending a message to a group on the groups page
 class MessageForm(forms.ModelForm):
     message = forms.CharField(widget=forms.TextInput(attrs={'class': 'groups-temp'}))
 
@@ -13,6 +14,7 @@ class MessageForm(forms.ModelForm):
         fields = ['message']
 
 
+# Form for creating a new group on the groups page
 class CreateGroupForm(forms.ModelForm):
 
     class Meta:
@@ -20,6 +22,7 @@ class CreateGroupForm(forms.ModelForm):
         fields = ['name']
 
 
+# Form for adding a user to an existing group on the groups page
 class CreateGroupMemberForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(), required=True)
 
@@ -36,6 +39,7 @@ class CreateGroupMemberForm(forms.ModelForm):
         fields = ['username']
 
 
+# Form allowing a user to record a strength exercise
 class AddStrengthForm(forms.ModelForm):
 
     exercise = forms.ChoiceField(choices=[], widget=forms.Select())
@@ -56,6 +60,7 @@ class AddStrengthForm(forms.ModelForm):
         fields = ['exercise', 'duration']
 
 
+# Form allowing a user to record a cardio exercise
 class AddCardioForm(forms.ModelForm):
 
     exercise = forms.ChoiceField(choices=[], widget=forms.Select())
@@ -76,6 +81,7 @@ class AddCardioForm(forms.ModelForm):
         fields = ['exercise', 'duration']
 
 
+# Form allowing a user to record a preset or saved custom food
 class AddFoodForm(forms.ModelForm):
     CATEGORY_CHOICES = [('meat', 'Meat'),('fruit', 'Fruit'),
                         ('vegetable','Vegetable'),('dairy','Dairy'),
@@ -142,6 +148,7 @@ class AddFoodForm(forms.ModelForm):
         self.fields['custom'].choices = CUSTOM_CHOICES
 
 
+# Form that allows a user to input and save their own custom food
 class AddCustomFoodForm(forms.ModelForm):
 
     class Meta:
@@ -155,6 +162,7 @@ class AddCustomFoodForm(forms.ModelForm):
         }
 
 
+# Form that allows a user to input and save their own custom exercise
 class AddCustomExerciseForm(forms.ModelForm):
     calories = forms.IntegerField(min_value=0, label='Calories (kcal)')
     duration = forms.IntegerField(min_value=0, label='Duration (min)')
@@ -164,6 +172,7 @@ class AddCustomExerciseForm(forms.ModelForm):
         fields = ['name', 'type', 'calories', 'duration']
 
 
+# Form allowing a user to update their current weight
 class UpdateWeightForm(forms.ModelForm):
 
     class Meta:
@@ -174,6 +183,7 @@ class UpdateWeightForm(forms.ModelForm):
         }
 
 
+# Form allowing a user to update their current weight goal
 class UpdateWeightGoalForm(forms.ModelForm):
 
     def clean_target_date(self):
@@ -191,6 +201,7 @@ class UpdateWeightGoalForm(forms.ModelForm):
         }
 
 
+# Form allowing a user to update their current exercise goal
 class UpdateExerciseGoalForm(forms.ModelForm):
 
     class Meta:

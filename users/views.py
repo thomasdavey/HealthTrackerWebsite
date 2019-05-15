@@ -16,6 +16,7 @@ from .forms import GoalRegistrationForm
 from .tokens import account_activation_token
 
 
+# Method for redirecting a user to the home page template
 def home(request):
     if request.user.is_authenticated:
         return redirect('tracker-home')
@@ -23,12 +24,14 @@ def home(request):
         return render(request, 'home.html')
 
 
+# Method for passing the correct information to the register page template
 def register(request):
     if request.method == 'POST':
         user_form = UserRegisterForm(request.POST)
         profile_form = ProfileRegistrationForm(request.POST)
         goal_form = GoalRegistrationForm(request.POST)
 
+        # this generates the registration form and saves a default exercise goal for the user
         if user_form.is_valid() and profile_form.is_valid() and goal_form.is_valid():
             user = user_form.save()
             user.profile.birth_date = profile_form.cleaned_data.get('birth_date')
@@ -65,6 +68,7 @@ def register(request):
     return render(request, 'register.html', {'user_form': user_form, 'profile_form': profile_form, 'goal_form': goal_form})
 
 
+# Method for passing the correct information to the account activation page template
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))

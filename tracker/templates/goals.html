@@ -1,3 +1,6 @@
+<!-- Tracker Goals Page -->
+<!-- Page contains information and a chart about user's current goals and options to update their goals. -->
+
 {% extends 'template.html' %}
 {% block content %}
     <div class="nav-mobile">
@@ -5,6 +8,7 @@
     </div>
 
     <div id="goals-main">
+        <!-- Progress circles and chart using 'Chart.js' -->
         <div id="goals-top">
             <div id="goals-top-left">
                 <h3>Current Weight: {{ user.profile.weight }}kg</h3>
@@ -18,6 +22,8 @@
                 <canvas id="myChart"></canvas>
             </div>
         </div>
+        <!-- Custom table that displays information about the user's goals. -->
+        <!-- Regular table not used to allow for repositioning of column on mobile site. -->
         <div id="goals-bottom">
             <div class="table">
                 <div class="table-block">
@@ -44,6 +50,7 @@
         </div>
     </div>
 
+    <!-- Pop-up modal windows to handle all forms on the page. -->
     <div class="modal">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
@@ -92,6 +99,7 @@
     var open = document.getElementsByClassName('modal-open');
     var close = document.getElementsByClassName('close');
 
+    //Dealing with modal functionality.
     for (var i=0; i<modal.length; i++) (function (i) {
         open[i].onclick = function() {
             modal[i].style.display = 'flex';
@@ -101,6 +109,7 @@
         };
     })(i);
 
+    //Creating chart using 'Chart.js' - code taken from documentation.
     var ctx = document.getElementById('myChart').getContext('2d');
     Chart.pluginService.register({
         beforeDraw: function (chart, easing) {
@@ -170,6 +179,7 @@
         }
     });
 
+    //Replacing progress circle information.
     window.onload = function() {
         var progressText = document.getElementsByClassName('ldBar-label');
         progressText[0].innerHTML = {{ days_between }};

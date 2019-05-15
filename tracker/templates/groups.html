@@ -1,11 +1,15 @@
+<!-- Tracker Groups Page -->
+<!-- Page contains messaging service for users to talk to each other about their goals. -->
+
 {% extends 'template.html' %}
 {% block content %}
     <div class="nav-mobile">
         <i class="fas fa-bars nav-mobile-button"></i>
         <i class="fas fa-user-friends nav-mobile-add"></i>
     </div>
-    <div id="tabs">
+    <div id="tabs"> <!-- JQuery tabs used to allow for multiple user groups to be displayed. -->
         <div class="groups-list">
+            <!-- Displaying all groups that the user is a member of -->
             <ul id="groups-side">
                 {% for message in last %}
                     {% if message.author.username == 'admin' %}
@@ -19,11 +23,13 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+            <!-- Options to add group/group member. -->
             <div id="groups-side-bottom">
                 <p>Add Group <a id="create-group-button"><i class="fas fa-plus-circle"></i></a></p>
                 <p>Add Member <a id="add-member-button"><i class="fas fa-plus-circle"></i></a></p>
             </div>
         </div>
+        <!-- Displaying all user messages for each group -->
         {%  if messages %}
         {% for set in messages %}
             <div id="{% for message in set %}{% if forloop.first %}{{ message.group.id }}{% endif %}{% endfor %}">
@@ -78,6 +84,8 @@
             <!-- What happens when no user is in no groups -->
         {% endif %}
     </div>
+
+    <!-- Modals to handle all forms on the page -->
     <div class="modal" id="create-group-modal">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
@@ -122,6 +130,8 @@
     </div>
 
     <script type="text/javascript">
+        //Creating script for each group.
+        //This script prevents the page refreshing upon form submission and instead uses ajax to reload information.
         {% for group in groups %}
         $(document).on('submit', '#form-{{ group.group.id }}', function(e) {
             e.preventDefault();
@@ -148,6 +158,7 @@
         });
         {% endfor %}
 
+        //Similarly preventing reload for group creation.
         $(document).on('submit', '#form-create', function(e) {
             e.preventDefault();
 
@@ -169,6 +180,7 @@
             });
         });
 
+        //Similarly preventing reload for group member addition.
         $(document).on('submit', '#form-add', function(e) {
             e.preventDefault();
 
@@ -190,10 +202,11 @@
             });
         });
 
+        //Implementing JQuery tab functionality.
         var messageCount = $('.chat-message').length;
-
         $(function() {
             var tabs = $("#tabs").tabs({
+                //Collapsing mobile nav on group selection.
                 activate: function(event, ui) {
                     $('.nav-mobile').removeClass('move-5');
                     $('.groups-list').removeClass('move-4');
@@ -203,6 +216,7 @@
             });
             window.scrollTo(0, document.body.scrollHeight);
 
+            //Listening for new messages added to the DOM. Refreshing all if new message was added.
             $(function() {
                 setTimeout(arguments.callee, 100);
                 if (messageCount !== $('.chat-message').length) {
@@ -212,6 +226,7 @@
                 }
             });
 
+            //Listening for new messages for each group every second.
             $(function() {
                 setTimeout(arguments.callee, 1000);
                 {% for group in groups %}
@@ -228,6 +243,7 @@
         var addMemberButton = document.getElementById("add-member-button");
         var addMemberClose = document.getElementsByClassName("close")[1];
 
+        //Implementing functionality for modals on page.
         createGroupButton.onclick = function() {
             createGroupModal.style.display = "flex";
         };

@@ -1,9 +1,13 @@
+<!-- Tracker Settings Page -->
+<!-- Page contains options to change/update account information and also to log off/deactivate account. -->
+
 {% extends 'template.html' %}
 {% block content %}
     <div class="nav-mobile">
         <i class="fas fa-bars nav-mobile-button"></i>
     </div>
     <div id="settings-container">
+        <!-- Divs containing user information -->
         <div id="settings-top-bar">
             <div class="profile-picture" style="background-image: url('{{ user.profile.image.url }}'); width: 150px; height: 150px;"></div>
             <div id="settings-top-information">
@@ -142,6 +146,7 @@
         </form>
     </div>
 
+    <!-- Modals to handle all forms on the page -->
     <div class="modal">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
@@ -207,6 +212,7 @@
     </div>
 
     <script>
+        //JQuery to implement functionality for all modals.
         var modal = document.getElementsByClassName('modal');
         var open = document.getElementsByClassName('settings-button-2');
         var close = document.getElementsByClassName('close');

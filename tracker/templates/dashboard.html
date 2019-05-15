@@ -1,3 +1,6 @@
+<!-- Tracker Home/Dashboard Page -->
+<!-- Page acts as landing page when a user has logged in. Displays broad information about the user's day. -->
+
 {% extends 'template.html' %}
 {% block content %}
     <div class="nav-mobile">
@@ -8,6 +11,8 @@
         <h1>Welcome, {{ user.first_name }}</h1>
         <h2>Let's take a look how your day's going...</h2>
         <h3>{{ date }}</h3>
+
+        <!-- Dials containing user information/progress for the day. -->
         <div id="home-progress-container">
             <div class="progress-circle progress-circle-no-percent">
                 <div class="ldBar label-center" style="width:200px; height:200px;" data-value="{{ acc.calorie_progress }}" data-preset="circle" data-stroke-width="5" data-stroke="#F8A032"></div>
@@ -25,6 +30,7 @@
     </div>
 
     <script>
+        //Updating information on the page with user's information.
         window.onload = function() {
             var progressText = document.getElementsByClassName('ldBar-label');
             progressText[0].innerHTML = {{ acc.calories_under }};

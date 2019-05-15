@@ -1,3 +1,6 @@
+<!-- Tracker Daily Log Page -->
+<!-- Page contains options to add food items to the user's daily total and to add custom food and exercises. -->
+
 {% extends 'template.html' %}
 {% block content %}
     <div class="nav-mobile">
@@ -6,6 +9,7 @@
     </div>
 
     <div id="daily-log-body">
+        <!-- Side bar with meal select options. -->
         <div id="meal-select">
             <div class="meal-select-meal">
                 <h3>Breakfast: {{ acc.total_breakfast }}
@@ -37,6 +41,7 @@
         </div>
 
         <div id="daily-log-container">
+            <!-- Progress dials. -->
             <div id="daily-log-top">
                 <h2>Keep Track of Your Day</h2>
                 <div id="daily-log-progress-container">
@@ -50,6 +55,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Exercise options for daily total. -->
             <div id="daily-log-bottom">
                 <div>
                     <div class="daily-log-bottom-button">
@@ -72,6 +78,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Nutrition information/progress for the day. -->
             <div id="daily-log-nutrition">
                 <div id="daily-log-nutrition-wrapper">
                     <h2>Nutritional Information</h2>
@@ -101,6 +108,7 @@
         </div>
     </div>
 
+    <!-- Pop-up modal windows to handle all forms on the page. -->
     <div class="modal">
         <div class="modal-content">
             <div class="close"><i class="fas fa-times"></i></div>
@@ -251,6 +259,7 @@
         var open = document.getElementsByClassName('modal-open');
         var close = document.getElementsByClassName('close');
 
+        //Creating functions to handle the modal functionality.
         for (var i=0; i<4; i++) (function (i) {
             open[i].onclick = function() {
                 modal[0].style.display = 'flex';
@@ -279,6 +288,7 @@
 
         var mealFields = document.getElementsByClassName('form-field');
 
+        //Updating progress circle information.
         window.onload = function() {
             var progressText = document.getElementsByClassName('ldBar-label');
             progressText[0].innerHTML = {{ acc.calories_under }};
@@ -289,6 +299,7 @@
             }
         };
 
+        //Dealing with meal select form selection boxes being hidden.
         mealCategory.onchange = function() {
             for (var i=0; i<8; i++) {
                 mealFields[i+1].style.display = 'none';
@@ -300,6 +311,7 @@
             }
         };
 
+        //Mobile button to expand right menu functionlity.
         $('.nav-mobile-add').click(function () {
             $('.nav-mobile').toggleClass('move-3');
             $('#meal-select').toggleClass('move-4');

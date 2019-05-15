@@ -293,6 +293,7 @@ def settings(request):
     update_profile_form = ProfileUpdateForm(instance=request.user.profile)
     modal = 'none'
     if request.method == 'POST':
+        print(request.POST)
         if 'update_account' in request.POST:
             update_account_form = AccountUpdateForm(data=request.POST, instance=request.user)
             modal = 'update_account'
@@ -315,9 +316,19 @@ def settings(request):
                 update_profile_form.save()
                 messages.success(request, f'Profile successfully updated!')
                 return redirect('tracker-settings')
+        if 'clear_food' in request.POST:
+            Food.objects.filter(user=request.user).delete()
+            return redirect('tracker-settings')
+        if 'clear_exercise' in request.POST:
+            Exercise.objects.filter(user=request.user).delete()
+            return redirect('tracker-settings')
+        if 'delete_account' in request.POST:
+            request.user.is_active = False
+            request.user.save()
+            return redirect('users-logout')
 
     my_exercises = Exercise.objects.filter(user=request.user)
-    exercises = list(my_exercises.values('name'))
+    my_foods = Food.objects.filter(user=request.user)
 
     context = {
         'selected': 'Settings',
@@ -326,7 +337,8 @@ def settings(request):
         'update_password_form': update_password_form,
         'update_profile_form': update_profile_form,
         'modal': modal,
-        'exercises': exercises
+        'exercises': my_exercises,
+        'foods': my_foods,
     }
     return render(request, 'settings.html', context)
 

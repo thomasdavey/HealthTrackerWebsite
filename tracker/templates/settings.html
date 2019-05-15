@@ -68,16 +68,78 @@
             </div>
         </div>
         <div class="settings-row">
-            <h3>Completed Goals</h3>
-        </div>
-        <div class="settings-row">
             <h3>Custom Food</h3>
+            {% if foods %}
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Calories (kcal)</th>
+                        <th>Carbohydrates (g)</th>
+                        <th>Fat (g)</th>
+                        <th>Protein (g)</th>
+                    </tr>
+                    {% for food in foods %}
+                    <tr>
+                        <td>{{ food.name }}</td>
+                        <td>{{ food.calories }}</td>
+                        <td>{{ food.carbs }}</td>
+                        <td>{{ food.fat }}</td>
+                        <td>{{ food.protein }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <div class="settings-button-container">
+                    <form method="POST">
+                        {%  csrf_token %}
+                        <div class="settings-button settings-button-2">
+                            <button type="submit" name="clear_food">Clear All</button>
+                        </div>
+                    </form>
+                </div>
+            {% else %}
+                <p>No custom foods have been added. To add some custom foods, visit the Daily Log page.</p>
+            {% endif %}
         </div>
         <div class="settings-row">
             <h3>Custom Exercises</h3>
+            {% if exercises %}
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                    </tr>
+                    {% for exercise in exercises %}
+                    <tr>
+                        <td>{{ exercise.name }}</td>
+                        <td>
+                        {% if exercise.type == 'C' %}
+                            Cardio
+                        {% else %}
+                            Strength
+                        {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <div class="settings-button-container">
+                    <form method="POST">
+                        {%  csrf_token %}
+                        <div class="settings-button settings-button-2">
+                            <button type="submit" name="clear_exercise">Clear All</button>
+                        </div>
+                    </form>
+                </div>
+            {% else %}
+                <p>No custom exercises have been added. To add some custom exercises, visit the Daily Log page.</p>
+            {% endif %}
         </div>
         <div class="settings-button"><a href="{% url 'users-logout' %}">Log Out</a></div>
-        <div class="settings-button"><a href="#">Delete Account</a></div>
+        <form method="POST">
+            {%  csrf_token %}
+            <div class="settings-button">
+                <button type="submit" name="delete_account">Delete Account</button>
+            </div>
+        </form>
     </div>
 
     <div class="modal">
